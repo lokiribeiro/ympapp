@@ -2,3 +2,8 @@ import '../imports/startup/fixtures';
 import '../imports/api/parties';
 import '../imports/api/users';
 import '../imports/api/images';
+import '../imports/api/jobs';
+import '../imports/api/inventories';
+import '../imports/api/profiles';
+import '../imports/api/docs';
+import '../imports/api/photos';
