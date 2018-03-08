@@ -10,6 +10,9 @@ import { Counts } from 'meteor/tmeasday:publish-counts';
 import { Jobs } from '../../../api/jobs';
 import { Docs } from '../../../api/docs';
 import { Photos } from '../../../api/photos';
+import { Profiles } from '../../../api/profiles';
+import { Histories } from '../../../api/histories';
+import { Supports } from '../../../api/supports';
 import template from './jobdetails.html';
  
 class Jobdetails {
@@ -25,6 +28,8 @@ class Jobdetails {
     console.info('state', this.stateHolder);
 
     this.job = {};
+    this.history = {};
+    this.support = {};
 
     this.uploader = new Slingshot.Upload('myFileUploads');
 
@@ -33,10 +38,15 @@ class Jobdetails {
     this.sort = {
       name: 1
     };
+
+    this.sort2 = {
+      dateNow: -1
+    };
     this.searchText = '';
     this.pageNum  = null;
     $scope.doneSearching = false;
     $scope.uploadSuccess = false;
+    this.showNotif = false;
 
     this.subscribe('jobs');
 
@@ -45,6 +55,20 @@ class Jobdetails {
     this.subscribe('photos');
 
     this.subscribe('users');
+
+    this.subscribe('profiles', () => [{
+      limit: parseInt(this.perPage),
+      skip: parseInt((this.getReactively('page') - 1) * this.perPage),
+      sort: this.getReactively('sort')
+    }, this.getReactively('searchText')
+    ]);
+
+    this.subscribe('histories', () => [{
+      sort: this.getReactively('sort2')
+    }, this.getReactively('searchText')
+    ]);
+
+    this.subscribe('supports');
  
     this.helpers({
       job() {
@@ -74,6 +98,15 @@ class Jobdetails {
       },
       currentUser() {
         return Meteor.user();
+      },
+      profiles() {
+        return Profiles.find({});
+      },
+      histories() {
+        return Histories.find({});
+      },
+      supports() {
+        return Supports.find({});
       }
     });
 
@@ -98,6 +131,12 @@ class Jobdetails {
     }
     this.gotoSettings = function() {
       $state.go('settings', {}, {reload: 'settings'});
+    }
+
+    this.notification = function() {
+      
+      this.showNotif = false;
+      console.info('notif daan', this.showNotif);
     }
 
     this.uploadFiles = function(file, errFiles) {
@@ -648,14 +687,30 @@ this.uploadImage = function(file, errFiles) {
 
   }
 };
-
-  }
+}
 
   isOwner(party) {
     return this.isLoggedIn && party.owner === this.currentUserId;
   }
    
   save() {
+    this.history.jobID = this.job._id;
+    this.history.title = this.job.title;
+    this.history.description = this.job.description;
+    this.history.location = this.job.location;
+    this.history.hours = this.job.hours;
+    this.history.years = this.job.years;
+    this.history.group = this.job.group;
+    this.history.support = this.job.support;
+    this.history.modelNumber = this.job.modelNumber;
+    this.history.serialNumber = this.job.serialNumber;
+    this.history.manufacturer = this.job.manufacturer;
+    this.history.dateNow = new Date();
+    console.info('profileget', this.job.doneBy);
+    this.history.userID = this.job.doneBy.userID;
+    this.history.name = this.job.doneBy.name;
+
+
     Jobs.update({
       _id: this.job._id
     }, {
@@ -667,7 +722,9 @@ this.uploadImage = function(file, errFiles) {
         years: this.job.years,
         group: this.job.group,
         support: this.job.support,
-        status: this.job.status
+        modelNumber: this.job.modelNumber,
+        serialNumber: this.job.serialNumber,
+        manufacturer: this.job.manufacturer
       }
     }, (error) => {
         if (error) {
@@ -676,6 +733,18 @@ this.uploadImage = function(file, errFiles) {
           console.log('Done!');
         }
     });
+
+    var status = Histories.insert(this.history);
+    console.info('status', status);
+    this.showNotif = true;
+  }
+
+  supportSave() {
+    this.support.jobID = this.job._id;
+    this.date = new Date();
+    var status = Supports.insert(this.support);
+    console.info('statussupport', status);
+    
   }
 }
  

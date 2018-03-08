@@ -7,3 +7,5 @@ import '../imports/api/inventories';
 import '../imports/api/profiles';
 import '../imports/api/docs';
 import '../imports/api/photos';
+import '../imports/api/histories';
+import '../imports/api/supports';

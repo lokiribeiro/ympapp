@@ -156,6 +156,11 @@
     <!-- END TOPBAR -->
     <!-- BEGIN PAGE CONTENT -->
     <div class="page-content">
+        <div ng-if="jobdetails.showNotif" class="preview active">
+            <div class="alert alert-success media fade in">
+              <p>Changes Saved <button type="button" class="close" ng-click="jobdetails.notification()" aria-hidden="true"><i class="icons-office-52"></i></button></p>
+            </div>
+          </div>
       <div class="row">
             <div class="col-md-6">
               <div class="panel panel-default">
@@ -196,9 +201,28 @@
                           </div>
                         </div>
                         <div class="form-group">
-                          <label class="col-sm-3 control-label">location</label>
+                          <label class="col-sm-3 control-label">Location</label>
                           <div class="col-sm-9">
                             <input type="text" class="form-control" ng-model="jobdetails.job.location" required>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label class="col-sm-3 control-label">Model Number
+                          </label>
+                          <div class="col-sm-9">
+                            <input type="text" class="form-control" ng-model="jobdetails.job.modelNumber" required>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label class="col-sm-3 control-label">Serial Number</label>
+                          <div class="col-sm-9">
+                            <input type="text" class="form-control" ng-model="jobdetails.job.serialNumber" required>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label class="col-sm-3 control-label">Manufacturer</label>
+                          <div class="col-sm-9">
+                            <input type="text" class="form-control" ng-model="jobdetails.job.manufacturer" required>
                           </div>
                         </div>
                         <div class="form-group">
@@ -248,83 +272,81 @@
                         <div class="row">
                             <div class="col-sm-3">
                                 <div class="form-group">
-                                    <label class="control-label">Upload drawing</label>
+                                    <label class="control-label">Drawing</label>
                                     <div>
-                                        <button  data-toggle="modal" data-target="#upload-drawing" class="btn btn-embossed btn-primary m-r-20">Drawing</button>
+                                        <button  data-toggle="modal" data-target="#upload-drawing" class="btn btn-embossed btn-primary m-r-20">Upload</button>
                                       </div>
                                           <!---->
                                 </div>
                             </div>
                             <div class="col-sm-3">
                               <div class="form-group">
-                                <label class="control-label">Upload Manual</label>
+                                <label class="control-label">Manual</label>
                                 <div>
-                                    <button  data-toggle="modal" data-target="#upload-manual" class="btn btn-embossed btn-primary m-r-20">Manual</button>
+                                    <button  data-toggle="modal" data-target="#upload-manual" class="btn btn-embossed btn-primary m-r-20">Upload</button>
                                   </div>
                                       <!---->
                               </div>
                             </div>
                             <div class="col-sm-3">
                               <div class="form-group">
-                                <label class="control-label">Upload Specification</label>
+                                <label class="control-label">Specification</label>
                                 <div>
-                                    <button data-toggle="modal" data-target="#upload-specs" class="btn btn-embossed btn-primary m-r-20">Specification</button>
+                                    <button data-toggle="modal" data-target="#upload-specs" class="btn btn-embossed btn-primary m-r-20">Upload</button>
                                   </div>
                                       <!---->
                               </div>
                             </div>
                             <div class="col-sm-3">
                               <div class="form-group">
-                                  <label class="control-label">Upload Pages</label>
+                                  <label class="control-label">Pages</label>
                                   <div>
-                                      <button  data-toggle="modal" data-target="#upload-pages" class="btn btn-embossed btn-primary m-r-20">Page</button>
+                                      <button  data-toggle="modal" data-target="#upload-pages" class="btn btn-embossed btn-primary m-r-20">Upload</button>
                                     </div>
                                         <!---->
                               </div>
                           </div>
                         </div>
                         <div class="row">
-                          <div  class="col-sm-4">
-                            <div class="form-group">
-                              <label class="control-label">Already Done?</label>
-                                <div class="input-group" ng-hide="{{jobdetails.job.status}}">
-                                  <label><input type="radio" name="radio2" value="true" ng-model="jobdetails.job.status"> Yes</label>
-                                  <label><input type="radio" name="radio2" value="false" ng-model="jobdetails.job.status"> No</label>
-                                </div>
-                                <div ng-if="{{jobdetails.job.status}}">
-                                  <label> Completed</label>
-                                </div>
-                            </div>
-                          </div>
-                          <div class="col-sm-4">
-                              <div class="form-group">
-                                  <label class="control-label"> </label>
-                                  <div>
-                                      <button class="btn btn-embossed btn-primary m-r-20">Single History</button>
-                                    </div>
-                                        <!---->
-                              </div>
-                          </div>
-                          <div class="col-sm-4">
-                            <div class="form-group">
-                              <label class="control-label"> </label>
-                              <div>
-                                  <button class="btn btn-embossed btn-primary m-r-20">Group History</button>
-                                </div>
-                                    <!---->
-                            </div>
-                          </div>
+                          
+                          
                         </div>
                         <div class="row">
-                            <div  class="col-sm-12">
+                            <div  class="col-sm-6">
                             <div class="form-group">
                               <label class="control-label">Support</label>
                               <div>
-                                <input class="form-control" ng-model="jobdetails.job.support" placeholder="Write support..." required>
+                                  <button class="btn btn-embossed btn-primary m-r-20" data-toggle="modal" data-target="#add-support" >Add</button>
+                                  <button class="btn btn-embossed btn-primary m-r-20" data-toggle="modal" data-target="#view-support">View</button>
                               </div>
                             </div>
                           </div>
+                          <div class="col-sm-6">
+                              <div class="form-group">
+                                  <label class="control-label">History </label>
+                                  <div>
+                                      <button class="btn btn-embossed btn-primary m-r-20" data-toggle="modal" data-target="#work-history" >Work</button>
+                                      <button class="btn btn-embossed btn-primary m-r-20" data-toggle="modal" data-target="#group-history">Group</button>
+                                    </div>
+                                        <!---->
+                              </div>
+                            </div>
                           </div>
+
+                          <div class="row">
+                              <div  class="col-sm-12">
+                                  <div class="form-group">
+                                    <label class="control-label">Done by</label>
+                                    <div>
+                                    <select ng-model="jobdetails.job.doneBy" name="users">
+                                      <option ng-repeat="profile in jobdetails.profiles" ng-value="profile" required>{{profile.name}}</option>
+                                    </select>
+                                  </div>
+                                  </div>
+                                </div>
+                          </div>
+
+
                         <div class="row">
                             <div class="col-sm-9 col-sm-offset-3">
                               <div class="pull-right">
@@ -571,6 +593,125 @@
           </div>
         </div>
       </div>
+
+      <div class="modal fade" id="work-history" aria-hidden="true">
+        <div class="modal-dialog modal-responsive" style="margin-top: 15% !important;">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icons-office-52"></i></button>
+              <h4 class="modal-title"><strong>Work</strong> History</h4>
+            </div>
+            <div class="modal-body " style="overflow-x: hidden !important;">                  
+                <table class="table table-hover dataTable" >
+                  <thead>
+                    <tr>
+                      <th>Done by</th>
+                      <th>Date</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr ng-repeat="history in jobdetails.histories" ng-if="history.jobID == jobdetails.job._id">
+                      <td>{{history.name}}</td>
+                      <td>{{history.dateNow | date : "medium"}}</td>
+                    </tr>
+                    
+                  </tbody>
+                </table>
+            </div>
+            <div class="modal-footer text-center">
+             <!--<button type="button" class="btn btn-primary btn-embossed bnt-square" ><i class="fa fa-check"></i> Add</button>-->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal fade" id="group-history" aria-hidden="true">
+          <div class="modal-dialog modal-responsive" style="margin-top: 15% !important;">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icons-office-52"></i></button>
+                <h4 class="modal-title"><strong>Group</strong> History</h4>
+              </div>
+              <div class="modal-body " style="overflow-x: hidden !important;">                  
+                  <table class="table table-hover dataTable" >
+                    <thead>
+                      <tr>
+                        <th>Job Title</th>
+                        <th>Done by</th>
+                        <th>Date</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr ng-repeat="history in jobdetails.histories" ng-if="history.group == jobdetails.job.group">
+                        <td>{{history.title}}</td>
+                        <td>{{history.name}}</td>
+                        <td>{{history.dateNow | date : "medium"}}</td>
+                      </tr>
+                      
+                    </tbody>
+                  </table>
+              </div>
+              <div class="modal-footer text-center">
+               <!--<button type="button" class="btn btn-primary btn-embossed bnt-square" ><i class="fa fa-check"></i> Add</button>-->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal fade" id="add-support" aria-hidden="true">
+            <div class="modal-dialog modal-responsive" style="margin-top: 15% !important;">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icons-office-52"></i></button>
+                  <h4 class="modal-title"><strong>Add</strong> Support Information</h4>
+                </div>
+                <div class="modal-body ">         
+                    <div class="col-sm-12">
+                        <textarea rows="10" class="form-control" ng-model="jobdetails.support.info" placeholder="Write support..."></textarea>
+                      </div>    
+                      <div class="col-sm-9 col-sm-offset-3" style="margin-top: 10px !important;">
+                        <div class="pull-right">
+                            <button ng-click="jobdetails.supportSave()" data-dismiss="modal" type="submit" class="btn btn-embossed btn-primary m-r-20"><i class="fa fa-save"></i> Save</button>     
+                        </div>
+                      </div>
+                      
+                    
+                </div>
+                <div class="modal-footer text-center">
+                 <!--<button type="button" class="btn btn-primary btn-embossed bnt-square" ><i class="fa fa-check"></i> Add</button>-->
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal fade" id="view-support" aria-hidden="true">
+              <div class="modal-dialog modal-responsive" style="margin-top: 15% !important;">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icons-office-52"></i></button>
+                    <h4 class="modal-title"><strong>Support</strong> Information</h4>
+                  </div>
+                  <div class="modal-body " style="overflow-x: hidden !important;">                  
+                      <table class="table table-hover dataTable" >
+                        <thead>
+                          <tr>
+                            <th> </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr ng-repeat="support in jobdetails.supports" ng-if="support.jobID == jobdetails.job._id">
+                            <td>{{support.info}}</td>
+                          </tr>
+                          
+                        </tbody>
+                      </table>
+                  </div>
+                  <div class="modal-footer text-center">
+                   <!--<button type="button" class="btn btn-primary btn-embossed bnt-square" ><i class="fa fa-check"></i> Add</button>-->
+                  </div>
+                </div>
+              </div>
+            </div>
 
 
   </div>

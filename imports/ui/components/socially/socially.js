@@ -16,6 +16,7 @@ import Jobdetails from '../jobdetails/jobdetails';
 import Inventorydetails from '../inventorydetails/inventorydetails';
 import Employees from '../employees/employees';
 import Employeedetails from '../employeedetails/employeedetails';
+import Logbook from '../logbook/logbook';
 
  
 class Socially {}
@@ -34,6 +35,7 @@ export default angular.module(name, [
   Employees.name,
   Login.name,
   Employeedetails.name,
+  Logbook.name,
   'accounts.ui',
   'date-picker',
   ngFileUpload
