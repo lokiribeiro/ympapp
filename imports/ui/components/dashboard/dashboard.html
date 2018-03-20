@@ -8,19 +8,19 @@
     </div>
     <div class="sidebar-inner">
       <ul class="nav nav-sidebar">
-        <li class="nav-parent active" ng-click="dashboard.gotoDashboard()">
+        <li class="nav-parent active" ng-click="dashboard.gotoDashboard()" ng-if="dashboard.currentUser.jobs">
           <a href=""><i class="icon-home"></i><span>Jobs</span></a>
         </li>
-        <li class="nav-parent" ng-click="dashboard.gotoInventory()">
+        <li class="nav-parent" ng-click="dashboard.gotoInventory()" ng-if="dashboard.currentUser.inventory">
           <a href=""><i class="icon-basket"></i><span>Inventory</span><span class="fa arrow"></span></a>
         </li>
-        <li class="nav-parent" ng-click="dashboard.gotoLogbook()">
+        <li class="nav-parent" ng-click="dashboard.gotoLogbook()" ng-if="dashboard.currentUser.logbook">
           <a href=""><i class="icon-note"></i><span>Logbook </span><span class="fa arrow"></span></a>
         </li>
-        <li class="nav-parent" ng-click="dashboard.gotoEmployees()">
+        <li class="nav-parent" ng-click="dashboard.gotoEmployees()" ng-if="dashboard.currentUser.employees">
           <a href=""><i class="icon-user"></i><span>Employees </span><span class="fa arrow"></span></a>
         </li>
-        <li class="nav-parent" ng-click="dashboard.gotoSettings()">
+        <li class="nav-parent" ng-click="dashboard.gotoSettings()" ng-if="dashboard.currentUser.settings">
           <a href=""><i class="icon-puzzle"></i><span>Settings</span> <span class="fa arrow"></span></a>
         </li>
       </ul>
@@ -134,16 +134,16 @@
           <!-- BEGIN USER DROPDOWN -->
           <li class="dropdown" id="user-header">
             <a href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-            <img src="../assets/global/images/avatars/user1.png" alt="user image">
+            <img src="{{dashboard.currentUser.profilePhoto}}" alt="user image">
             <span class="username">Hi, {{dashboard.currentUser.username}}</span>
             </a>
             <ul class="dropdown-menu">
               <li>
-                <a href="#"><i class="icon-user"></i><span>My Profile</span></a>
+                <a ui-sref="profilepage({ employeeId: dashboard.currentUserId })"><i class="icon-user"></i><span>My Profile</span></a>
               </li>
-              <li>
+              <!--<li>
                 <a href="#"><i class="icon-settings"></i><span>Account Settings</span></a>
-              </li>
+              </li>-->
               <li>
                 <a href="#" ng-click="dashboard.logout()"><i class="icon-logout"></i><span>Logout</span></a>
               </li>
@@ -159,19 +159,14 @@
     <div class="page-content">
       <div class="row">
         <div class="col-lg-12 portlets">
-          <div class="panel">
+          <div class="panel bg-dark">
             <div class="panel-content">
               <div class="row">
                   <div class="col-sm-4">
                       <div class="form-group">
                         <label class="control-label">Group</label>
                           <select ng-model="dashboard.searchText" class="form-control">
-                            <option value="">Select Group...</option>
-                            <option value="Main Engine">Main Engine</option>
-                            <option value="Engine Room">Engine Room</option>
-                            <option value="Bridge">Bridge</option>
-                            <option value="Fuel Tank">Fuel Tank</option>
-                            <option value="Jet Ski">Jet Ski</option>
+                              <option ng-repeat="group in dashboard.groups" value="{{group.name}}">{{group.name}}</option>
                           </select>
                       </div>
                       </div>
@@ -207,7 +202,7 @@
       </div>
       <div class="row">
         <div class="col-lg-12 portlets">
-          <div class="panel">
+          <div class="panel bg-dark">
             <div class="panel-header panel-controls">
                 <div class="m-b-20 row">
                     <div class="btn-group">
@@ -235,7 +230,7 @@
                     <th>Frequency (Hrs)</th>
                     <th>Frequency (Days)</th>
                     <th>Date</th>
-                    <th class="text-right">Is it Done?</th>
+                    <th>Is it Done?</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -245,7 +240,8 @@
                     <td>{{job.hours}}</td>
                     <td>{{job.years}}</td>
                     <td>{{job.date | date : "mediumDate"}}</td>
-                    <td class="text-right"><a class="edit btn btn-sm btn-default" ui-sref="jobdetails({ jobId: job._id })"><i class="icon-note"></i></a>  <a class="delete btn btn-sm btn-danger" href="javascript:;"><i class="icons-office-52"></i></a>
+                    <!--<td class="text-right"><a class="edit btn btn-sm btn-default" ui-sref="jobdetails({ jobId: job._id })"><i class="icon-note"></i></a>  <a class="delete btn btn-sm btn-danger" href="javascript:;"><i class="icons-office-52"></i></a>-->
+                    <td>{{job.status ? "yes" : "no"}}</td>
                     </td>
                   </tr>
                   
@@ -284,12 +280,7 @@
                   <div class="form-group">
                     <label class="control-label">Group</label>
                       <select ng-model="dashboard.job.group" name="group" class="form-control" required>
-                        <option value="">Select Group...</option>
-                        <option value="Main Engine">Main Engine</option>
-                        <option value="Engine Room">Engine Room</option>
-                        <option value="Bridge">Bridge</option>
-                        <option value="Fuel Tank">Fuel Tank</option>
-                        <option value="Jet Ski">Jet Ski</option>
+                        <option ng-repeat="group in dashboard.groups" value="{{group.name}}">{{group.name}}</option>
                       </select>
                   </div>
                 </div>

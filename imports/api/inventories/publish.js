@@ -5,12 +5,24 @@ import { Inventories } from './collection';
 
 if (Meteor.isServer) {
    Meteor.publish('inventories', function(options, searchString) {
-   const selector = {};
+    var selector = {};
 
    if (typeof searchString === 'string' && searchString.length) {
-    selector.name = {
-      $regex: `.*${searchString}.*`,
-      $options : 'i'
+    //selector.name = {
+    //  $regex: `.*${searchString}.*`,
+    //  $options : 'i'
+    var search = {$regex: `.*${searchString}.*`, $options: 'i'};
+    selector = {$or: [
+      {name: search},
+      {category: search},
+      {manufacturer: search},
+      {modelNo: search},
+      {partNo: search},
+      {totalAmount: search},
+      {minAmount: search},
+      {department: search},
+      {critical:search}
+    ]
     };
   }
 

@@ -64,14 +64,7 @@ html {
 }
 body {
   height: 100%;
-  background: #1f3649;
-  background: -moz-radial-gradient(center, ellipse cover, #1f3649 0%, #17253d 44%, #040d11 100%);
-  background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%, #1f3649), color-stop(44%, #17253d), color-stop(100%, #040d11));
-  background: -webkit-radial-gradient(center, ellipse cover, #1f3649 0%, #17253d 44%, #040d11 100%);
-  background: -o-radial-gradient(center, ellipse cover, #1f3649 0%, #17253d 44%, #040d11 100%);
-  background: -ms-radial-gradient(center, ellipse cover, #1f3649 0%, #17253d 44%, #040d11 100%);
-  background: radial-gradient(ellipse at center, #1f3649 0%, #17253d 44%, #040d11 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='@account-color-dark', endColorstr='#040d11', GradientType=1);
+  background: #8c9093;
   color: #5B5B5B;
   font-family: 'Lato', 'Open Sans', Helvetica, sans-serif !important;
   line-height: 1.42857143;
@@ -4209,12 +4202,12 @@ body:not(.fixed-sidebar):not(.fixed-topbar):not(.sidebar-top) .sidebar .logopane
   }
 }
 .main-content {
-  background: #F5F5F5;
+  background: #8c9093;
   margin-left: 240px;
   min-height: 750px;
 }
 .main-content .page-content {
-  background: #F5F5F5;
+  background: #8c9093;
   margin-top: 50px;
   overflow: hidden;
   padding: 20px 50px 0;

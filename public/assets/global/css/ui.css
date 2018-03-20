@@ -4348,7 +4348,7 @@ label.ios-switch:last-of-type {
 .pagination > .active > span:focus {
   background: none;
   border: none;
-  color: #3C3C3C;
+  color: #fff;
 }
 ul.pagination > .disabled > span,
 ul.pagination > .disabled > a,
@@ -4793,20 +4793,20 @@ body.DTTT_Print {
   border: none;
 }
 .nav-tabs3 > .nav.nav-tabs > li > a {
-  background-color: #CFDAE0;
-  color: #121212;
+  background-color: #2B2E33;
+  color: #fff;
 }
 .nav-tabs3 > .nav.nav-tabs.nav-dark > li > a {
   background-color: #353940;
   color: #dadada;
 }
 .nav-tabs3 > .nav.nav-tabs > li.active > a {
-  background-color: #F1F1F1;
+  background-color: #CFDAE0;
   border: none;
   color: #121212;
 }
 .nav-tabs3 > .tab-content {
-  background-color: #F1F1F1;
+  background-color: #2B2E33;
   border-top: none !important;
   overflow: hidden;
   padding: 15px;
@@ -5118,7 +5118,7 @@ body.DTTT_Print {
   color: #121212;
   display: inline-block;
   padding: 15px;
-  width: 100%;
+  /*width: 100%;*/
 }
 .panel-accordion a:hover {
   text-decoration: none;

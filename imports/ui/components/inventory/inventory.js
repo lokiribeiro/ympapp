@@ -26,6 +26,21 @@ class Inventory {
     };
     this.searchText = '';
 
+    this.options = [
+      {name: 'Yes', value: true},
+      {name: 'No', value: false}
+    ];
+
+    this.nameUp = false;
+    this.categoryUp = false;
+    this.manufacturerUp = false;
+    this.modelNoUp = false;
+    this.partNoUp = false;
+    this.totalAmountUp = false;
+    this.minAmountUp = false;
+    this.departmentUp = false;
+    this.criticalUp = false;
+
     this.subscribe('inventories', () => [{
       limit: parseInt(this.perPage),
       skip: parseInt((this.getReactively('page') - 1) * this.perPage),
@@ -79,6 +94,296 @@ class Inventory {
     this.gotoSettings = function() {
       $state.go('settings', {}, {reload: 'settings'});
     }
+
+    this.sortNameUp = function() {
+      this.nameUp = false;
+      this.categoryUp = false;
+      this.manufacturerUp = false;
+      this.modelNoUp = false;
+      this.partNoUp = false;
+      this.totalAmountUp = false;
+      this.minAmountUp = false;
+      this.departmentUp = false;
+      this.criticalUp = false;
+      this.sort = {
+        name: 1
+      };
+
+    }
+
+    this.sortNameDown = function() {
+      this.nameUp = true;
+      this.categoryUp = false;
+      this.manufacturerUp = false;
+      this.modelNoUp = false;
+      this.partNoUp = false;
+      this.totalAmountUp = false;
+      this.minAmountUp = false;
+      this.departmentUp = false;
+      this.criticalUp = false;
+      this.sort = {
+        name: -1
+      };
+
+    }
+
+    this.sortCategoryUp = function() {
+      this.nameUp = false;
+      this.categoryUp = false;
+      this.manufacturerUp = false;
+      this.modelNoUp = false;
+      this.partNoUp = false;
+      this.totalAmountUp = false;
+      this.minAmountUp = false;
+      this.departmentUp = false;
+      this.criticalUp = false;
+      this.sort = {
+        category: 1
+      };
+
+    }
+
+    this.sortCategoryDown = function() {
+      this.nameUp = false;
+      this.categoryUp = true;
+      this.manufacturerUp = false;
+      this.modelNoUp = false;
+      this.partNoUp = false;
+      this.totalAmountUp = false;
+      this.minAmountUp = false;
+      this.departmentUp = false;
+      this.criticalUp = false;
+      this.sort = {
+        category: -1
+      };
+
+    }
+
+    this.sortManufacturerUp = function() {
+      this.nameUp = false;
+      this.categoryUp = false;
+      this.manufacturerUp = false;
+      this.modelNoUp = false;
+      this.partNoUp = false;
+      this.totalAmountUp = false;
+      this.minAmountUp = false;
+      this.departmentUp = false;
+      this.criticalUp = false;
+      this.sort = {
+        manufacturer: 1
+      };
+
+    }
+
+    this.sortManufacturerDown = function() {
+      this.nameUp = false;
+      this.categoryUp = false;
+      this.manufacturerUp = true;
+      this.modelNoUp = false;
+      this.partNoUp = false;
+      this.totalAmountUp = false;
+      this.minAmountUp = false;
+      this.departmentUp = false;
+      this.criticalUp = false;
+      this.sort = {
+        manufacturer: -1
+      };
+
+    }
+
+    this.sortModelNoUp = function() {
+      this.nameUp = false;
+      this.categoryUp = false;
+      this.manufacturerUp = false;
+      this.modelNoUp = false;
+      this.partNoUp = false;
+      this.totalAmountUp = false;
+      this.minAmountUp = false;
+      this.departmentUp = false;
+      this.criticalUp = false;
+      this.sort = {
+        modelNo: 1
+      };
+
+    }
+
+    this.sortModelNoDown = function() {
+      this.nameUp = false;
+      this.categoryUp = false;
+      this.manufacturerUp = false;
+      this.modelNoUp = true;
+      this.partNoUp = false;
+      this.totalAmountUp = false;
+      this.minAmountUp = false;
+      this.departmentUp = false;
+      this.criticalUp = false;
+      this.sort = {
+        modelNo: -1
+      };
+
+    }
+
+    this.sortPartNoUp = function() {
+      this.nameUp = false;
+      this.categoryUp = false;
+      this.manufacturerUp = false;
+      this.modelNoUp = false;
+      this.partNoUp = false;
+      this.totalAmountUp = false;
+      this.minAmountUp = false;
+      this.departmentUp = false;
+      this.criticalUp = false;
+      this.sort = {
+        partNo: 1
+      };
+
+    }
+
+    this.sortPartNoDown = function() {
+      this.nameUp = false;
+      this.categoryUp = false;
+      this.manufacturerUp = false;
+      this.modelNoUp = false;
+      this.partNoUp = true;
+      this.totalAmountUp = false;
+      this.minAmountUp = false;
+      this.departmentUp = false;
+      this.criticalUp = false;
+      this.sort = {
+        partNo: -1
+      };
+
+    }
+
+  this.sortTotalAmountUp = function() {
+    this.nameUp = false;
+    this.categoryUp = false;
+    this.manufacturerUp = false;
+    this.modelNoUp = false;
+    this.partNoUp = false;
+    this.totalAmountUp = false;
+    this.minAmountUp = false;
+    this.departmentUp = false;
+    this.criticalUp = false;
+    this.sort = {
+      totalAmount: 1
+    };
+  
+  }
+  
+  this.sortTotalAmountDown = function() {
+    this.nameUp = false;
+    this.categoryUp = false;
+    this.manufacturerUp = false;
+    this.modelNoUp = false;
+    this.partNoUp = false;
+    this.totalAmountUp = true;
+    this.minAmountUp = false;
+    this.departmentUp = false;
+    this.criticalUp = false;
+    this.sort = {
+      totalAmount: -1
+    };
+
+ }
+
+this.sortMinAmountUp = function() {
+  this.nameUp = false;
+  this.categoryUp = false;
+  this.manufacturerUp = false;
+  this.modelNoUp = false;
+  this.partNoUp = false;
+  this.totalAmountUp = false;
+  this.minAmountUp = false;
+  this.departmentUp = false;
+  this.criticalUp = false;
+  this.sort = {
+    minAmount: 1
+  };
+
+}
+
+this.sortMinAmountDown = function() {
+  this.nameUp = false;
+  this.categoryUp = false;
+  this.manufacturerUp = false;
+  this.modelNoUp = false;
+  this.partNoUp = false;
+  this.totalAmountUp = false;
+  this.minAmountUp = true;
+  this.departmentUp = false;
+  this.criticalUp = false;
+  this.sort = {
+    minAmount: -1
+  };
+  
+}
+
+this.sortDepartmentUp = function() {
+  this.nameUp = false;
+  this.categoryUp = false;
+  this.manufacturerUp = false;
+  this.modelNoUp = false;
+  this.partNoUp = false;
+  this.totalAmountUp = false;
+  this.minAmountUp = false;
+  this.departmentUp = false;
+  this.criticalUp = false;
+  this.sort = {
+    department: 1
+  };
+
+}
+
+this.sortDepartmentDown = function() {
+  this.nameUp = false;
+  this.categoryUp = false;
+  this.manufacturerUp = false;
+  this.modelNoUp = false;
+  this.partNoUp = false;
+  this.totalAmountUp = false;
+  this.minAmountUp = false;
+  this.departmentUp = true;
+  this.criticalUp = false;
+  this.sort = {
+    department: -1
+  };
+  
+}
+
+this.sortCriticalUp = function() {
+  this.nameUp = false;
+  this.categoryUp = false;
+  this.manufacturerUp = false;
+  this.modelNoUp = false;
+  this.partNoUp = false;
+  this.totalAmountUp = false;
+  this.minAmountUp = false;
+  this.departmentUp = false;
+  this.criticalUp = false;
+  this.sort = {
+    critical: 1
+  };
+
+}
+
+this.sortCriticalDown = function() {
+  this.nameUp = false;
+  this.categoryUp = false;
+  this.manufacturerUp = false;
+  this.modelNoUp = false;
+  this.partNoUp = false;
+  this.totalAmountUp = false;
+  this.minAmountUp = false;
+  this.departmentUp = true;
+  this.criticalUp = true;
+  this.sort = {
+    critical: -1
+  };
+  
+}
+
+    
   }
 
   isOwner(inventory) {
@@ -100,6 +405,7 @@ class Inventory {
     this.inventory.date = new Date();
     var status = Inventories.insert(this.inventory);
     console.info('status', status);
+    this.inventory = {};
     //this.reset();
   }
 }

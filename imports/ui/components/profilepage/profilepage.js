@@ -9,9 +9,9 @@ import { Counts } from 'meteor/tmeasday:publish-counts';
 
 import { Profiles } from '../../../api/profiles';
 import { Docs } from '../../../api/docs';
-import template from './employeedetails.html';
+import template from './profilepage.html';
  
-class Employeedetails {
+class Profilepage {
   constructor($scope, $reactive, $stateParams, $state, Upload) {
     //'ngInject';
 
@@ -83,8 +83,6 @@ class Employeedetails {
       {name: 'user', value: 'user'}
     ];
 
-    this.access = {};
-
     console.info('employeeId', this.employeeId);
 
     this.subscribe('profiles');
@@ -96,7 +94,7 @@ class Employeedetails {
     this.helpers({
       profile() {
         return Profiles.findOne({
-            _id: $stateParams.employeeId
+            userID: $stateParams.employeeId
           });
       },
       isLoggedIn() {
@@ -115,17 +113,6 @@ class Employeedetails {
           console.info('docs', docs);
           return docs;
       },
-      access() {
-        var profile = Profiles.findOne({
-          _id: $stateParams.employeeId
-        });
-        $scope.profileId = profile.userID;
-        var access = Meteor.users.findOne({
-          _id: $scope.profileId
-        });
-        console.info('access', access);
-        return access;
-      }
     });
 
     this.logout = function() {
@@ -149,86 +136,6 @@ class Employeedetails {
     }
     this.gotoSettings = function() {
       $state.go('settings', {}, {reload: 'settings'});
-    }
-
-    this.updateJobs = function(group) {
-      console.info('value upon entrance', group.jobs);
-      var profile = Profiles.findOne({
-        _id: $stateParams.employeeId
-      });
-      $scope.profileId = profile.userID;
-      console.info('profileId', $scope.profileId);
-      Meteor.call('upsertJobsAccess', $scope.profileId, group.jobs, function(err, result) {
-        if (err) {
-          console.info('err', err);
-       } else {
-         console.info('uploaded', err);
-       }
-      });
-    }
-
-    this.updateInventory = function(group) {
-      console.info('value upon entrance', group.inventory);
-      var profile = Profiles.findOne({
-        _id: $stateParams.employeeId
-      });
-      $scope.profileId = profile.userID;
-      console.info('profileId', $scope.profileId);
-      Meteor.call('upsertInventoryAccess', $scope.profileId, group.inventory, function(err, result) {
-        if (err) {
-          console.info('err', err);
-       } else {
-         console.info('uploaded', err);
-       }
-      });
-    }
-
-    this.updateLogbook = function(group) {
-      console.info('value upon entrance', group.logbook);
-      var profile = Profiles.findOne({
-        _id: $stateParams.employeeId
-      });
-      $scope.profileId = profile.userID;
-      console.info('profileId', $scope.profileId);
-      Meteor.call('upsertLogbookAccess', $scope.profileId, group.logbook, function(err, result) {
-        if (err) {
-          console.info('err', err);
-       } else {
-         console.info('uploaded', err);
-       }
-      });
-    }
-
-    this.updateEmployees = function(group) {
-      console.info('value upon entrance', group.employees);
-      var profile = Profiles.findOne({
-        _id: $stateParams.employeeId
-      });
-      $scope.profileId = profile.userID;
-      console.info('profileId', $scope.profileId);
-      Meteor.call('upsertEmployeesAccess', $scope.profileId, group.employees, function(err, result) {
-        if (err) {
-          console.info('err', err);
-       } else {
-         console.info('uploaded', err);
-       }
-      });
-    }
-
-    this.updateSettings = function(group) {
-      console.info('value upon entrance', group.settings);
-      var profile = Profiles.findOne({
-        _id: $stateParams.employeeId
-      });
-      $scope.profileId = profile.userID;
-      console.info('profileId', $scope.profileId);
-      Meteor.call('upsertSettingsAccess', $scope.profileId, group.settings, function(err, result) {
-        if (err) {
-          console.info('err', err);
-       } else {
-         console.info('uploaded', err);
-       }
-      });
     }
 
     this.uploadCv = function(file, errFiles) {
@@ -586,9 +493,8 @@ this.uploadPhoto = function(file, errFiles) {
       else {
         var filename = this.fileHere;
         console.info('profileID', this.profile);
-        var profileID = $stateParams.employeeId;
-        var profileID2 = $stateParams.employeeId;
-        var profileID3 = $scope.profileId;
+        var profileID = $stateParams.employeeId
+        var profileID2 = $stateParams.employeeId
         console.info('profileID', profileID);
         var downloadurl = downloadUrl;
 
@@ -601,16 +507,6 @@ this.uploadPhoto = function(file, errFiles) {
             console.info('uploaded', err);
          }
        });
-
-       Meteor.call('upsertPhotoUser', profileID3, downloadurl, function(err, result) {
-        console.log(downloadUrl);
-        console.log('success: ' + downloadUrl);
-        if (err) {
-          console.info('err', err);
-        } else {
-          console.info('uploaded', err);
-       }
-     });
 
         Meteor.call('upsertPhoto', profileID, downloadUrl, function(err, result) {
               console.log(downloadUrl);
@@ -968,11 +864,9 @@ this.uploadMisc = function(file, errFiles) {
         }
     });
   }
-
-  
 }
  
-const name = 'employeedetails';
+const name = 'profilepage';
 
 //Inventorydetails.$inject = ['$scope', '$reactive', '$stateParams'];
  
@@ -984,15 +878,15 @@ export default angular.module(name, [
 ]).component(name, {
   template,
   controllerAs: name,
-  controller: ['$scope', '$reactive', '$stateParams', '$state', 'Upload', Employeedetails]
+  controller: ['$scope', '$reactive', '$stateParams', '$state', 'Upload', Profilepage]
 })
 .config(['$stateProvider',
 function($stateProvider) {
     //'ngInject';
     $stateProvider
-      .state('employeedetails', {
-        url: '/employeedetails/:employeeId',
-        template: '<employeedetails></employeedetails>',
+      .state('profilepage', {
+        url: '/profilepage/:employeeId',
+        template: '<profilepage></profilepage>',
     
         resolve: {
             currentUser($q, $state) {

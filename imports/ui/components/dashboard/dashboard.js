@@ -9,6 +9,7 @@ import { Counts } from 'meteor/tmeasday:publish-counts';
 
 import { Jobs } from '../../../api/jobs';
 import { Parties } from '../../../api/parties';
+import { Groups } from '../../../api/groups';
 import template from './dashboard.html';
  
 class Dashboard {
@@ -28,6 +29,9 @@ class Dashboard {
     this.sort = {
       name: 1
     };
+    this.sortDate = {
+      date: -1
+    };
     this.searchText = '';
 
     this.subscribe('parties', () => [{
@@ -40,13 +44,15 @@ class Dashboard {
     this.subscribe('jobs', () => [{
       limit: parseInt(this.perPage),
       skip: parseInt((this.getReactively('page') - 1) * this.perPage),
-      sort: this.getReactively('sort')
+      sort: this.getReactively('sortDate')
     }, this.getReactively('searchText'), 
     this.getReactively('dateFrom2'),
     this.getReactively('dateTo2')
     ]);
 
     this.subscribe('users');
+
+    this.subscribe('groups');
  
     this.helpers({
       parties() {
@@ -58,7 +64,7 @@ class Dashboard {
       },
       jobs() {
         var jobs =  Jobs.find({}, {
-          sort : this.getReactively('sort')
+          sort : this.getReactively('sortDate')
         });
         console.info('parties', jobs);
         return jobs;
@@ -74,6 +80,11 @@ class Dashboard {
       },
       currentUser() {
         return Meteor.user();
+      },
+      groups() {
+        return Groups.find({}, {
+          sort : this.getReactively('sort')
+        });
       }
     });
 

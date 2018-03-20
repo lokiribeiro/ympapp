@@ -58,11 +58,83 @@ export function  upsertPage(profileID, downloadUrl, jobID, page){
     }
   return fileUpsert;
 }
+
+export function  upsertCvs(profileID, downloadUrl){
+  var selector = {userID: profileID,
+    fileType:'cv'};
+  var modifier = {$set: {
+      downloadurl: downloadUrl,
+      fileType:'cv'
+    }};
+    if (Meteor.isServer) {
+  var fileUpsert = Docs.upsert(selector, modifier);
+    }
+  return fileUpsert;
+}
+
+export function  upsertPassports(profileID, downloadUrl){
+  var selector = {userID: profileID,
+    fileType:'passport'};
+  var modifier = {$set: {
+      downloadurl: downloadUrl,
+      fileType:'passport'
+    }};
+    if (Meteor.isServer) {
+  var fileUpsert = Docs.upsert(selector, modifier);
+    }
+  return fileUpsert;
+}
+
+export function  upsertPhoto(profileID, downloadUrl){
+  var selector = {userID: profileID,
+    fileType:'photo'};
+  var modifier = {$set: {
+      downloadurl: downloadUrl,
+      fileType:'photo'
+    }};
+    if (Meteor.isServer) {
+  var fileUpsert = Docs.upsert(selector, modifier);
+    }
+  return fileUpsert;
+}
+
+export function  upsertLicenses(profileID, downloadUrl, certType, expDate){
+  var certs = {};
+  certs.userID = profileID;
+  certs.downloadurl = downloadUrl;
+  certs.certType = certType;
+  certs.expDate = expDate;
+  certs.fileType = 'license';
+ 
+    if (Meteor.isServer) {
+  var fileUpsert = Docs.insert(certs);
+    }
+  return fileUpsert;
+}
+
+export function  upsertMisc(profileID, downloadUrl, fileName, desc){
+  var miscs = {};
+  miscs.userID = profileID;
+  miscs.downloadurl = downloadUrl;
+  miscs.fileName = fileName;
+  miscs.desc = desc;
+  miscs.fileType = 'misc';
+ 
+    if (Meteor.isServer) {
+  var fileUpsert = Docs.insert(miscs);
+    }
+  return fileUpsert;
+}
    
 
 Meteor.methods({
   upsertDrawing,
   upsertManual,
   upsertSpecs,
-  upsertPage
+  upsertPage,
+  upsertCvs,
+  upsertPassports,
+  upsertPhoto,
+  upsertLicenses,
+  upsertMisc
 });

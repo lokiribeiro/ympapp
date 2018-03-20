@@ -6,6 +6,7 @@ import ngFileUpload from 'ng-file-upload';
 
 import '../../../startup/accounts-config.js';
 import '../../../startup/datepicker.js';
+import '../../../startup/ngPrint.js';
  
 import template from './socially.html';
 import Navigation from '../navigation/navigation';
@@ -17,6 +18,11 @@ import Inventorydetails from '../inventorydetails/inventorydetails';
 import Employees from '../employees/employees';
 import Employeedetails from '../employeedetails/employeedetails';
 import Logbook from '../logbook/logbook';
+import Newlog from '../newlog/newlog';
+import Sealog from '../sealog/sealog';
+import Logdetails from '../logdetails/logdetails';
+import Settings from '../settings/settings';
+import Profilepage from '../profilepage/profilepage';
 
  
 class Socially {}
@@ -36,8 +42,14 @@ export default angular.module(name, [
   Login.name,
   Employeedetails.name,
   Logbook.name,
+  Newlog.name,
+  Sealog.name,
+  Logdetails.name,
+  Settings.name,
+  Profilepage.name,
   'accounts.ui',
   'date-picker',
+  'ngPrint',
   ngFileUpload
 //  '720kb.datepicker'
 ]).component(name, {

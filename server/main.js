@@ -9,3 +9,6 @@ import '../imports/api/docs';
 import '../imports/api/photos';
 import '../imports/api/histories';
 import '../imports/api/supports';
+import '../imports/api/logbooks';
+import '../imports/api/groups';
+import '../imports/api/subgroups';

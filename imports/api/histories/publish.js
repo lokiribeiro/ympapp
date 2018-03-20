@@ -8,7 +8,7 @@ if (Meteor.isServer) {
     const selector = {};
  
     if (typeof searchString === 'string' && searchString.length) {
-     selector.name = {
+     selector.title = {
        $regex: `.*${searchString}.*`,
        $options : 'i'
      };

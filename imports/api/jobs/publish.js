@@ -7,18 +7,25 @@ if (Meteor.isServer) {
    Meteor.publish('jobs', function(options, searchString, dateFrom, dateTo) {
    var selector = {};
 
-   if (typeof searchString === 'string' && searchString.length) {
+   if (typeof dateFrom === 'number' && typeof dateTo === 'number') {
+    var selector = {dateTime: {
+        $gte: dateFrom,
+        $lte: dateTo
+      }};
+  } else if (typeof searchString === 'string' && searchString.length) {
      var search = {$regex: `.*${searchString}.*`, $options: 'i'};
      selector = {$or: [
        {title: search},
-       {group: search}
-     ],
-    $and: [
-      {dateTime: {
-        $gte: dateFrom,
-        $lte: dateTo
-      }}
-    ]};
+       {group: search},
+       {location: search},
+       {modelNumber: search},
+       {hours: search},
+       {years: search},
+       {serialNumber: search},
+       {manufacturer: search},
+       {status: search}
+     ]
+    };
     /*selector = {dateTime: {
       $gte: dateFrom,
       $lte: dateTo

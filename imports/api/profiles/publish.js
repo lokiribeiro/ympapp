@@ -5,12 +5,18 @@ import { Profiles } from './collection';
 
 if (Meteor.isServer) {
    Meteor.publish('profiles', function(options, searchString) {
-   const selector = {};
+   var selector = {};
 
    if (typeof searchString === 'string' && searchString.length) {
-    selector.name = {
-      $regex: `.*${searchString}.*`,
-      $options : 'i'
+    var search = {$regex: `.*${searchString}.*`, $options: 'i'};
+    selector = {$or: [
+      {firstName: search},
+      {lastName: search},
+      {type: search},
+      {status: search},
+      {termOfEmployment: search},
+      {username: search}
+    ]
     };
   }
 

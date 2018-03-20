@@ -29,6 +29,11 @@ class Inventorydetails {
     };
     this.searchText = '';
 
+    this.options = [
+      {name: 'Yes', value: true},
+      {name: 'No', value: false}
+    ];
+
     this.subscribe('inventories');
 
     this.subscribe('users');
@@ -72,6 +77,12 @@ class Inventorydetails {
     this.gotoSettings = function() {
       $state.go('settings', {}, {reload: 'settings'});
     }
+    this.delete = function() {
+      var inventoryId = $stateParams.inventoryId;
+      var status = Inventories.remove(inventoryId);
+      console.info('item removed', status);
+      $state.go('inventory', {}, {reload: 'inventory'});
+    }
   }
 
   isOwner(inventory) {
@@ -84,15 +95,15 @@ class Inventorydetails {
     }, {
       $set: {
         name: this.inventory.name,
-        price: this.inventory.price,
-        amount: this.inventory.amount,
-        minAmt: this.inventory.minAmt,
-        note: this.inventory.note,
-        serialNo: this.inventory.serialNo,
-        usedFor: this.inventory.usedFor,
+        category: this.inventory.category,
         manufacturer: this.inventory.manufacturer,
-        supplier: this.inventory.supplier,
-        barcode: this.inventory.barcode
+        modelNo: this.inventory.modelNo,
+        partNo: this.inventory.partNo,
+        totalAmount: this.inventory.totalAmount,
+        minAmount: this.inventory.minAmount,
+        department: this.inventory.department,
+        critical: this.inventory.critical,
+        price: this.inventory.price
       }
     }, (error) => {
         if (error) {

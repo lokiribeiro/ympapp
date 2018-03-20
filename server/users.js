@@ -16,6 +16,74 @@ import { Meteor } from 'meteor/meteor';
      }
      return username;
    }
+
+   export function upsertNewRoleFromAdmin(userID, userRole, boatID){
+    var selector = {_id: userID};
+    var modifier = {$set: {
+      role: userRole,
+      boatID: boatID
+    }};
+    var roleUpsert = Meteor.users.upsert(selector, modifier);
+    return roleUpsert;
+  }
+
+  export function upsertJobsAccess(userID, access){
+    var selector = {_id: userID};
+    var modifier = {$set: {
+      jobs: access
+    }};
+    var roleUpsert = Meteor.users.upsert(selector, modifier);
+    return roleUpsert;
+  }
+
+  export function upsertInventoryAccess(userID, access){
+    var selector = {_id: userID};
+    var modifier = {$set: {
+      inventory: access
+    }};
+    var roleUpsert = Meteor.users.upsert(selector, modifier);
+    return roleUpsert;
+  }
+
+  export function upsertLogbookAccess(userID, access){
+    var selector = {_id: userID};
+    var modifier = {$set: {
+      logbook: access
+    }};
+    var roleUpsert = Meteor.users.upsert(selector, modifier);
+    return roleUpsert;
+  }
+
+  export function upsertEmployeesAccess(userID, access){
+    var selector = {_id: userID};
+    var modifier = {$set: {
+      employees: access
+    }};
+    var roleUpsert = Meteor.users.upsert(selector, modifier);
+    return roleUpsert;
+  }
+
+  export function upsertSettingsAccess(userID, access){
+    var selector = {_id: userID};
+    var modifier = {$set: {
+      settings: access
+    }};
+    var roleUpsert = Meteor.users.upsert(selector, modifier);
+    return roleUpsert;
+  }
+
+  export function  upsertPhotoUser(profileID, downloadUrl){
+    var selector = {_id: profileID};
+    var modifier = {$set: {
+        profilePhoto: downloadUrl
+      }};
+      if (Meteor.isServer) {
+    var fileUpsert = Meteor.users.upsert(selector, modifier);
+      }
+    return fileUpsert;
+  }
+    
+   
    
    
    
@@ -28,5 +96,12 @@ import { Meteor } from 'meteor/meteor';
 
 
    Meteor.methods({
-       createUsers
+       createUsers,
+       upsertNewRoleFromAdmin,
+       upsertJobsAccess,
+       upsertInventoryAccess,
+       upsertLogbookAccess,
+       upsertEmployeesAccess,
+       upsertSettingsAccess,
+       upsertPhotoUser
    });

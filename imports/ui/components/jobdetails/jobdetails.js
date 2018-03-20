@@ -13,6 +13,7 @@ import { Photos } from '../../../api/photos';
 import { Profiles } from '../../../api/profiles';
 import { Histories } from '../../../api/histories';
 import { Supports } from '../../../api/supports';
+import { Groups } from '../../../api/groups';
 import template from './jobdetails.html';
  
 class Jobdetails {
@@ -43,10 +44,12 @@ class Jobdetails {
       dateNow: -1
     };
     this.searchText = '';
+    this.searchGroup = '';
     this.pageNum  = null;
     $scope.doneSearching = false;
     $scope.uploadSuccess = false;
     this.showNotif = false;
+    this.notComplete = false;
 
     this.subscribe('jobs');
 
@@ -65,10 +68,12 @@ class Jobdetails {
 
     this.subscribe('histories', () => [{
       sort: this.getReactively('sort2')
-    }, this.getReactively('searchText')
+    }, this.getReactively('searchGroup')
     ]);
 
     this.subscribe('supports');
+
+    this.subscribe('groups');
  
     this.helpers({
       job() {
@@ -107,6 +112,11 @@ class Jobdetails {
       },
       supports() {
         return Supports.find({});
+      },
+      groups() {
+        return Groups.find({}, {
+          sort : this.getReactively('sort')
+        });
       }
     });
 
@@ -137,6 +147,19 @@ class Jobdetails {
       
       this.showNotif = false;
       console.info('notif daan', this.showNotif);
+    }
+
+    this.notCompleted = function() {
+      
+      this.notComplete = false;
+      console.info('complete daan', this.notComplete);
+    }
+
+    this.delete = function() {
+      var jobId = $stateParams.jobId;
+      var status = Jobs.remove(jobId);
+      console.info('status removed', status);
+      $state.go('dashboard', {}, {reload: 'dashboard'});
     }
 
     this.uploadFiles = function(file, errFiles) {
@@ -694,49 +717,51 @@ this.uploadImage = function(file, errFiles) {
   }
    
   save() {
-    this.history.jobID = this.job._id;
-    this.history.title = this.job.title;
-    this.history.description = this.job.description;
-    this.history.location = this.job.location;
-    this.history.hours = this.job.hours;
-    this.history.years = this.job.years;
-    this.history.group = this.job.group;
-    this.history.support = this.job.support;
-    this.history.modelNumber = this.job.modelNumber;
-    this.history.serialNumber = this.job.serialNumber;
-    this.history.manufacturer = this.job.manufacturer;
-    this.history.dateNow = new Date();
-    console.info('profileget', this.job.doneBy);
-    this.history.userID = this.job.doneBy.userID;
-    this.history.name = this.job.doneBy.name;
-
-
-    Jobs.update({
-      _id: this.job._id
-    }, {
-      $set: {
-        title: this.job.title,
-        description: this.job.description,
-        location: this.job.location,
-        hours: this.job.hours,
-        years: this.job.years,
-        group: this.job.group,
-        support: this.job.support,
-        modelNumber: this.job.modelNumber,
-        serialNumber: this.job.serialNumber,
-        manufacturer: this.job.manufacturer
-      }
-    }, (error) => {
-        if (error) {
-          console.log('Oops, unable to update the job...');
-        } else {
-          console.log('Done!');
+    console.info('doneby', this.job.doneBy);
+    if(this.job.doneBy){
+      this.history.jobID = this.job._id;
+      this.history.title = this.job.title;
+      this.history.group = this.job.group;
+      this.history.workHistory = this.job.workHistory;
+      this.history.dateNow = new Date();
+      console.info('profileget', this.job.doneBy);
+      this.history.userID = this.job.doneBy.userID;
+      this.history.name = this.job.doneBy.name;
+      this.job.status = true;
+  
+  
+      Jobs.update({
+        _id: this.job._id
+      }, {
+        $set: {
+          title: this.job.title,
+          description: this.job.description,
+          location: this.job.location,
+          hours: this.job.hours,
+          years: this.job.years,
+          group: this.job.group,
+          support: this.job.support,
+          modelNumber: this.job.modelNumber,
+          serialNumber: this.job.serialNumber,
+          manufacturer: this.job.manufacturer,
+          status: this.job.status
         }
-    });
+      }, (error) => {
+          if (error) {
+            console.log('Oops, unable to update the job...');
+          } else {
+            console.log('Done!');
+          }
+      });
+  
+      var status = Histories.insert(this.history);
+      console.info('status', status);
+      this.showNotif = true;
 
-    var status = Histories.insert(this.history);
-    console.info('status', status);
-    this.showNotif = true;
+    } else {
+      this.notComplete = true;
+    }
+    
   }
 
   supportSave() {

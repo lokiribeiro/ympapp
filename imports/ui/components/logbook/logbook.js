@@ -7,8 +7,8 @@ import { Meteor } from 'meteor/meteor';
 
 import { Counts } from 'meteor/tmeasday:publish-counts';
 
-import { Jobs } from '../../../api/jobs';
-import { Parties } from '../../../api/parties';
+import { Logbooks } from '../../../api/logbooks';
+import { Profiles } from '../../../api/profiles';
 import template from './logbook.html';
  
 class Logbook {
@@ -26,45 +26,39 @@ class Logbook {
     this.perPage = 10;
     this.page = 1;
     this.sort = {
-      name: 1
+      date: -1
     };
     this.searchText = '';
+    this.searchText2 = '';
 
-    this.subscribe('parties', () => [{
+    this.subscribe('profiles', () => [{
+        limit: parseInt(this.perPage),
+        skip: parseInt((this.getReactively('page') - 1) * this.perPage),
+        sort: this.getReactively('sort')
+      }, this.getReactively('searchText2')
+      ]);
+
+    this.subscribe('logbooks', () => [{
       limit: parseInt(this.perPage),
       skip: parseInt((this.getReactively('page') - 1) * this.perPage),
       sort: this.getReactively('sort')
-    }, this.getReactively('searchText')
-    ]);
-
-    this.subscribe('jobs', () => [{
-      limit: parseInt(this.perPage),
-      skip: parseInt((this.getReactively('page') - 1) * this.perPage),
-      sort: this.getReactively('sort')
-    }, this.getReactively('searchText'), 
-    this.getReactively('dateFrom2'),
-    this.getReactively('dateTo2')
+    }, this.getReactively('dateFrom2'),
+    this.getReactively('dateTo2'),
+    this.getReactively('searchText')
     ]);
 
     this.subscribe('users');
  
     this.helpers({
-      parties() {
-        var parties =  Parties.find({}, {
+      logbooks() {
+        var logbooks =  Logbooks.find({}, {
           sort : this.getReactively('sort')
         });
-        console.info('parties', parties);
-        return parties;
+        console.info('parties', logbooks);
+        return logbooks;
       },
-      jobs() {
-        var jobs =  Jobs.find({}, {
-          sort : this.getReactively('sort')
-        });
-        console.info('parties', jobs);
-        return jobs;
-      },
-      jobsCount() {
-        return Counts.get('numberOfJobs');
+      logbooksCount() {
+        return Counts.get('numberOfLogbooks');
       },
       isLoggedIn() {
         return !!Meteor.userId();
@@ -74,6 +68,9 @@ class Logbook {
       },
       currentUser() {
         return Meteor.user();
+      },
+      profiles() {
+        return Profiles.find({});
       }
     });
 
@@ -98,6 +95,24 @@ class Logbook {
     }
     this.gotoSettings = function() {
       $state.go('settings', {}, {reload: 'settings'});
+    }
+    this.gotoNewLog = function() {
+      angular.element("body").removeClass("modal-open");
+      var removeMe = angular.element(document.getElementsByClassName("modal-backdrop"));
+      removeMe.remove();
+      //window.setTimeout(function(){
+        $state.go('newlog', {}, {reload: 'newlog'});
+      //},2000);
+      
+    }
+    this.gotoSeaLog = function() {
+      angular.element("body").removeClass("modal-open");
+      var removeMe = angular.element(document.getElementsByClassName("modal-backdrop"));
+      removeMe.remove();
+      //window.setTimeout(function(){
+        $state.go('sealog', {}, {reload: 'sealog'});
+      //},2000);
+      
     }
   }
 
@@ -130,9 +145,9 @@ class Logbook {
   }
 
   filterNow() {
-    console.info('searchText', this.searchText);
     this.dateFrom2 = this.dateFrom.getTime();
     this.dateTo2 = this.dateTo.getTime();
+    console.info('searchText', typeof this.dateFrom2);
   }
 }
  

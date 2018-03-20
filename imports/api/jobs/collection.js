@@ -4,12 +4,12 @@ export const Jobs = new Mongo.Collection('jobs');
 
 Jobs.allow({
  insert(userId, job) {
-   return userId && job.owner === userId;
+   return userId;
  },
  update(userId, job, fields, modifier) {
-   return userId && job.owner === userId;
+   return true;
  },
  remove(userId, job) {
-   return userId && job.owner === userId;
+   return true;
  }
 });

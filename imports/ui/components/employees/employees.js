@@ -30,6 +30,41 @@ class Employees {
     };
     this.searchText = '';
 
+    $scope.thisUser = Meteor.userId();
+    console.info('userID', $scope.thisUser);
+
+    this.types = [
+      {name: 'Y1', value: 'Y1'},
+      {name: 'Y2', value: 'Y2'},
+      {name: 'Y3', value: 'Y3'},
+      {name: 'Y4', value: 'Y4'}
+    ];
+
+    this.statuses = [
+      {name: 'Available', value: 'Available'},
+      {name: 'Employed', value: 'Employed'},
+      {name: 'Onboard', value: 'Onboard'}
+    ];
+
+    this.mailings = [
+      {name: 'Subscribed', value: 'Subscribed'},
+      {name: 'Unsubscribed', value: 'Unsubscribed'}
+    ];
+
+    this.terms = [
+      {name: 'Permanent', value: 'Permanent'},
+      {name: 'Rotation', value: 'Rotation'},
+      {name: 'Relief', value: 'Relief'},
+      {name: 'All', value: 'All'}
+    ];
+
+    this.roles = [
+      {name: 'admin', value: 'admin'},
+      {name: 'user', value: 'user'}
+    ];
+
+
+
     this.subscribe('users');
 
     this.subscribe('profiles', () => [{
@@ -60,15 +95,47 @@ class Employees {
         return Meteor.userId();
       },
       currentUser() {
-          var thisuser = Meteor.user();
-          console.info('thisuser',thisuser);
         return Meteor.user();
+      },
+      boatuserID() {
+        var boatUser = Meteor.users.find({
+          _id: $scope.thisUser
+        });
+        console.info('boatUser', boatUser);
+        boatUser.forEach(function(boat){
+          $scope.boatID  = boat.boatID;
+          console.info('boatID', boat);
+        })
+        console.info('boatID', $scope.boatID);
+        return $scope.boatID;
       }
     });
 
     $scope.createProfile = function(details){
       console.info('employee details', $scope.profile)
-      $scope.profile.userID = details
+      $scope.profile.userID = details;
+      var boat = Meteor.user();
+      console.info('boat', boat);
+      var boatID = boat.boatID;
+      $scope.profile.boatID = boatID;
+      Meteor.call('upsertNewRoleFromAdmin', details, $scope.profile.role, boatID, function(err, detail) {
+        console.info('detail', detail);
+          if (err) {
+              console.info('err', err);
+         } else {
+           console.info('success', detail);
+         }
+      });
+      var downloadurl = '../assets/img/user.jpg';
+      Meteor.call('upsertPhotoUser', $scope.profile.userID, downloadurl, function(err, result) {
+        console.log(downloadUrl);
+        console.log('success: ' + downloadUrl);
+        if (err) {
+          console.info('err', err);
+        } else {
+          console.info('uploaded', err);
+       }
+      });
       var status = Profiles.insert($scope.profile);
       console.info('status', status);
     }
@@ -76,6 +143,7 @@ class Employees {
     this.submit = function() {
       this.employee.date = new Date();
       this.employee.password = 'Password123';
+      this.employee.profilePhoto = '../assets/img/user.jpg';
       $scope.profile = this.employee;
       console.info('username', this.employee.username);
       Meteor.call('createUsers', this.employee.username, this.employee.password, this.employee.email, function(err, detail) {
