@@ -128,8 +128,6 @@ class Employees {
       });
       var downloadurl = '../assets/img/user.jpg';
       Meteor.call('upsertPhotoUser', $scope.profile.userID, downloadurl, function(err, result) {
-        console.log(downloadUrl);
-        console.log('success: ' + downloadUrl);
         if (err) {
           console.info('err', err);
         } else {
