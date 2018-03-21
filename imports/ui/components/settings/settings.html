@@ -134,7 +134,7 @@
               <!-- BEGIN USER DROPDOWN -->
               <li class="dropdown" id="user-header">
                 <a href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                <img src="{{settings.currentUser.profilePhoto}}" alt="user image">
+                <img style="width: 36px !important; height: 36px !important;" src="{{settings.currentUser.profilePhoto}}" alt="user image">
                 <span class="username">Hi, {{settings.currentUser.username}}</span>
                 </a>
                 <ul class="dropdown-menu">
@@ -162,10 +162,10 @@
               <div class="panel bg-dark">
                 <div class="panel-content">
                   <div class="row">
-                    <div class="col-sm-3">
+                    <div class="col-sm-2">
                         <div class="form-group">
-                            <label>Group</label>
-                            <input type="text" class="form-control" ng-model="settings.group.name" placeholder="Equipment Group name">
+                            <label>Equipment</label>
+                            <input type="text" class="form-control" ng-model="settings.group.name" placeholder="Equipment name">
                         </div>
                     </div>
                     <div class="col-sm-1">
@@ -173,17 +173,26 @@
                                 <label> </label>
                                     <div class="icheck-list">
                                         <label>
-                                        <input type="checkbox" class="icheckbox_square-blue" ng-model="settings.group.hours"> With hours</label>
+                                        <input type="checkbox" class="icheckbox_square-blue f-12" ng-model="settings.group.hours"> With hours</label>
                                     </div>
                                     </div>
                     </div>
+                    <div class="col-sm-1">
+                      <div class="form-group">
+                          <label> </label>
+                              <div class="icheck-list">
+                                  <label>
+                                  <input type="checkbox" class="icheckbox_square-blue f-12" ng-model="settings.group.days"> With Days</label>
+                              </div>
+                              </div>
+                    </div>
                   <div class="col-sm-2">
                       <div class="form-group" style="margin-top: 25px !important;"> 
-                      <button class="btn btn-dark col-sm-12" ng-click="settings.save()"><i class="fa fa-plus"></i> Add Group</button>
+                      <button class="btn btn-dark col-sm-12" ng-click="settings.save()"><i class="fa fa-plus"></i> Add Equip</button>
                       </div>
                   </div>
                   <div class="col-md-6">
-                        <h3><strong>Equipment</strong> Groups List</h3>
+                        <h3><strong>Equipment</strong>List</h3>
                         <div class="panel-group panel-accordion dark-accordion" id="accordion">
                             <div class="panel panel-default" ng-repeat="group in settings.groups">
                                 <div class="panel-heading">
@@ -231,7 +240,7 @@
                                             </div>
                                             <div class="col-sm-3">
                                                 <div class="form-group" style="margin-top: 25px !important;"> 
-                                                    <button class="btn btn-dark col-sm-12" ng-click="settings.addField()"><i class="fa fa-plus"></i> Add Option</button>
+                                                    <button class="btn btn-dark col-sm-12" ng-click="settings.addField()">Add Option</button>
                                                 </div>
                                             </div>
                                             <div class="col-sm-3">

@@ -133,7 +133,7 @@
               <!-- BEGIN USER DROPDOWN -->
               <li class="dropdown" id="user-header">
                 <a href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                <img src="{{profilepage.currentUser.profilePhoto}}" alt="user image">
+                <img style="width: 36px !important; height: 36px !important;" src="{{profilepage.currentUser.profilePhoto}}" alt="user image">
                 <span class="username">Hi, {{profilepage.currentUser.username}}</span>
                 </a>
                 <ul class="dropdown-menu">
@@ -284,6 +284,38 @@
                       </div>
                     </div>
                   </div>
+
+                  <div class="panel panel-default">
+                      <div class="panel-header bg-dark">
+                          <h3>Change <strong>password</strong></h3>
+                      </div>
+                        <div class="panel-content bg-dark">
+                            <div class="row">
+                              <div class="col-sm-12">
+                              <div class="form-group">
+                                <label class="control-label f-12">New Password
+                                </label>
+                                <div>
+                                  <input type="password" class="form-control" ng-model="profilepage.newPassword">
+                                </div>
+                              </div>
+                              </div>
+                            </div>
+                          <div class="row" style="margin-top: 10px !important;">
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                              <form role="form" class="form-horizontal form-validation">
+                                <div class="row">
+                                  <div class="col-sm-9 col-sm-offset-3">
+                                    <div class="pull-right">
+                                      <button ng-click="profilepage.save()" type="submit" class="btn btn-embossed btn-primary">Save Changes</button>
+                                    </div>
+                                  </div>
+                                </div>
+                              </form>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                 </div>
                 <div class="col-md-6">
                     <div class="panel-group panel-accordion dark-accordion" id="accordion">

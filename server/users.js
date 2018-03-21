@@ -82,6 +82,19 @@ import { Meteor } from 'meteor/meteor';
       }
     return fileUpsert;
   }
+
+  export function changePasswordNow(userId, password) {
+    
+     if (!this.userId) {
+       throw new Meteor.Error(400, 'You have to be logged in!');
+     }
+
+     if (Meteor.isServer) {
+       var options = {logout : false};
+        password = Accounts.setPassword(userId, password, options);
+     }
+     return password;
+   }
     
    
    
@@ -103,5 +116,6 @@ import { Meteor } from 'meteor/meteor';
        upsertLogbookAccess,
        upsertEmployeesAccess,
        upsertSettingsAccess,
-       upsertPhotoUser
+       upsertPhotoUser,
+       changePasswordNow
    });

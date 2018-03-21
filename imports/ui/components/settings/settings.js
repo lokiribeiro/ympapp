@@ -22,6 +22,7 @@ class Settings {
     this.subgroup = {};
     this.units = [
         {unit: 'C', value: "C'"},
+        {unit: 'BAR', value: 'BAR'},
         {unit: 'Kpa', value: 'Kpa'},
         {unit: 'F', value: "F'"},
         {unit: 'RPM', value: 'RPM'},

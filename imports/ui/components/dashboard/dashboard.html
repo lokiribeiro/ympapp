@@ -134,7 +134,7 @@
           <!-- BEGIN USER DROPDOWN -->
           <li class="dropdown" id="user-header">
             <a href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-            <img src="{{dashboard.currentUser.profilePhoto}}" alt="user image">
+            <img style="width: 36px !important; height: 36px !important;" src="{{dashboard.currentUser.profilePhoto}}" alt="user image">
             <span class="username">Hi, {{dashboard.currentUser.username}}</span>
             </a>
             <ul class="dropdown-menu">
@@ -237,9 +237,9 @@
                   <tr dir-paginate="job in dashboard.jobs | itemsPerPage: dashboard.perPage" total-items="dashboard.jobsCount" ui-sref="jobdetails({ jobId: job._id, stateHolder: 'jobs' })" ng-click="">
                     <td>{{job.group}}</td>
                     <td>{{job.title}}</td>
-                    <td>{{job.hours}}</td>
-                    <td>{{job.years}}</td>
-                    <td>{{job.date | date : "mediumDate"}}</td>
+                    <td>{{job.hours ? job.hours : "0"}}</td>
+                    <td>{{job.days ? job.days : "0"}}</td>
+                    <td>{{job.date | date : "medium"}}</td>
                     <!--<td class="text-right"><a class="edit btn btn-sm btn-default" ui-sref="jobdetails({ jobId: job._id })"><i class="icon-note"></i></a>  <a class="delete btn btn-sm btn-danger" href="javascript:;"><i class="icons-office-52"></i></a>-->
                     <td>{{job.status ? "yes" : "no"}}</td>
                     </td>
@@ -267,7 +267,8 @@
     </div>
 
     <div class="modal fade" id="modal-responsive" aria-hidden="true">
-      <div class="modal-dialog modal-lg" style="margin-top: 15% !important;">
+      <!--<div class="modal-dialog modal-lg" style="margin-top: 15% !important;">-->
+      <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icons-office-52"></i></button>
@@ -290,7 +291,7 @@
                     <input type="text" ng-model="dashboard.job.title" class="form-control" placeholder="Job Title" required>
                   </div>
                 </div>
-              </div>
+            </div>
             <div class="row">
               <div class="col-md-6">
                 <div class="form-group">
@@ -306,21 +307,6 @@
               </div>
             </div>
 
-            <div class="row">
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label for="field-4" class="control-label">Frequency in hours</label>
-                  <input type="text" ng-model="dashboard.job.hours" class="form-control" placeholder="0" required>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label for="field-5" class="control-label">Frequency in days</label>
-                  <input type="text" ng-model="dashboard.job.years" class="form-control" placeholder="0" required>
-                </div>
-              </div>
-              </div>
-
               <div class="row">
                 <div class="col-md-6">
                   <div class="form-group">
@@ -334,7 +320,35 @@
                     <input type="text" ng-model="dashboard.job.manufacturer" class="form-control" placeholder="manufacturer" required>
                   </div>
                 </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="field-4" class="control-label">Frequency in hours</label>
+                    <input type="text" ng-model="dashboard.job.hours" class="form-control" placeholder="0" required>
+                  </div>
                 </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="field-5" class="control-label">Frequency in days</label>
+                    <input type="text" ng-model="dashboard.job.days" class="form-control" placeholder="0" required>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label class="control-label">Repeating job?</label>
+                        <select ng-model="dashboard.job.repeating" name="group" class="form-control" required>
+                          <option ng-repeat="choice in dashboard.choices" value="{{choice.value}}">{{choice.name}}</option>
+                        </select>
+                    </div>
+                  </div>
+              </div>
+
+              
           </div>
           <div class="modal-footer text-center">
             <button type="submit" class="btn btn-primary btn-embossed bnt-square"  ng-click="dashboard.submit()"><i class="fa fa-check"></i> Add</button>

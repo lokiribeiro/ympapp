@@ -33,6 +33,7 @@ class Profilepage {
     $scope.misce = {};
     this.showNotif = false;
     this.notComplete = false;
+    this.newPassword = '';
 
     this.types = [
       {name: 'Y1', value: 'Y1'},
@@ -830,31 +831,7 @@ this.uploadMisc = function(file, errFiles) {
       _id: this.profile._id
     }, {
       $set: {
-        firstName: this.profile.firstName,
-        lastName: this.profile.lastName,
-        type: this.profile.type,
-        status: this.profile.status,
-        mailing: this.profile.mailing,
-        termOfEmployment: this.profile.termOfEmployment,
-        email: this.profile.email,
-        birthDate: this.profile.birthDate,
-        address: this.profile.address,
-        phone: this.profile.phone,
-        phone2: this.profile.phone2,
-        phone3: this.profile.phone3,
-        birthDate: this.profile.birthDate,
-        skype: this.profile.skype,
-        notes: this.profile.notes,
-        ecFullName: this.profile.ecFullName,
-        ecRelation: this.profile.ecRelation,
-        ecContactNum: this.profile.ecContactNum,
-        ecContactNum2: this.profile.ecContactNum2,
-        ecContactNum3: this.profile.ecContactNum3,
-        ecEmail: this.profile.ecEmail,
-        ecAddress: this.profile.ecAddress,
-        ecSkype: this.profile.ecSkype
-
-
+       password : this.newPassword
       }
     }, (error) => {
         if (error) {
@@ -863,6 +840,19 @@ this.uploadMisc = function(file, errFiles) {
           console.log('Done!');
         }
     });
+
+    var userID = this.profile.userID;
+    var password = this.newPassword;
+    console.info('userID', userID);
+
+    Meteor.call('changePasswordNow', userID, password, function(err, result) {
+      console.log('password: ' + password);
+      if (err) {
+        console.info('err', err);
+      } else {
+        console.info('uploaded', err);
+     }
+   });
   }
 }
  

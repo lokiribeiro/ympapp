@@ -15,6 +15,61 @@ import template from './dashboard.html';
 class Dashboard {
   constructor($scope, $reactive, $state) {
     //'ngInject';
+    angular.element(document).ready(function () {
+      var jobs =  Jobs.find({});
+      console.info('jobs on load', jobs);
+      var compareDate = new Date();
+      $scope.compareDate = compareDate.getTime();
+      console.info('$scope.compareDate', $scope.compareDate);
+
+      
+      jobs.forEach(function(job){
+        if(job.dateTime <= $scope.compareDate){
+          if(job.repeating){
+            if(job.hours){
+              job.dateNext = job.dateTime + (job.hours*60*60*1000);
+              var newDate = job.dateNext;
+              job.date = new Date(newDate);
+              job.dateTime = job.date.getTime();
+              var jobID = job._id;
+              var date = job.date;
+              var dateTime = job.dateTime;
+              var dateNext = job.dateNext;
+
+              Meteor.call('upsertNewJobTime', jobID, date, dateTime, dateNext, function(err, result) {
+                console.log('success: ' + job.dateTime);
+                if (err) {
+                  console.info('err', err);
+                } else {
+                  console.info('uploaded', err);
+               }
+             });
+
+            } else if(job.days){
+              var hours = job.days * 24;
+              job.dateNext = job.dateTime + (hours*60*60*1000);
+              var newDate = job.dateNext;
+              job.date = new Date(newDate);
+              job.dateTime = job.date.getTime();
+              var jobID = job._id;
+              var date = job.date;
+              var dateTime = job.dateTime;
+              var dateNext = job.dateNext;
+
+              Meteor.call('upsertNewJobTime', jobID, date, dateTime, dateNext, function(err, result) {
+                console.log('success: ' + job.dateTime);
+                if (err) {
+                  console.info('err', err);
+                } else {
+                  console.info('uploaded', err);
+               }
+             });
+            }
+          }
+        }
+      });
+
+    });
  
     $reactive(this).attach($scope);
 
@@ -33,6 +88,11 @@ class Dashboard {
       date: -1
     };
     this.searchText = '';
+
+    this.choices = [
+      {name: 'Yes', value: true},
+      {name: 'No', value: false},
+    ];
 
     this.subscribe('parties', () => [{
       limit: parseInt(this.perPage),
@@ -129,6 +189,18 @@ class Dashboard {
     this.job.owner = Meteor.userId();
     this.job.date = new Date();
     this.job.dateTime = this.job.date.getTime();
+    if(this.job.hours){
+      this.job.dateNext = this.job.dateTime + (this.job.hours*60*60*1000);
+      var newDate = this.job.dateNext;
+      this.job.date = new Date(newDate);
+      this.job.dateTime = this.job.date.getTime();
+    } else if(this.job.days){
+      var hours = this.job.days * 24;
+      this.job.dateNext = this.job.dateTime + (hours*60*60*1000);
+      var newDate = this.job.dateNext;
+      this.job.date = new Date(newDate);
+      this.job.dateTime = this.job.date.getTime();
+    }
     var status = Jobs.insert(this.job);
     this.job = {};
   }
