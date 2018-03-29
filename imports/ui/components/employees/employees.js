@@ -118,7 +118,8 @@ class Employees {
       console.info('boat', boat);
       var boatID = boat.boatID;
       $scope.profile.boatID = boatID;
-      Meteor.call('upsertNewRoleFromAdmin', details, $scope.profile.role, boatID, function(err, detail) {
+      var jobs = true;
+      Meteor.call('upsertNewRoleFromAdmin', details, $scope.profile.role, boatID, jobs, function(err, detail) {
         console.info('detail', detail);
           if (err) {
               console.info('err', err);

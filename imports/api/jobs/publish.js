@@ -5,16 +5,21 @@ import { Jobs } from './collection';
 
 if (Meteor.isServer) {
    Meteor.publish('jobs', function(options, searchString, dateFrom, dateTo) {
-   var selector = {};
+   var selector = {status: false};
 
    if (typeof dateFrom === 'number' && typeof dateTo === 'number') {
-    var selector = {dateTime: {
+    var selector = {$and: [
+      {status: false},
+      {dateTime: {
         $gte: dateFrom,
         $lte: dateTo
-      }};
+      }}
+    ]};
   } else if (typeof searchString === 'string' && searchString.length) {
      var search = {$regex: `.*${searchString}.*`, $options: 'i'};
-     selector = {$or: [
+     selector = {$and: [
+       {status: false},
+       {$or: [
        {title: search},
        {group: search},
        {location: search},
@@ -24,8 +29,8 @@ if (Meteor.isServer) {
        {serialNumber: search},
        {manufacturer: search},
        {status: search}
-     ]
-    };
+     ]}
+    ]};
     /*selector = {dateTime: {
       $gte: dateFrom,
       $lte: dateTo

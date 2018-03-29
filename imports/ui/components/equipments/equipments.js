@@ -10,15 +10,17 @@ import { Counts } from 'meteor/tmeasday:publish-counts';
 import { Groups } from '../../../api/groups';
 import { Subgroups } from '../../../api/subgroups';
 
-import template from './settings.html';
+import template from './equipments.html';
  
-class Settings {
+class Equipments {
   constructor($scope, $reactive, $state) {
     //'ngInject';
  
     $reactive(this).attach($scope);
 
     this.group = {};
+    $scope.removeID = '';
+    $scope.equipName = '';
     this.subgroup = {};
     this.units = [
         {unit: 'C', value: "C'"},
@@ -88,12 +90,21 @@ class Settings {
     this.gotoEmployees = function() {
       $state.go('employees', {}, {reload: 'employees'});
     }
-    this.gotoSettings = function() {
-      $state.go('settings', {}, {reload: 'settings'});
+    this.gotoEquipments = function() {
+      $state.go('equipments', {}, {reload: 'equipments'});
     }
     this.addField = function () {
         this.inputs.push({});
     }
+    this.removeGroup = function() {
+      Groups.remove($scope.removeID);
+    }
+    this.removeGroupConfirm = function(group) {
+      console.info('remove group', group);
+      $scope.removeID = group._id;
+      $scope.equipName = group.name;
+    }
+
   }
 
   isOwner(party) {
@@ -115,6 +126,26 @@ class Settings {
     this.group.date = new Date();
     var status = Groups.insert(this.group);
     this.group = {};
+  }
+
+  saveChanges(group) {
+    console.info('group value', this.group)
+    Groups.update({
+      _id: group._id
+    }, {
+      $set: {
+        location: group.location,
+        modelNumber: group.modelNumber,
+        serialNumber: group.serialNumber,
+        manufacturer: group.manufacturer
+      }
+    }, (error) => {
+        if (error) {
+          console.log('Oops, unable to update the party...');
+        } else {
+          console.log('Done!');
+        }
+    });
   }
 
   addRow(passedGroup, unit) {
@@ -174,11 +205,7 @@ class Settings {
     
 }
 
-  removeGroup(group) {
-      console.info('remove group', group);
-      Groups.remove(group._id);
-  }
-
+  
   reset() {
     this.searchText = '';
     this.dateFrom2 = '';
@@ -193,7 +220,7 @@ class Settings {
   }
 }
  
-const name = 'settings';
+const name = 'equipments';
 
 //Dashboard.$inject = ['$scope', '$reactive'];
  
@@ -205,15 +232,15 @@ export default angular.module(name, [
 ]).component(name, {
   template,
   controllerAs: name,
-  controller: ['$scope', '$reactive', '$state', Settings]
+  controller: ['$scope', '$reactive', '$state', Equipments]
 })
 .config(['$stateProvider', 
 function($stateProvider) {
   //'ngInject';
   $stateProvider
-    .state('settings', {
-      url: '/settings',
-      template: '<settings></settings>',
+    .state('equipments', {
+      url: '/equipments',
+      template: '<equipments></equipments>',
       resolve: {
         currentUser($q, $state) {
             if (!Meteor.userId()) {

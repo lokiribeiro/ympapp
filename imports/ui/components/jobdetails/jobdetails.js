@@ -24,6 +24,7 @@ class Jobdetails {
 
     this.jobId = $stateParams.jobId;
     this.stateHolder = $stateParams.stateHolder;
+    $scope.userID = Meteor.userId();
 
     console.info('jobId', this.jobId);
     console.info('state', this.stateHolder);
@@ -45,11 +46,14 @@ class Jobdetails {
     };
     this.searchText = '';
     this.searchGroup = '';
+    $scope.passworD = '';
     this.pageNum  = null;
     $scope.doneSearching = false;
     $scope.uploadSuccess = false;
     this.showNotif = false;
     this.notComplete = false;
+    $scope.notMatch = false;
+    $scope.canDelete = false;
 
     this.subscribe('jobs');
 
@@ -59,12 +63,7 @@ class Jobdetails {
 
     this.subscribe('users');
 
-    this.subscribe('profiles', () => [{
-      limit: parseInt(this.perPage),
-      skip: parseInt((this.getReactively('page') - 1) * this.perPage),
-      sort: this.getReactively('sort')
-    }, this.getReactively('searchText')
-    ]);
+    this.subscribe('profiles');
 
     this.subscribe('histories', () => [{
       sort: this.getReactively('sort2')
@@ -160,6 +159,40 @@ class Jobdetails {
       var status = Jobs.remove(jobId);
       console.info('status removed', status);
       $state.go('dashboard', {}, {reload: 'dashboard'});
+    }
+
+    this.removeJobConfirm = function(job) {
+      console.info('remove job', job);
+      $scope.removeID = job._id;
+      $scope.jobName = job.title;
+      $scope.notMatch = false;
+    }
+
+    this.removeJob = function() {
+      console.info('userID', $scope.userID);
+      var profiles = Profiles.find({
+        userID: $scope.userID
+      });
+
+      console.info('profiles', profiles);
+      profiles.forEach(function(profile){
+        if(profile.userID == $scope.userID){
+          console.info('pasok', profile.password);
+          console.info('pass ko', $scope.passworD);
+          if(profile.password == $scope.passworD){
+            Jobs.remove($scope.removeID);
+            angular.element("body").removeClass("modal-open");
+            var removeMe = angular.element(document.getElementsByClassName("modal-backdrop"));
+            removeMe.remove();
+            $state.go('dashboard', {}, {reload: 'dashboard'});
+          } else {
+            $scope.notMatch = true;
+            $scope.passworD = '';
+          }
+        } 
+      });
+
+
     }
 
     this.uploadFiles = function(file, errFiles) {

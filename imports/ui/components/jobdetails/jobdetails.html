@@ -19,9 +19,6 @@
         <li class="nav-parent" ng-click="jobdetails.gotoEmployees()" ng-if="jobdetails.currentUser.employees">
           <a href=""><i class="icon-user"></i><span>Employees </span><span class="fa arrow"></span></a>
         </li>
-        <li class="nav-parent" ng-click="jobdetails.gotoSettings()" ng-if="jobdetails.currentUser.settings">
-          <a href=""><i class="icon-puzzle"></i><span>Settings</span> <span class="fa arrow"></span></a>
-        </li>
       </ul>
     </div>
   </div>
@@ -174,7 +171,7 @@
                     <div class="col-md-12 col-sm-12 col-xs-12">
                       <form role="form" class="form-horizontal form-validation">
                       <div class="form-group">
-                              <label class="col-sm-3 control-label">Group</label>
+                              <label class="col-sm-3 control-label">Equipment</label>
                               <div class="col-sm-3">
                                 <select ng-model="jobdetails.job.group" name="group"  class="form-control" >
                                   <option ng-repeat="group in jobdetails.groups" value="{{group.name}}">{{group.name}}</option>
@@ -194,28 +191,28 @@
                           </div>
                           <label class="col-sm-3 control-label">Frequency in days</label>
                           <div class="col-sm-3">
-                            <input type="text" class="form-control" ng-model="jobdetails.job.years">
+                            <input type="text" class="form-control" ng-model="jobdetails.job.days">
                           </div>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" ng-repeat="group in jobdetails.groups" ng-if="jobdetails.job.group == group.name">
                           <label class="col-sm-3 control-label">Location</label>
                           <div class="col-sm-3">
-                            <input type="text" class="form-control" ng-model="jobdetails.job.location">
+                            <input type="text" class="form-control" ng-model="group.location" disabled>
                           </div>
                           <label class="col-sm-3 control-label">Model Number
                             </label>
                             <div class="col-sm-3">
-                              <input type="text" class="form-control" ng-model="jobdetails.job.modelNumber">
+                              <input type="text" class="form-control" ng-model="group.modelNumber" disabled>
                             </div>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" ng-repeat="group in jobdetails.groups" ng-if="jobdetails.job.group == group.name">
                           <label class="col-sm-3 control-label">Serial Number</label>
                           <div class="col-sm-3">
-                            <input type="text" class="form-control" ng-model="jobdetails.job.serialNumber">
+                            <input type="text" class="form-control" ng-model="group.serialNumber" disabled>
                           </div>
                           <label class="col-sm-3 control-label">Manufacturer</label>
                           <div class="col-sm-3">
-                            <input type="text" class="form-control" ng-model="jobdetails.job.manufacturer">
+                            <input type="text" class="form-control" ng-model="group.manufacturer" disabled>
                           </div>
                         </div>
                         <div class="form-group">
@@ -241,7 +238,7 @@
                                   <label class="control-label">Description
                                   </label>
                                   <div>
-                                    <textarea rows="10" class="form-control" ng-model="jobdetails.job.description" placeholder="Write description... (minimum 30 characters)" minlength="30" required></textarea>
+                                    <textarea rows="10" class="form-control" ng-model="jobdetails.job.description" placeholder="Write description... (minimum 30 characters)" disabled></textarea>
                                   </div>
                                 </div>
                           </div>
@@ -264,7 +261,6 @@
                 <div class="panel-body bg-dark">
                   <div class="row">
                     <div class="col-md-12 col-sm-12 col-xs-12">
-                      <form role="form" class="form-validation">
                         <div class="row" ng-if="jobdetails.currentUser.role == 'admin'">
                             <div class="col-sm-3">
                                 <div class="form-group">
@@ -302,42 +298,13 @@
                                         <!---->
                               </div>
                           </div>
-                        </div>
-                        <div class="row">
-                          
-                          
-                        </div>
-                        <div class="row">
-                            <div  class="col-sm-6">
-                            <div class="form-group">
-                              <label class="control-label">Support</label>
-                              <div>
-                                  <button class="btn btn-embossed btn-primary m-r-20" data-toggle="modal" data-target="#add-support" >Add</button>
-                                  <button class="btn btn-embossed btn-primary m-r-20" data-toggle="modal" data-target="#view-support">View</button>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="col-sm-6">
-                              <div class="form-group">
-                                  <div class="form-group">
-                                      <label class="control-label">Job Done by</label>
-                                      <div>
-                                      <select ng-model="jobdetails.job.doneBy" name="users" class="form-control" required>
-                                        <option ng-repeat="profile in jobdetails.profiles" ng-value="profile" >{{profile.firstName + ' ' + profile.lastName}}</option>
-                                      </select>
-                                    </div>
-                                    </div>
-                              </div>
-                            </div>
-                          </div>
-
-                          
+                        </div>                    
 
                           <div class="row">
                               <div class="nav-tabs3">
                                   <ul id="myTab6" class="nav nav-tabs">
-                                    <li class="active"><a href="#tab6_1" data-toggle="tab">Work History</a></li>
-                                    <li class=""><a href="#tab6_2" data-toggle="tab">Group History</a></li>
+                                    <li class="active"><a href="#tab6_1" data-toggle="tab">Job History</a></li>
+                                    <li class=""><a href="#tab6_2" data-toggle="tab">Equipment History</a></li>
                                   </ul>
                                   <div class="tab-content">
                                     <div class="tab-pane fade active in" id="tab6_1">
@@ -345,14 +312,6 @@
                                             <div>
                                               <textarea rows="5" class="form-control" ng-model="jobdetails.job.workHistory" placeholder="Write work history..."></textarea>
                                             </div>
-                                          </div>
-                                          <div class="row">
-                                              <div class="col-sm-9 col-sm-offset-3">
-                                                <div class="pull-right">
-                                                    <button ng-if="jobdetails.currentUser.role == 'admin'" ng-click="jobdetails.delete()" type="submit" class="btn btn-embossed btn-primary m-r-20"><i class="fa fa-trash"></i> Delete Job</button>
-                                                  <button ng-click="jobdetails.save()" type="submit" class="btn btn-embossed btn-primary m-r-20"><i class="fa fa-save"></i> Save Changes</button>
-                                                </div>
-                                              </div>
                                           </div>
                                           <div class="panel-content withScroll" data-height="200" style="max-height: 200px; overflow: auto !important;">
                                             <p ng-repeat="history in jobdetails.histories" ng-if="history.jobID == jobdetails.job._id">
@@ -388,7 +347,37 @@
                                   </div>
                                 </div>
                           </div>
-                      </form>
+                          <div class="row">
+                            <div  class="col-sm-6">
+                            <div class="form-group">
+                              <label class="control-label">Support</label>
+                              <div>
+                                  <button class="btn btn-embossed btn-primary m-r-20" data-toggle="modal" data-target="#add-support" >Add</button>
+                                  <button class="btn btn-embossed btn-primary m-r-20" data-toggle="modal" data-target="#view-support">View</button>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-sm-6">
+                              <div class="form-group">
+                                  <div class="form-group">
+                                      <label class="control-label">Job Done by</label>
+                                      <div>
+                                      <select ng-model="jobdetails.job.doneBy" name="users" class="form-control" required>
+                                        <option ng-repeat="profile in jobdetails.profiles" ng-value="profile" >{{profile.firstName + ' ' + profile.lastName}}</option>
+                                      </select>
+                                    </div>
+                                    </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-sm-9 col-sm-offset-3">
+                              <div class="pull-right">
+                                  <button ng-if="jobdetails.currentUser.role == 'admin'" data-toggle="modal" data-target="#modal-confirm" ng-click="jobdetails.removeJobConfirm(jobdetails.job)" class="btn btn-embossed btn-primary m-r-20"><i class="fa fa-trash"></i> Delete Job</button>
+                                <button ng-click="jobdetails.save()" class="btn btn-embossed btn-primary"><i class="fa fa-save"></i> Save Changes</button>
+                              </div>
+                            </div>
+                        </div>
                     </div>
                   </div>
                 </div>
@@ -676,7 +665,7 @@
                       </div>    
                       <div class="col-sm-9 col-sm-offset-3" style="margin-top: 10px !important;">
                         <div class="pull-right">
-                            <button ng-click="jobdetails.supportSave()" data-dismiss="modal" type="submit" class="btn btn-embossed btn-primary m-r-20"><i class="fa fa-save"></i> Save</button>     
+                            <button ng-click="jobdetails.supportSave()" data-dismiss="modal" class="btn btn-embossed btn-primary m-r-20"><i class="fa fa-save"></i> Save</button>     
                         </div>
                       </div>
                       
@@ -713,6 +702,35 @@
                   </div>
                   <div class="modal-footer text-center">
                    <!--<button type="button" class="btn btn-primary btn-embossed bnt-square" ><i class="fa fa-check"></i> Add</button>-->
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="modal fade" id="modal-confirm" aria-hidden="true">
+              <div class="modal-dialog modal-responsive" style="margin-top: 15% !important;">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icons-office-52"></i></button>
+                      <h4 class="modal-title">Are you sure you want to delete this job: <strong>{{jobName}}</strong>?</h4>
+                  </div>
+                  <div class="modal-body">
+                      <div ng-show="notMatch" class="preview active">
+                          <div class="alert alert-danger media fade in">
+                            <p> Incorrect Password</p>
+                          </div>
+                      </div>
+                      <div class="form-group">
+                          <label class="col-sm-4 control-label">Type password to confirm
+                          </label>
+                          <div class="col-sm-8">
+                            <input type="password" class="form-control" ng-model="passworD">
+                          </div>
+                        </div>
+                  </div>
+                  <div class="modal-footer text-center">
+                    <button class="btn btn-dark f-12" data-dismiss="modal">Cancel</button>
+                    <button class="btn btn-dark f-12" type="submit" ng-click="jobdetails.removeJob()"><i class="fa fa-trash"></i> Delete Now</button>
                   </div>
                 </div>
               </div>

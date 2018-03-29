@@ -88,10 +88,16 @@ class Dashboard {
       date: -1
     };
     this.searchText = '';
+    //this.viewJobs = true;
 
     this.choices = [
       {name: 'Yes', value: true},
       {name: 'No', value: false},
+    ];
+
+    this.choices2 = [
+      {name: 'Yes', value: false},
+      {name: 'No', value: true},
     ];
 
     this.subscribe('parties', () => [{
@@ -155,6 +161,11 @@ class Dashboard {
       },2000);
     }
 
+    this.viewFilter = function() {
+      this.viewJobs = !this.viewJobs;
+      console.info('viewJobs', this.viewJobs);
+    }
+
     this.gotoDashboard = function() {
       $state.go('dashboard', {}, {reload: 'dashboard'});
     }
@@ -167,8 +178,8 @@ class Dashboard {
     this.gotoEmployees = function() {
       $state.go('employees', {}, {reload: 'employees'});
     }
-    this.gotoSettings = function() {
-      $state.go('settings', {}, {reload: 'settings'});
+    this.gotoEquipments = function() {
+      $state.go('equipments', {}, {reload: 'equipments'});
     }
   }
 
@@ -189,18 +200,68 @@ class Dashboard {
     this.job.owner = Meteor.userId();
     this.job.date = new Date();
     this.job.dateTime = this.job.date.getTime();
-    if(this.job.hours){
+    console.info('lastService', this.job.unplanned);
+    if(this.job.lastService && (this.job.unplanned == 'false')){
+      if(this.job.lastServiceHours){
+        if(this.job.hours){
+          console.log('lastservice hours with hours');
+          var lastServiceTime = this.job.lastService.getTime();
+          var lastServiceHours = parseInt(this.job.hours) - parseInt(this.job.lastServiceHours);
+          this.job.dateNext = this.job.dateTime + (lastServiceHours*60*60*1000);
+          var newDate = this.job.dateNext;
+          this.job.date = new Date(newDate);
+          this.job.dateTime = this.job.date.getTime();
+          this.job.status = true;
+        } else if(this.job.days) {
+          console.log('lastservice hours with days');
+          var lastServiceTime = this.job.lastService.getTime();
+          var hours = this.job.days * 24;
+          var lastServiceHours = parseInt(hours) - parseInt(this.job.lastServiceHours);
+          this.job.dateNext = this.job.dateTime + (lastServiceHours*60*60*1000);
+          var newDate = this.job.dateNext;
+          this.job.date = new Date(newDate);
+          this.job.dateTime = this.job.date.getTime();
+          this.job.status = true;
+        }
+      } else {
+        if(this.job.hours){
+          console.log('no lastservice hours with hours');
+          var lastServiceTime = this.job.lastService.getTime();
+          this.job.dateNext = lastServiceTime + (this.job.hours*60*60*1000);
+          var newDate = this.job.dateNext;
+          this.job.date = new Date(newDate);
+          this.job.dateTime = this.job.date.getTime();
+          this.job.status = false;
+        } else if(this.job.days){
+          console.log('no lastservice hours with hours');
+          var hours = this.job.days * 24;
+          var lastServiceTime = this.job.lastService.getTime();
+          this.job.dateNext = lastServiceTime + (hours*60*60*1000);
+          var newDate = this.job.dateNext;
+          this.job.date = new Date(newDate);
+          this.job.dateTime = this.job.date.getTime();
+          this.job.status = false;
+        }
+      }  
+    } else if(this.job.hours){
+      console.log('no lastservice date with hours');
       this.job.dateNext = this.job.dateTime + (this.job.hours*60*60*1000);
       var newDate = this.job.dateNext;
       this.job.date = new Date(newDate);
       this.job.dateTime = this.job.date.getTime();
+      this.job.status = false;
     } else if(this.job.days){
+      console.log('no lastservice date with days');
       var hours = this.job.days * 24;
       this.job.dateNext = this.job.dateTime + (hours*60*60*1000);
       var newDate = this.job.dateNext;
       this.job.date = new Date(newDate);
       this.job.dateTime = this.job.date.getTime();
+      this.job.status = false;
+    } else if(this.job.unplanned) {
+      this.job.status = false;
     }
+    console.info('this.job', this.job);
     var status = Jobs.insert(this.job);
     this.job = {};
   }
@@ -210,6 +271,10 @@ class Dashboard {
     this.dateFrom2 = '';
     this.dateTo2 = '';
     
+  }
+
+  resetForm() {
+    this.job = {};
   }
 
   filterNow() {

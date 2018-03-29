@@ -21,7 +21,7 @@ import Logbook from '../logbook/logbook';
 import Newlog from '../newlog/newlog';
 import Sealog from '../sealog/sealog';
 import Logdetails from '../logdetails/logdetails';
-import Settings from '../settings/settings';
+import Equipments from '../equipments/equipments';
 import Profilepage from '../profilepage/profilepage';
 
  
@@ -45,7 +45,7 @@ export default angular.module(name, [
   Newlog.name,
   Sealog.name,
   Logdetails.name,
-  Settings.name,
+  Equipments.name,
   Profilepage.name,
   'accounts.ui',
   'date-picker',

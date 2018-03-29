@@ -19,9 +19,6 @@
         <li class="nav-parent active" ng-click="employees.gotoEmployees()" ng-if="employees.currentUser.employees">
           <a href=""><i class="icon-user"></i><span>Employees </span><span class="fa arrow"></span></a>
         </li>
-        <li class="nav-parent " ng-click="employees.gotoSettings()" ng-if="employees.currentUser.settings">
-          <a href=""><i class="icon-puzzle"></i><span>Settings</span> <span class="fa arrow"></span></a>
-        </li>
       </ul>
     </div>
   </div>
@@ -226,11 +223,11 @@
         <div class="modal fade" id="modal-responsive" aria-hidden="true">
           <div class="modal-dialog modal-lg">
             <div class="modal-content">
-              <div class="modal-header">
+              <div class="modal-header bg-dark">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icons-office-52"></i></button>
                 <h4 class="modal-title"><strong>New</strong> Employee</h4>
               </div>
-              <div class="modal-body">
+              <div class="modal-body bg-dark">
                 <!--<p>Change screen size to see responsive behaviour.</p>-->
                 <div class="row">
                   <div class="col-md-6">
@@ -302,7 +299,7 @@
                   </div>
                 </div>
               </div>
-              <div class="modal-footer text-center">
+              <div class="modal-footer text-center bg-dark">
                 <button type="submit" class="btn btn-primary btn-embossed bnt-square"  ng-click="employees.submit()"><i class="fa fa-check"></i> Add</button>
               </div>
             </div>

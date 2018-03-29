@@ -17,11 +17,12 @@ import { Meteor } from 'meteor/meteor';
      return username;
    }
 
-   export function upsertNewRoleFromAdmin(userID, userRole, boatID){
+   export function upsertNewRoleFromAdmin(userID, userRole, boatID, jobs){
     var selector = {_id: userID};
     var modifier = {$set: {
       role: userRole,
-      boatID: boatID
+      boatID: boatID,
+      jobs: jobs
     }};
     var roleUpsert = Meteor.users.upsert(selector, modifier);
     return roleUpsert;
