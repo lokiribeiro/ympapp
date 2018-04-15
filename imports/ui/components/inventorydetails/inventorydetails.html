@@ -19,6 +19,9 @@
         <li class="nav-parent" ng-click="inventorydetails.gotoEmployees()" ng-if="inventorydetails.currentUser.employees">
           <a href=""><i class="icon-user"></i><span>Employees </span><span class="fa arrow"></span></a>
         </li>
+        <li class="nav-parent" ng-click="inventorydetails.gotoAdminPanel()" ng-if="inventorydetails.currentUser.superadmin">
+          <a href=""><i class="icon-puzzle"></i><span>Super Admin </span><span class="fa arrow"></span></a>
+        </li>
       </ul>
     </div>
   </div>

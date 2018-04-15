@@ -5,13 +5,15 @@ import { Histories } from './collection';
 
 if (Meteor.isServer) {
   Meteor.publish('histories', function(options, searchString) {
-    const selector = {};
+    var selector = {};
  
     if (typeof searchString === 'string' && searchString.length) {
-     selector.title = {
-       $regex: `.*${searchString}.*`,
-       $options : 'i'
-     };
+      var search = {$regex: `.*${searchString}.*`, $options: 'i'};
+      selector = {$or: [
+        {title: search},
+        {group: search},
+        {workHistory: search}
+      ]};
    }
 
   Counts.publish(this, 'numberOfHistories', Histories.find(selector), {

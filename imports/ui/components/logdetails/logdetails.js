@@ -19,6 +19,9 @@ class Logdetails {
  
     $reactive(this).attach($scope);
 
+    var userBoat = Meteor.user();
+    $scope.userBoatID = userBoat.boatID;
+
     this.logId = $stateParams.logId;
 
     console.info('logId', this.logId);
@@ -85,12 +88,14 @@ class Logdetails {
           });
       },
       groups() {
-        return Groups.find({}, {
+        var selector = {boatID: $scope.userBoatID};
+        return Groups.find(selector, {
           sort : this.getReactively('sort')
         });
       },
       subgroups() {
-        return Subgroups.find({}, {
+        var selector = {boatID: $scope.userBoatID};
+        return Subgroups.find(selector, {
           sort : this.getReactively('sort2')
         });
       }
@@ -117,6 +122,9 @@ class Logdetails {
     }
     this.gotoSettings = function() {
       $state.go('settings', {}, {reload: 'settings'});
+    }
+    this.gotoAdminPanel = function() {
+      $state.go('adminpanel', {}, {reload: 'adminpanel'});
     }
 
     this.notification = function() {

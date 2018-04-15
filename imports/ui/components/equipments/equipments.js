@@ -2,6 +2,7 @@ import angular from 'angular';
 import angularMeteor from 'angular-meteor';
 import uiRouter from 'angular-ui-router';
 import utilsPagination from 'angular-utils-pagination';
+import {pleaseWait} from '../../../startup/please-wait.js';
 
 import { Meteor } from 'meteor/meteor';
 
@@ -55,10 +56,30 @@ class Equipments {
  
     this.helpers({
       groups() {
-        return Groups.find({});
+        var userID = Meteor.userId();
+        var boats = Meteor.users.findOne(userID);
+        console.info('boats', boats);
+        if(boats){
+          $scope.userBoatID = boats.boatID;
+          var boatID = $scope.userBoatID;
+          var selector = {boatID: boatID};
+        } else {
+          var selector = {};
+        } 
+        return Groups.find(selector);
       },
       subgroups() {
-        return Subgroups.find({});
+        var userID = Meteor.userId();
+        var boats = Meteor.users.findOne(userID);
+        console.info('boats', boats);
+        if(boats){
+          $scope.userBoatID = boats.boatID;
+          var boatID = $scope.userBoatID;
+          var selector = {boatID: boatID};
+        } else {
+          var selector = {};
+        } 
+        return Subgroups.find(selector);
       },
       isLoggedIn() {
         return !!Meteor.userId();
@@ -72,8 +93,14 @@ class Equipments {
     });
 
     this.logout = function() {
+      window.loading_screen = pleaseWait({
+        logo: "../assets/global/images/logo/logo-white.png",
+        backgroundColor: '#8c9093',
+        loadingHtml: "<div class='sk-spinner sk-spinner-wave'><div class='sk-rect1'></div><div class='sk-rect2'></div><div class='sk-rect3'></div><div class='sk-rect4'></div><div class='sk-rect5'></div></div>"
+      });
       Accounts.logout();
       window.setTimeout(function(){
+        window.loading_screen.finish();
         $state.go('login', {}, {reload: 'login'});
       },2000);
     }
@@ -93,6 +120,9 @@ class Equipments {
     this.gotoEquipments = function() {
       $state.go('equipments', {}, {reload: 'equipments'});
     }
+    this.gotoAdminPanel = function() {
+      $state.go('adminpanel', {}, {reload: 'adminpanel'});
+    }
     this.addField = function () {
         this.inputs.push({});
     }
@@ -103,6 +133,41 @@ class Equipments {
       console.info('remove group', group);
       $scope.removeID = group._id;
       $scope.equipName = group.name;
+    }
+    this.deleteRow = function(row){
+      console.info('row', row);
+      var rowID = row._id;
+      var status = Subgroups.remove(rowID);
+      console.info('status', status);
+    }
+    this.save = function() {
+      console.info('group value', this.group)
+      this.group.owner = Meteor.userId();
+      this.group.date = new Date();
+      this.group.boatID = $scope.userBoatID;
+      var status = Groups.insert(this.group);
+      this.group = {};
+    }
+    this.addRow = function(passedGroup, unit) {
+      console.info('array value', unit);
+      console.info('inputs value', this.inputs);
+      console.info('passed group', passedGroup);
+      var inputs = this.inputs;
+      var lenth = inputs.length;
+      var optionArray = [];
+      for(x=0;x<lenth;x++){
+          optionArray[x] = this.inputs[x].option;
+          this.withoutOptions = false;
+      }
+      this.subgroup.optionItems = optionArray;
+      this.subgroup.groupID = passedGroup._id;
+      this.subgroup.unit = unit;
+      this.subgroup.withoutOptions = this.withoutOptions;
+      this.subgroup.boatID = $scope.userBoatID;
+      console.info('subgroup items', this.subgroup.optionItems);
+      var status = Subgroups.insert(this.subgroup);
+      this.subgroup = {};
+      this.inputs = [];
     }
 
   }
@@ -118,14 +183,6 @@ class Equipments {
 
   sortChanged(sort) {
     this.sort = sort;
-  }
-
-  save() {
-    console.info('group value', this.group)
-    this.group.owner = Meteor.userId();
-    this.group.date = new Date();
-    var status = Groups.insert(this.group);
-    this.group = {};
   }
 
   saveChanges(group) {
@@ -146,27 +203,6 @@ class Equipments {
           console.log('Done!');
         }
     });
-  }
-
-  addRow(passedGroup, unit) {
-    console.info('array value', unit);
-    console.info('inputs value', this.inputs);
-    console.info('passed group', passedGroup);
-    var inputs = this.inputs;
-    var lenth = inputs.length;
-    var optionArray = [];
-    for(x=0;x<lenth;x++){
-        optionArray[x] = this.inputs[x].option;
-        this.withoutOptions = false;
-    }
-    this.subgroup.optionItems = optionArray;
-    this.subgroup.groupID = passedGroup._id;
-    this.subgroup.unit = unit;
-    this.subgroup.withoutOptions = this.withoutOptions;
-    console.info('subgroup items', this.subgroup.optionItems);
-    var status = Subgroups.insert(this.subgroup);
-    this.subgroup = {};
-    this.inputs = [];
   }
 
   updatePort(group) {

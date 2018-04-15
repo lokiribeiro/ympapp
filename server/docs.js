@@ -125,6 +125,20 @@ export function  upsertMisc(profileID, downloadUrl, fileName, desc){
     }
   return fileUpsert;
 }
+
+export function  upsertService(profileID, downloadUrl, jobID, date){
+  var services = {};
+  services.userID = profileID;
+  services.downloadurl = downloadUrl;
+  services.jobID = jobID;
+  services.date = date;
+  services.fileType = 'service';
+ 
+    if (Meteor.isServer) {
+  var fileUpsert = Docs.insert(services);
+    }
+  return fileUpsert;
+}
    
 
 Meteor.methods({
@@ -136,5 +150,6 @@ Meteor.methods({
   upsertPassports,
   upsertPhoto,
   upsertLicenses,
-  upsertMisc
+  upsertMisc,
+  upsertService
 });

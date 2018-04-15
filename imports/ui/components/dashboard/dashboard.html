@@ -20,6 +20,9 @@
         <li class="nav-parent" ng-click="dashboard.gotoEmployees()" ng-if="dashboard.currentUser.employees">
           <a href=""><i class="icon-user"></i><span>Employees </span><span class="fa arrow"></span></a>
         </li>
+        <li class="nav-parent" ng-click="dashboard.gotoAdminPanel()" ng-if="dashboard.currentUser.superadmin">
+          <a href=""><i class="icon-puzzle"></i><span>Super Admin </span><span class="fa arrow"></span></a>
+        </li>
       </ul>
     </div>
   </div>
@@ -158,44 +161,21 @@
         <div class="col-lg-12 portlets">
           <div class="panel bg-dark">
             <div class="panel-content">
-                <div class="m-b-20 row">
-                    <div class="btn-group">
-                        <button class="btn btn-dark" ng-click="dashboard.gotoEquipments()" ng-if="dashboard.currentUser.role == 'admin'"><i class="fa fa-plus"></i> Add Equipment</button>
-                    </div>
-                  </div>
               <div class="row">
-                  <div class="col-sm-4">
-                      <div class="form-group">
-                        <label class="control-label">Equipment</label>
-                          <select ng-model="dashboard.searchText" class="form-control">
-                              <option ng-repeat="group in dashboard.groups" value="{{group.name}}">{{group.name}}</option>
-                          </select>
-                      </div>
-                      </div>
-              <div class="col-sm-3">
+                <div class="col-sm-8">
                   <div class="form-group">
-                      <label class="form-label">From</label>
-                      <div class="prepend-icon">
-                          <date-picker language="en" ng-model="dashboard.dateFrom" format="MMMM d, y"></date-picker>
-                        <i class="icon-calendar"></i>
-                      </div>
-                    </div>
-              </div>
-              <div class="col-sm-3">
-                  <div class="form-group">
-                      <label class="form-label">To</label>
-                      <div class="prepend-icon">
-                          <date-picker language="en" ng-model="dashboard.dateTo" format="MMMM d, y"></date-picker>
-                        <i class="icon-calendar"></i>
-                      </div>
-                    </div>
-              </div>
-              <div class="col-sm-2" style="padding-left: 0 !important; padding-right: 0 !important;">
-                  <div class="form-group" style="margin-top: 25px !important;"> 
-                  <button class="btn btn-dark" ng-click="dashboard.filterNow()">Search</button>
-                  <button class="btn btn-dark" ng-click="dashboard.reset()">Reset</button>
+                    <label class="control-label">Equipment</label>
+                    <select ng-model="dashboard.selectEquip" class="form-control">
+                      <option ng-repeat="group in dashboard.groups" value="{{group._id}}">{{group.name}}</option>
+                    </select>
                   </div>
-              </div>
+                </div>
+                <div class="col-sm-4" style="padding-left: 0 !important; padding-right: 0 !important;">
+                  <div class="form-group" style="margin-top: 25px !important;">
+                    <button class="btn btn-dark" ng-click="dashboard.gotoEquipList(dashboard.selectEquip)" ng-if="dashboard.selectEquip">View Equipment</button>
+                    <button class="btn btn-dark" ng-click="dashboard.gotoEquipments()" ng-if="dashboard.currentUser.role == 'admin'">Add Equipment</button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -205,17 +185,54 @@
         <div class="col-lg-12 portlets">
           <div class="panel bg-dark">
             <div class="panel-header panel-controls">
-                <div class="m-b-20 row">
-                    <div class="btn-group">
-                      <button id="table-edit_new" class="btn btn-dark" data-toggle="modal" data-target="#modal-responsive"><i class="fa fa-plus"></i> Add New Job</button>
-                    </div>
-                    <!--<div class="btn-group" ng-hide="dashboard.viewJobs">
-                      <button class="btn btn-dark" ng-click="dashboard.viewFilter()"><i class="fa fa-eye-slash"></i> View due Jobs</button>
-                    </div>
-                    <div class="btn-group" ng-if="dashboard.viewJobs">
-                      <button class="btn btn-dark" ng-click="dashboard.viewFilter()"><i class="fa fa-eye"></i> View all Jobs</button>
-                    </div>-->
+              <div class="m-b-20 row">
+                <div class="btn-group">
+                  <button class="btn btn-dark" data-toggle="modal" data-target="#modal-responsive"><i class="fa fa-plus"></i> Add Planned Job</button>
+                </div>
+                <div class="btn-group">
+                  <button class="btn btn-dark" data-toggle="modal" data-target="#modal-unplanned"><i class="fa fa-plus"></i> Add Unplanned Job</button>
+                </div>
+                <div class="btn-group" ng-hide="dashboard.viewJobs">
+                  <button class="btn btn-dark pull-right" ng-click="dashboard.viewFilter()"><i class="fa fa-eye-slash"></i> View due Jobs</button>
+                </div>
+                <div class="btn-group" ng-if="dashboard.viewJobs">
+                  <button class="btn btn-dark pull-right" ng-click="dashboard.viewFilter()"><i class="fa fa-eye"></i> View all Jobs</button>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label class="control-label">Equipment</label>
+                    <select ng-model="dashboard.searchText" class="form-control">
+                      <option ng-repeat="group in dashboard.groups" value="{{group.name}}">{{group.name}}</option>
+                    </select>
                   </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label class="form-label">From</label>
+                        <div class="prepend-icon">
+                            <date-picker language="en" ng-model="dashboard.dateFrom" format="MMMM d, y"></date-picker>
+                          <i class="icon-calendar"></i>
+                        </div>
+                      </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label class="form-label">To</label>
+                        <div class="prepend-icon">
+                            <date-picker language="en" ng-model="dashboard.dateTo" format="MMMM d, y"></date-picker>
+                          <i class="icon-calendar"></i>
+                        </div>
+                      </div>
+                </div>
+                <div class="col-sm-2" style="padding-left: 0 !important; padding-right: 0 !important;">
+                    <div class="form-group" style="margin-top: 25px !important;"> 
+                    <button class="btn btn-dark" ng-click="dashboard.filterNow()">Search</button>
+                    <button class="btn btn-dark" ng-click="dashboard.reset()">Reset</button>
+                    </div>
+                </div>
+                </div>
                   <div class="row">
                       <div class="col-sm-12">
                           <form>
@@ -241,7 +258,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr dir-paginate="job in dashboard.jobs | itemsPerPage: dashboard.perPage" total-items="dashboard.jobsCount" ui-sref="jobdetails({ jobId: job._id, stateHolder: 'jobs' })" ng-click="">
+                  <tr ng-repeat="job in dashboard.jobs" ui-sref="jobdetails({ jobId: job._id, stateHolder: 'jobs' })" ng-click="" ng-hide="dashboard.viewJobs">
                     <td>{{job.group}}</td>
                     <td>{{job.title}}</td>
                     <td>{{job.hours ? job.hours : "0"}}</td>
@@ -251,10 +268,20 @@
                     <td>{{job.status ? "yes" : "no"}}</td>
                     </td>
                   </tr>
+                  <tr ng-repeat="job in dashboard.jobs" ui-sref="jobdetails({ jobId: job._id, stateHolder: 'jobs' })" ng-click="" ng-if="job.status == false && dashboard.viewJobs">
+                      <td>{{job.group}}</td>
+                      <td>{{job.title}}</td>
+                      <td>{{job.hours ? job.hours : "0"}}</td>
+                      <td>{{job.days ? job.days : "0"}}</td>
+                      <td>{{job.date | date : "medium"}}</td>
+                      <!--<td class="text-right"><a class="edit btn btn-sm btn-default" ui-sref="jobdetails({ jobId: job._id })"><i class="icon-note"></i></a>  <a class="delete btn btn-sm btn-danger" href="javascript:;"><i class="icons-office-52"></i></a>-->
+                      <td>{{job.status ? "yes" : "no"}}</td>
+                      </td>
+                  </tr>
                   
                 </tbody>
               </table>
-              <dir-pagination-controls on-page-change="dashboard.pageChanged(newPageNumber)"></dir-pagination-controls>
+              <!--<dir-pagination-controls on-page-change="dashboard.pageChanged(newPageNumber)"></dir-pagination-controls>-->
             </div>
           </div>
         </div>
@@ -279,7 +306,7 @@
         <div class="modal-content">
           <div class="modal-header bg-dark">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icons-office-52"></i></button>
-            <h4 class="modal-title"><strong>New</strong> Job</h4>
+            <h4 class="modal-title"><strong>New Planned</strong> Job</h4>
           </div>
           <div class="modal-body bg-dark">
             <!--<p>Change screen size to see responsive behaviour.</p>-->
@@ -294,20 +321,10 @@
                 </div>
                 <div class="col-md-6">
                   <div class="form-group">
-                    <label class="control-label">Unplanned job?</label>
-                      <select ng-model="dashboard.job.unplanned" name="group" class="form-control" required>
-                        <option ng-repeat="choice in dashboard.choices" value="{{choice.value}}">{{choice.name}}</option>
-                      </select>
+                    <label for="field-1" class="control-label">Title</label>
+                    <input type="text" ng-model="dashboard.job.title" class="form-control" placeholder="Job Title" required>
                   </div>
                 </div>
-            </div>
-            <div class="row">
-              <div class="col-md-12">
-                <div class="form-group">
-                  <label for="field-1" class="control-label">Title</label>
-                  <input type="text" ng-model="dashboard.job.title" class="form-control" placeholder="Job Title" required>
-                </div>
-              </div>
             </div>
             <div class="row" >
               <div class="col-md-12">
@@ -320,7 +337,7 @@
                 </div>
               </div>
             </div>
-            <div class="row" ng-if="dashboard.job.unplanned == 'false'">
+            <div class="row">
               <div class="col-md-4">
                 <div class="form-group">
                   <label for="field-4" class="control-label">Frequency in hours</label>
@@ -342,31 +359,41 @@
                   </div>
                 </div>
             </div>
-            <div class="row" ng-if="dashboard.job.unplanned == 'false'">
-                <div class="col-sm-6">
-                  <div class="form-group">
-                    <label class="form-label">Last Service (optional)</label>
-                    <div class="prepend-icon">
-                      <date-picker language="en" ng-model="dashboard.job.lastService" format="MMMM d, y"></date-picker>
-                      <i class="icon-calendar"></i>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                      <label for="field-4" class="control-label">Hours since last service (optional)</label>
-                      <input type="text" ng-model="dashboard.job.lastServiceHours" class="form-control" placeholder="0" required>
-                    </div>
-                </div>
-              </div>
-              
-
-              
           </div>
           <div class="modal-footer text-center bg-dark">
             <button class="btn btn-primary btn-embossed bnt-square" data-dismiss="modal" ng-click=""><i class="fa fa-times"></i> Cancel</button>
             <button class="btn btn-primary btn-embossed bnt-square" ng-click="dashboard.resetForm()"><i class="fa fa-refresh"></i> Reset</button>
             <button type="submit" class="btn btn-primary btn-embossed bnt-square" data-dismiss="modal" ng-click="dashboard.submit()"><i class="fa fa-check"></i> Add</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="modal-unplanned" aria-hidden="true">
+      <!--<div class="modal-dialog modal-lg" style="margin-top: 15% !important;">-->
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header bg-dark">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icons-office-52"></i></button>
+            <h4 class="modal-title"><strong>New Unplanned</strong> Job</h4>
+          </div>
+          <div class="modal-body bg-dark">
+            <!--<p>Change screen size to see responsive behaviour.</p>-->
+            <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="control-label">Equipment</label>
+                      <select ng-model="dashboard.job.group" name="group" class="form-control" required>
+                        <option ng-repeat="group in dashboard.groups" value="{{group.name}}">{{group.name}}</option>
+                      </select>
+                  </div>
+                </div>
+            </div>
+          </div>
+          <div class="modal-footer text-center bg-dark">
+            <button class="btn btn-primary btn-embossed bnt-square" data-dismiss="modal" ng-click=""><i class="fa fa-times"></i> Cancel</button>
+            <button class="btn btn-primary btn-embossed bnt-square" ng-click="dashboard.resetForm()"><i class="fa fa-refresh"></i> Reset</button>
+            <button type="submit" class="btn btn-primary btn-embossed bnt-square" data-dismiss="modal" ng-click="dashboard.submitUnplanned()"><i class="fa fa-check"></i> Add</button>
           </div>
         </div>
       </div>

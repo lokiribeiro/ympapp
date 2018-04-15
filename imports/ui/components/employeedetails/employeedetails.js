@@ -2,6 +2,7 @@ import angular from 'angular';
 import angularMeteor from 'angular-meteor';
 import uiRouter from 'angular-ui-router';
 import utilsPagination from 'angular-utils-pagination';
+import {pleaseWait} from '../../../startup/please-wait.js';
 
 import { Meteor } from 'meteor/meteor';
 
@@ -129,8 +130,14 @@ class Employeedetails {
     });
 
     this.logout = function() {
+      window.loading_screen = pleaseWait({
+        logo: "../assets/global/images/logo/logo-white.png",
+        backgroundColor: '#8c9093',
+        loadingHtml: "<div class='sk-spinner sk-spinner-wave'><div class='sk-rect1'></div><div class='sk-rect2'></div><div class='sk-rect3'></div><div class='sk-rect4'></div><div class='sk-rect5'></div></div>"
+      });
       Accounts.logout();
       window.setTimeout(function(){
+        window.loading_screen.finish();
         $state.go('login', {}, {reload: 'login'});
       },2000);
     }
@@ -149,6 +156,9 @@ class Employeedetails {
     }
     this.gotoSettings = function() {
       $state.go('settings', {}, {reload: 'settings'});
+    }
+    this.gotoAdminPanel = function() {
+      $state.go('adminpanel', {}, {reload: 'adminpanel'});
     }
 
     this.updateJobs = function(group) {

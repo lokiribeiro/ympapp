@@ -2,6 +2,7 @@ import angular from 'angular';
 import angularMeteor from 'angular-meteor';
 import uiRouter from 'angular-ui-router';
 import utilsPagination from 'angular-utils-pagination';
+import {pleaseWait} from '../../../startup/please-wait.js';
 
 import { Meteor } from 'meteor/meteor';
 
@@ -9,6 +10,7 @@ import { Counts } from 'meteor/tmeasday:publish-counts';
 
 //import { Users } from '../../../api/users';
 import { Profiles } from '../../../api/profiles';
+import { Boats } from '../../../api/boats';
 import template from './employees.html';
  
 class Employees {
@@ -66,18 +68,15 @@ class Employees {
 
 
     this.subscribe('users');
+    this.subscribe('boats');
 
     this.subscribe('profiles', () => [{
-      limit: parseInt(this.perPage),
-      skip: parseInt((this.getReactively('page') - 1) * this.perPage),
       sort: this.getReactively('sort')
     }, this.getReactively('searchText')
     ]);
  
     this.helpers({
       users() {
-          var users = Meteor.users.find();
-          console.info('users', users);
         return Meteor.users.find({});
       },
       profiles() {
@@ -117,6 +116,15 @@ class Employees {
       var boat = Meteor.user();
       console.info('boat', boat);
       var boatID = boat.boatID;
+      var selector = {_id: boatID};
+      var boats = Boats.find(selector);
+      $scope.profile.boatName= '';
+      boats.forEach(function(boat){
+        if(boat._id == boatID){
+          $scope.profile.boatName = boat.boatName;
+        }
+      })
+      console.info('boatName', $scope.profile.boatName);
       $scope.profile.boatID = boatID;
       var jobs = true;
       Meteor.call('upsertNewRoleFromAdmin', details, $scope.profile.role, boatID, jobs, function(err, detail) {
@@ -161,8 +169,14 @@ class Employees {
     }
 
     this.logout = function() {
+      window.loading_screen = pleaseWait({
+        logo: "../assets/global/images/logo/logo-white.png",
+        backgroundColor: '#8c9093',
+        loadingHtml: "<div class='sk-spinner sk-spinner-wave'><div class='sk-rect1'></div><div class='sk-rect2'></div><div class='sk-rect3'></div><div class='sk-rect4'></div><div class='sk-rect5'></div></div>"
+      });
       Accounts.logout();
       window.setTimeout(function(){
+        window.loading_screen.finish();
         $state.go('login', {}, {reload: 'login'});
       },2000);
     }
@@ -181,6 +195,9 @@ class Employees {
     }
     this.gotoSettings = function() {
       $state.go('settings', {}, {reload: 'settings'});
+    }
+    this.gotoAdminPanel = function() {
+      $state.go('adminpanel', {}, {reload: 'adminpanel'});
     }
   }
 

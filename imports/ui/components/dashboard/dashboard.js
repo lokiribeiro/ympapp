@@ -6,6 +6,7 @@ import utilsPagination from 'angular-utils-pagination';
 import { Meteor } from 'meteor/meteor';
 
 import { Counts } from 'meteor/tmeasday:publish-counts';
+import {pleaseWait} from '../../../startup/please-wait.js';
 
 import { Jobs } from '../../../api/jobs';
 import { Parties } from '../../../api/parties';
@@ -88,7 +89,7 @@ class Dashboard {
       date: -1
     };
     this.searchText = '';
-    //this.viewJobs = true;
+    this.viewJobs = true;
 
     this.choices = [
       {name: 'Yes', value: true},
@@ -108,8 +109,6 @@ class Dashboard {
     ]);
 
     this.subscribe('jobs', () => [{
-      limit: parseInt(this.perPage),
-      skip: parseInt((this.getReactively('page') - 1) * this.perPage),
       sort: this.getReactively('sortDate')
     }, this.getReactively('searchText'), 
     this.getReactively('dateFrom2'),
@@ -129,7 +128,17 @@ class Dashboard {
         return parties;
       },
       jobs() {
-        var jobs =  Jobs.find({}, {
+        var userID = Meteor.userId();
+        var boats = Meteor.users.findOne(userID);
+        console.info('boats', boats);
+        if(boats){
+          $scope.userBoatID = boats.boatID;
+          var boatID = $scope.userBoatID;
+          var selector = {boatID: boatID};
+        } else {
+          var selector = {};
+        }     
+        var jobs =  Jobs.find(selector, {
           sort : this.getReactively('sortDate')
         });
         console.info('parties', jobs);
@@ -148,15 +157,31 @@ class Dashboard {
         return Meteor.user();
       },
       groups() {
-        return Groups.find({}, {
+        var userID = Meteor.userId();
+        var boats = Meteor.users.findOne(userID);
+        console.info('boats', boats);
+        if(boats){
+          $scope.userBoatID = boats.boatID;
+          var boatID = $scope.userBoatID;
+          var selector = {boatID: boatID};
+        } else {
+          var selector = {};
+        }  
+        return Groups.find(selector, {
           sort : this.getReactively('sort')
         });
       }
     });
 
     this.logout = function() {
+      window.loading_screen = pleaseWait({
+        logo: "../assets/global/images/logo/logo-white.png",
+        backgroundColor: '#8c9093',
+        loadingHtml: "<div class='sk-spinner sk-spinner-wave'><div class='sk-rect1'></div><div class='sk-rect2'></div><div class='sk-rect3'></div><div class='sk-rect4'></div><div class='sk-rect5'></div></div>"
+      });
       Accounts.logout();
       window.setTimeout(function(){
+        window.loading_screen.finish();
         $state.go('login', {}, {reload: 'login'});
       },2000);
     }
@@ -181,6 +206,114 @@ class Dashboard {
     this.gotoEquipments = function() {
       $state.go('equipments', {}, {reload: 'equipments'});
     }
+    this.gotoAdminPanel = function() {
+      $state.go('adminpanel', {}, {reload: 'adminpanel'});
+    }
+
+    this.gotoEquipList = function(equipID) {
+      console.info('equipID', equipID);
+      $state.go('equipmentlist', {equipID: equipID}, {reload: 'equipmentlist'});
+    }
+
+    this.submit = function() {
+      this.job.owner = Meteor.userId();
+      this.job.date = new Date();
+      this.job.dateTime = this.job.date.getTime();
+      this.job.boatID = $scope.userBoatID;
+      /*if(this.job.lastService && (this.job.unplanned == 'false')){
+        if(this.job.lastServiceHours){
+          if(this.job.hours){
+            console.log('lastservice hours with hours');
+            var lastServiceTime = this.job.lastService.getTime();
+            var lastServiceHours = parseInt(this.job.hours) - parseInt(this.job.lastServiceHours);
+            this.job.dateNext = this.job.dateTime + (lastServiceHours*60*60*1000);
+            var newDate = this.job.dateNext;
+            this.job.date = new Date(newDate);
+            this.job.dateTime = this.job.date.getTime();
+            this.job.status = true;
+          } else if(this.job.days) {
+            console.log('lastservice hours with days');
+            var lastServiceTime = this.job.lastService.getTime();
+            var hours = this.job.days * 24;
+            var lastServiceHours = parseInt(hours) - parseInt(this.job.lastServiceHours);
+            this.job.dateNext = this.job.dateTime + (lastServiceHours*60*60*1000);
+            var newDate = this.job.dateNext;
+            this.job.date = new Date(newDate);
+            this.job.dateTime = this.job.date.getTime();
+            this.job.status = true;
+          }
+        } else {
+          if(this.job.hours){
+            console.log('no lastservice hours with hours');
+            var lastServiceTime = this.job.lastService.getTime();
+            this.job.dateNext = lastServiceTime + (this.job.hours*60*60*1000);
+            var newDate = this.job.dateNext;
+            this.job.date = new Date(newDate);
+            this.job.dateTime = this.job.date.getTime();
+            this.job.status = false;
+          } else if(this.job.days){
+            console.log('no lastservice hours with hours');
+            var hours = this.job.days * 24;
+            var lastServiceTime = this.job.lastService.getTime();
+            this.job.dateNext = lastServiceTime + (hours*60*60*1000);
+            var newDate = this.job.dateNext;
+            this.job.date = new Date(newDate);
+            this.job.dateTime = this.job.date.getTime();
+            this.job.status = false;
+          }
+        }  
+      } else if(this.job.hours){
+        console.log('no lastservice date with hours');
+        this.job.dateNext = this.job.dateTime + (this.job.hours*60*60*1000);
+        var newDate = this.job.dateNext;
+        this.job.date = new Date(newDate);
+        this.job.dateTime = this.job.date.getTime();
+        this.job.status = false;
+      } else if(this.job.days){
+        console.log('no lastservice date with days');
+        var hours = this.job.days * 24;
+        this.job.dateNext = this.job.dateTime + (hours*60*60*1000);
+        var newDate = this.job.dateNext;
+        this.job.date = new Date(newDate);
+        this.job.dateTime = this.job.date.getTime();
+        this.job.status = false;
+      } else if(this.job.unplanned) {
+        this.job.status = false;
+      }*/
+      if(this.job.hours){
+        console.log('no lastservice date with hours');
+        this.job.dateNext = this.job.dateTime + (this.job.hours*60*60*1000);
+        var newDate = this.job.dateNext;
+        this.job.date = new Date(newDate);
+        this.job.dateTime = this.job.date.getTime();
+        this.job.status = false;
+      } else if(this.job.days){
+        console.log('no lastservice date with days');
+        var hours = this.job.days * 24;
+        this.job.dateNext = this.job.dateTime + (hours*60*60*1000);
+        var newDate = this.job.dateNext;
+        this.job.date = new Date(newDate);
+        this.job.dateTime = this.job.date.getTime();
+        this.job.status = false;
+      }
+      this.job.unplanned = false;
+      console.info('this.job', this.job);
+      var status = Jobs.insert(this.job);
+      this.job = {};
+    }
+
+    this.submitUnplanned = function() {
+      this.job.owner = Meteor.userId();
+      this.job.date = new Date();
+      this.job.dateTime = this.job.date.getTime();
+      this.job.title = 'Unplanned Job';
+      this.job.unplanned = true;
+      this.job.status = false;
+      this.job.boatID = $scope.userBoatID;
+      console.info('this.job', this.job);
+      var status = Jobs.insert(this.job);
+      this.job = {};
+    }
   }
 
   isOwner(party) {
@@ -194,76 +327,6 @@ class Dashboard {
 
   sortChanged(sort) {
     this.sort = sort;
-  }
-
-  submit() {
-    this.job.owner = Meteor.userId();
-    this.job.date = new Date();
-    this.job.dateTime = this.job.date.getTime();
-    console.info('lastService', this.job.unplanned);
-    if(this.job.lastService && (this.job.unplanned == 'false')){
-      if(this.job.lastServiceHours){
-        if(this.job.hours){
-          console.log('lastservice hours with hours');
-          var lastServiceTime = this.job.lastService.getTime();
-          var lastServiceHours = parseInt(this.job.hours) - parseInt(this.job.lastServiceHours);
-          this.job.dateNext = this.job.dateTime + (lastServiceHours*60*60*1000);
-          var newDate = this.job.dateNext;
-          this.job.date = new Date(newDate);
-          this.job.dateTime = this.job.date.getTime();
-          this.job.status = true;
-        } else if(this.job.days) {
-          console.log('lastservice hours with days');
-          var lastServiceTime = this.job.lastService.getTime();
-          var hours = this.job.days * 24;
-          var lastServiceHours = parseInt(hours) - parseInt(this.job.lastServiceHours);
-          this.job.dateNext = this.job.dateTime + (lastServiceHours*60*60*1000);
-          var newDate = this.job.dateNext;
-          this.job.date = new Date(newDate);
-          this.job.dateTime = this.job.date.getTime();
-          this.job.status = true;
-        }
-      } else {
-        if(this.job.hours){
-          console.log('no lastservice hours with hours');
-          var lastServiceTime = this.job.lastService.getTime();
-          this.job.dateNext = lastServiceTime + (this.job.hours*60*60*1000);
-          var newDate = this.job.dateNext;
-          this.job.date = new Date(newDate);
-          this.job.dateTime = this.job.date.getTime();
-          this.job.status = false;
-        } else if(this.job.days){
-          console.log('no lastservice hours with hours');
-          var hours = this.job.days * 24;
-          var lastServiceTime = this.job.lastService.getTime();
-          this.job.dateNext = lastServiceTime + (hours*60*60*1000);
-          var newDate = this.job.dateNext;
-          this.job.date = new Date(newDate);
-          this.job.dateTime = this.job.date.getTime();
-          this.job.status = false;
-        }
-      }  
-    } else if(this.job.hours){
-      console.log('no lastservice date with hours');
-      this.job.dateNext = this.job.dateTime + (this.job.hours*60*60*1000);
-      var newDate = this.job.dateNext;
-      this.job.date = new Date(newDate);
-      this.job.dateTime = this.job.date.getTime();
-      this.job.status = false;
-    } else if(this.job.days){
-      console.log('no lastservice date with days');
-      var hours = this.job.days * 24;
-      this.job.dateNext = this.job.dateTime + (hours*60*60*1000);
-      var newDate = this.job.dateNext;
-      this.job.date = new Date(newDate);
-      this.job.dateTime = this.job.date.getTime();
-      this.job.status = false;
-    } else if(this.job.unplanned) {
-      this.job.status = false;
-    }
-    console.info('this.job', this.job);
-    var status = Jobs.insert(this.job);
-    this.job = {};
   }
 
   reset() {
@@ -313,7 +376,7 @@ function($stateProvider) {
               return $q.resolve();
             };
         }
-    }
+      }
     });
   } 
 ]);

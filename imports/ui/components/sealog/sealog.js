@@ -2,6 +2,7 @@ import angular from 'angular';
 import angularMeteor from 'angular-meteor';
 import uiRouter from 'angular-ui-router';
 import utilsPagination from 'angular-utils-pagination';
+import {pleaseWait} from '../../../startup/please-wait.js';
 
 import { Meteor } from 'meteor/meteor';
 import { Counts } from 'meteor/tmeasday:publish-counts';
@@ -72,26 +73,62 @@ class Sealog {
         return Meteor.user();
       },
       profiles() {
-        return Profiles.find({});
+        var userID = Meteor.userId();
+        var boats = Meteor.users.findOne(userID);
+        console.info('boats', boats);
+        if(boats){
+          $scope.userBoatID = boats.boatID;
+          var boatID = $scope.userBoatID;
+          var selector = {boatID: boatID};
+        } else {
+          var selector = {};
+        } 
+        return Profiles.find(selector);
       },
       logbooks() {
         return Logbooks.find({});
       },
       groups() {
-        return Groups.find({}, {
+        var userID = Meteor.userId();
+        var boats = Meteor.users.findOne(userID);
+        console.info('boats', boats);
+        if(boats){
+          $scope.userBoatID = boats.boatID;
+          var boatID = $scope.userBoatID;
+          var selector = {boatID: boatID};
+        } else {
+          var selector = {};
+        } 
+        return Groups.find(selector, {
           sort : this.getReactively('sort')
         });
       },
       subgroups() {
-        return Subgroups.find({}, {
+        var userID = Meteor.userId();
+        var boats = Meteor.users.findOne(userID);
+        console.info('boats', boats);
+        if(boats){
+          $scope.userBoatID = boats.boatID;
+          var boatID = $scope.userBoatID;
+          var selector = {boatID: boatID};
+        } else {
+          var selector = {};
+        } 
+        return Subgroups.find(selector, {
           sort : this.getReactively('sort2')
         });
       }
     });
 
     this.logout = function() {
+      window.loading_screen = pleaseWait({
+        logo: "../assets/global/images/logo/logo-white.png",
+        backgroundColor: '#8c9093',
+        loadingHtml: "<div class='sk-spinner sk-spinner-wave'><div class='sk-rect1'></div><div class='sk-rect2'></div><div class='sk-rect3'></div><div class='sk-rect4'></div><div class='sk-rect5'></div></div>"
+      });
       Accounts.logout();
       window.setTimeout(function(){
+        window.loading_screen.finish();
         $state.go('login', {}, {reload: 'login'});
       },2000);
     }
@@ -111,6 +148,9 @@ class Sealog {
     this.gotoSettings = function() {
       $state.go('settings', {}, {reload: 'settings'});
     }
+    this.gotoAdminPanel = function() {
+      $state.go('adminpanel', {}, {reload: 'adminpanel'});
+    }
 
     this.notification = function() {
       
@@ -124,6 +164,7 @@ class Sealog {
       this.port.userID = this.engineer.doneBy.userID;
       this.port.name = this.engineer.doneBy.firstName + ' ' + this.engineer.doneBy.lastName;
       this.port.type = 'sea';
+      this.port.boatID = $scope.userBoatID;
       console.info('port details', this.port);
       Logbooks.insert(this.port, (error) => {
           if (error) {

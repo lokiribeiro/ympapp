@@ -3,8 +3,8 @@ import { Mongo } from 'meteor/mongo';
 export const Profiles = new Mongo.Collection('profiles');
 
 Profiles.allow({
- insert(userId, profile) {
-   return userId;
+ insert() {
+   return true;
  },
  update(userId, profile, fields, modifier) {
    return true;

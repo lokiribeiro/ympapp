@@ -5,19 +5,35 @@ import { Jobs } from './collection';
 
 if (Meteor.isServer) {
    Meteor.publish('jobs', function(options, searchString, dateFrom, dateTo) {
-   var selector = {status: false};
+   //var selector = {status: false};
+   var selector = {};
 
    if (typeof dateFrom === 'number' && typeof dateTo === 'number') {
-    var selector = {$and: [
+    /*var selector = {$and: [
       {status: false},
       {dateTime: {
         $gte: dateFrom,
         $lte: dateTo
       }}
-    ]};
+    ]};*/
+    var selector = {dateTime: {
+        $gte: dateFrom,
+        $lte: dateTo
+      }};
   } else if (typeof searchString === 'string' && searchString.length) {
      var search = {$regex: `.*${searchString}.*`, $options: 'i'};
-     selector = {$and: [
+     selector = {$or: [
+      {title: search},
+      {group: search},
+      {location: search},
+      {modelNumber: search},
+      {hours: search},
+      {years: search},
+      {serialNumber: search},
+      {manufacturer: search},
+      {status: search}
+    ]};
+       /*selector = {$and: [
        {status: false},
        {$or: [
        {title: search},
@@ -30,7 +46,7 @@ if (Meteor.isServer) {
        {manufacturer: search},
        {status: search}
      ]}
-    ]};
+    ]};*/
     /*selector = {dateTime: {
       $gte: dateFrom,
       $lte: dateTo

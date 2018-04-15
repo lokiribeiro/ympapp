@@ -2,6 +2,7 @@ import angular from 'angular';
 import angularMeteor from 'angular-meteor';
 import uiRouter from 'angular-ui-router';
 import utilsPagination from 'angular-utils-pagination';
+import {pleaseWait} from '../../../startup/please-wait.js';
 
 import { Meteor } from 'meteor/meteor';
 
@@ -51,7 +52,17 @@ class Logbook {
  
     this.helpers({
       logbooks() {
-        var logbooks =  Logbooks.find({}, {
+        var userID = Meteor.userId();
+        var boats = Meteor.users.findOne(userID);
+        console.info('boats', boats);
+        if(boats){
+          $scope.userBoatID = boats.boatID;
+          var boatID = $scope.userBoatID;
+          var selector = {boatID: boatID};
+        } else {
+          var selector = {};
+        } 
+        var logbooks =  Logbooks.find(selector, {
           sort : this.getReactively('sort')
         });
         console.info('parties', logbooks);
@@ -75,8 +86,14 @@ class Logbook {
     });
 
     this.logout = function() {
+      window.loading_screen = pleaseWait({
+        logo: "../assets/global/images/logo/logo-white.png",
+        backgroundColor: '#8c9093',
+        loadingHtml: "<div class='sk-spinner sk-spinner-wave'><div class='sk-rect1'></div><div class='sk-rect2'></div><div class='sk-rect3'></div><div class='sk-rect4'></div><div class='sk-rect5'></div></div>"
+      });
       Accounts.logout();
       window.setTimeout(function(){
+        window.loading_screen.finish();
         $state.go('login', {}, {reload: 'login'});
       },2000);
     }
@@ -95,6 +112,9 @@ class Logbook {
     }
     this.gotoSettings = function() {
       $state.go('settings', {}, {reload: 'settings'});
+    }
+    this.gotoAdminPanel = function() {
+      $state.go('adminpanel', {}, {reload: 'adminpanel'});
     }
     this.gotoNewLog = function() {
       angular.element("body").removeClass("modal-open");

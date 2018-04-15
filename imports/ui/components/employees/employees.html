@@ -19,6 +19,9 @@
         <li class="nav-parent active" ng-click="employees.gotoEmployees()" ng-if="employees.currentUser.employees">
           <a href=""><i class="icon-user"></i><span>Employees </span><span class="fa arrow"></span></a>
         </li>
+        <li class="nav-parent" ng-click="employees.gotoAdminPanel()" ng-if="employees.currentUser.superadmin">
+          <a href=""><i class="icon-puzzle"></i><span>Super Admin </span><span class="fa arrow"></span></a>
+        </li>
       </ul>
     </div>
   </div>
@@ -183,19 +186,17 @@
                       <tr>
                         <th>First Name</th>
                         <th>Last Name</th>
-                        <th>Type</th>
-                        <th>Status</th>
-                        <th>Term of Employment</th>
+                        <th>Mailing</th>
+                        <th>Boat Name</th>
                         <th>username</th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr ng-repeat="employee in employees.profiles" ng-if="employee.boatID == 'boat1'" ui-sref="employeedetails({ employeeId: employee._id })" ng-click="">
+                      <tr ng-repeat="employee in employees.profiles" ng-if="employee.boatID == employees.currentUser.boatID" ui-sref="employeedetails({ employeeId: employee._id })" ng-click="">
                         <td>{{employee.firstName}}</td>
                         <td>{{employee.lastName}}</td>
-                        <td>{{employee.type}}</td>
-                        <td>{{employee.status}}</td>
-                        <td>{{employee.termOfEmployment}}</td>
+                        <td>{{employee.mailing}}</td>
+                        <td>{{employee.boatName}}</td>
                         <td>{{employee.username}}</td> 
                       </tr>
                       
@@ -244,7 +245,7 @@
                   </div>
                 </div>
     
-                <div class="row">
+                <!--<div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
                         <label class="control-label">Type</label>
@@ -261,7 +262,7 @@
                       </select>
                     </div>
                   </div>
-                </div>
+                </div>-->
     
                 <div class="row">
                   <div class="col-md-6">
@@ -272,17 +273,14 @@
                       </select>
                     </div>
                   </div>
-                  <div class="col-md-6">
+                  <!--<div class="col-md-6">
                     <div class="form-group">
                       <label class="control-label">Term of Employment</label>
                       <select ng-model="employees.employee.termOfEmployment" name="group" class="form-control">
                         <option ng-repeat="term in employees.terms" value="{{term.value}}">{{term.name}}</option>
                       </select>
                     </div>
-                  </div>
-                </div>
-
-                <div class="row">
+                  </div>-->
                   <div class="col-md-6">
                     <div class="form-group">
                       <label class="control-label">Role</label>
@@ -291,7 +289,10 @@
                       </select>
                     </div>
                   </div>
-                  <div class="col-md-6">
+                </div>
+
+                <div class="row">
+                  <div class="col-md-12">
                     <div class="form-group">
                       <label for="field-5" class="control-label">Username</label>
                       <input type="text" ng-model="employees.employee.username" class="form-control" placeholder="username" required>

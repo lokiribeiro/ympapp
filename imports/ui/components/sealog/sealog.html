@@ -19,6 +19,9 @@
             <li class="nav-parent" ng-click="sealog.gotoEmployees()" ng-if="sealog.currentUser.employees">
               <a href=""><i class="icon-user"></i><span>Employees </span><span class="fa arrow"></span></a>
             </li>
+            <li class="nav-parent" ng-click="sealog.gotoAdminPanel()" ng-if="sealog.currentUser.superadmin">
+              <a href=""><i class="icon-puzzle"></i><span>Super Admin </span><span class="fa arrow"></span></a>
+            </li>
           </ul>
         </div>
       </div>

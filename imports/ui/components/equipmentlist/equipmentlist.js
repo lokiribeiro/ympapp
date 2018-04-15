@@ -15,29 +15,25 @@ import { Profiles } from '../../../api/profiles';
 import { Histories } from '../../../api/histories';
 import { Supports } from '../../../api/supports';
 import { Groups } from '../../../api/groups';
-import template from './jobdetails.html';
+import template from './equipmentlist.html';
  
-class Jobdetails {
+class Equipmentlist {
   constructor($scope, $reactive, $stateParams, $state, Upload) {
     //'ngInject';
  
     $reactive(this).attach($scope);
 
-    this.jobId = $stateParams.jobId;
+    this.equipID = $stateParams.equipID;
     this.stateHolder = $stateParams.stateHolder;
     $scope.userID = Meteor.userId();
 
-    console.info('jobId', this.jobId);
+    console.info('equipID', this.equipID);
     console.info('state', this.stateHolder);
 
     this.job = {};
     this.history = {};
     this.support = {};
 
-    this.uploader = new Slingshot.Upload('myFileUploads');
-
-    this.perPage = 3;
-    this.page = 1;
     this.sort = {
       name: 1
     };
@@ -77,21 +73,26 @@ class Jobdetails {
     this.subscribe('groups');
  
     this.helpers({
+      equip() {
+        return Groups.findOne({
+            _id: $stateParams.equipID
+        });
+      },
       job() {
         return Jobs.findOne({
-            _id: $stateParams.jobId
+            _id: $stateParams.equipID
           });
       },
       docs() {
         var docs = Docs.find({
-            jobID: $stateParams.jobId
+            equipID: $stateParams.equipID
           });
           console.info('docs', docs);
           return docs;
       },
       photos() {
         var photos = Photos.find({
-            jobID: $stateParams.jobId
+            equipID: $stateParams.equipID
           });
           console.info('photos', photos);
           return photos;
@@ -106,17 +107,7 @@ class Jobdetails {
         return Meteor.user();
       },
       profiles() {
-        var userID = Meteor.userId();
-        var boats = Meteor.users.findOne(userID);
-        console.info('boats', boats);
-        if(boats){
-          $scope.userBoatID = boats.boatID;
-          var boatID = $scope.userBoatID;
-          var selector = {boatID: boatID};
-        } else {
-          var selector = {};
-        } 
-        return Profiles.find(selector);
+        return Profiles.find({});
       },
       histories() {
         var userID = Meteor.userId();
@@ -133,21 +124,6 @@ class Jobdetails {
       },
       supports() {
         return Supports.find({});
-      },
-      groups() {
-        var userID = Meteor.userId();
-        var boats = Meteor.users.findOne(userID);
-        console.info('boats', boats);
-        if(boats){
-          $scope.userBoatID = boats.boatID;
-          var boatID = $scope.userBoatID;
-          var selector = {boatID: boatID};
-        } else {
-          var selector = {};
-        } 
-        return Groups.find(selector, {
-          sort : this.getReactively('sort')
-        });
       }
     });
 
@@ -202,8 +178,8 @@ class Jobdetails {
     }
 
     this.delete = function() {
-      var jobId = $stateParams.jobId;
-      var status = Jobs.remove(jobId);
+      var equipID = $stateParams.equipID;
+      var status = Jobs.remove(equipID);
       console.info('status removed', status);
       $state.go('dashboard', {}, {reload: 'dashboard'});
     }
@@ -213,45 +189,6 @@ class Jobdetails {
       $scope.removeID = job._id;
       $scope.jobName = job.title;
       $scope.notMatch = false;
-    }
-
-    this.saveWork = function() {
-      console.info('doneby', this.job.doneBy);
-      if(this.job.doneBy){
-        this.history.jobID = this.job._id;
-        this.history.title = this.job.title;
-        this.history.group = this.job.group;
-        this.history.workHistory = this.job.workHistory;
-        this.history.dateNow = new Date();
-        console.info('profileget', this.job.doneBy);
-        this.history.userID = this.job.doneBy.userID;
-        this.history.name = this.job.doneBy.name;
-        this.history.boatID = $scope.userBoatID;
-        this.job.status = true;
-    
-        Jobs.update({
-          _id: this.job._id
-        }, {
-          $set: {
-            status: this.job.status
-          }
-        }, (error) => {
-            if (error) {
-              console.log('Oops, unable to update the job...');
-            } else {
-              console.log('Done!');
-            }
-        });
-    
-        var status = Histories.insert(this.history);
-        console.info('status', status);
-        this.showNotif = true;
-        $state.go('dashboard', {}, {reload: 'dashboard'});
-  
-      } else {
-        this.notComplete = true;
-      }
-      
     }
 
     this.removeJob = function() {
@@ -305,7 +242,7 @@ class Jobdetails {
             var filename = this.fileHere;
             var profileID = Meteor.userId();
   
-            Meteor.call('upsertDrawing', profileID, downloadUrl, $stateParams.jobId, function(err, result) {
+            Meteor.call('upsertDrawing', profileID, downloadUrl, $stateParams.equipID, function(err, result) {
                   console.log(downloadUrl);
             console.log('success: ' + downloadUrl);
                   if (err) {
@@ -415,7 +352,7 @@ class Jobdetails {
           var filename = this.fileHere;
           var profileID = Meteor.userId();
 
-          Meteor.call('upsertManual', profileID, downloadUrl, $stateParams.jobId, function(err, result) {
+          Meteor.call('upsertManual', profileID, downloadUrl, $stateParams.equipID, function(err, result) {
                 console.log(downloadUrl);
           console.log('success: ' + downloadUrl);
                 if (err) {
@@ -524,7 +461,7 @@ this.uploadSpecs = function(file, errFiles) {
         var filename = this.fileHere;
         var profileID = Meteor.userId();
 
-        Meteor.call('upsertSpecs', profileID, downloadUrl, $stateParams.jobId, function(err, result) {
+        Meteor.call('upsertSpecs', profileID, downloadUrl, $stateParams.equipID, function(err, result) {
               console.log(downloadUrl);
         console.log('success: ' + downloadUrl);
               if (err) {
@@ -635,7 +572,7 @@ this.uploadPage = function(file, errFiles) {
         var profileID = Meteor.userId();
         
 
-        Meteor.call('upsertPage', profileID, downloadUrl, $stateParams.jobId, $scope.pageNum, function(err, result) {
+        Meteor.call('upsertPage', profileID, downloadUrl, $stateParams.equipID, $scope.pageNum, function(err, result) {
               console.log(downloadUrl);
         console.log('success: ' + downloadUrl);
               if (err) {
@@ -745,7 +682,7 @@ this.uploadImage = function(file, errFiles) {
         var filename = this.fileHere;
         var profileID = Meteor.userId();
 
-        Meteor.call('upsertPhotos', profileID, downloadUrl, $stateParams.jobId, function(err, result) {
+        Meteor.call('upsertPhotos', profileID, downloadUrl, $stateParams.equipID, function(err, result) {
               console.log(downloadUrl);
         console.log('success: ' + downloadUrl);
               if (err) {
@@ -855,7 +792,7 @@ this.uploadService = function(file, errFiles) {
         var profileID = Meteor.userId();
         var dateNow = new Date();
 
-        Meteor.call('upsertService', profileID, downloadUrl, $stateParams.jobId, dateNow, function(err, result) {
+        Meteor.call('upsertService', profileID, downloadUrl, $stateParams.equipID, dateNow, function(err, result) {
               console.log(downloadUrl);
         console.log('success: ' + downloadUrl);
               if (err) {
@@ -1073,8 +1010,45 @@ this.uploadService = function(file, errFiles) {
     }
   }
 
+  saveWork() {
+    console.info('doneby', this.job.doneBy);
+    if(this.job.doneBy){
+      this.history.equipID = this.job._id;
+      this.history.title = this.job.title;
+      this.history.group = this.job.group;
+      this.history.workHistory = this.job.workHistory;
+      this.history.dateNow = new Date();
+      console.info('profileget', this.job.doneBy);
+      this.history.userID = this.job.doneBy.userID;
+      this.history.name = this.job.doneBy.name;
+      this.job.status = true;
+  
+      Jobs.update({
+        _id: this.job._id
+      }, {
+        $set: {
+          status: this.job.status
+        }
+      }, (error) => {
+          if (error) {
+            console.log('Oops, unable to update the job...');
+          } else {
+            console.log('Done!');
+          }
+      });
+  
+      var status = Histories.insert(this.history);
+      console.info('status', status);
+      this.showNotif = true;
+
+    } else {
+      this.notComplete = true;
+    }
+    
+  }
+
   supportSave() {
-    this.support.jobID = this.job._id;
+    this.support.equipID = this.job._id;
     this.date = new Date();
     var status = Supports.insert(this.support);
     console.info('statussupport', status);
@@ -1082,7 +1056,7 @@ this.uploadService = function(file, errFiles) {
   }
 }
  
-const name = 'jobdetails';
+const name = 'equipmentlist';
 
 //Jobdetails.$inject = ['$scope', '$reactive', '$stateParams'];
  
@@ -1094,15 +1068,15 @@ export default angular.module(name, [
 ]).component(name, {
   template,
   controllerAs: name,
-  controller: ['$scope', '$reactive', '$stateParams', '$state', 'Upload', Jobdetails]
+  controller: ['$scope', '$reactive', '$stateParams', '$state', 'Upload', Equipmentlist]
 })
 .config(['$stateProvider',
 function($stateProvider) {
     //'ngInject';
     $stateProvider
-      .state('jobdetails', {
-        url: '/jobdetails/:stateHolder/:jobId',
-        template: '<jobdetails></jobdetails>',
+      .state('equipmentlist', {
+        url: '/equipmentlist/:equipID',
+        template: '<equipmentlist></equipmentlist>',
     
         resolve: {
             currentUser($q, $state) {

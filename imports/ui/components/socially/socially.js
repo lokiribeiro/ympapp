@@ -2,11 +2,13 @@ import angular from 'angular';
 import angularMeteor from 'angular-meteor';
 import uiRouter from 'angular-ui-router';
 import ngFileUpload from 'ng-file-upload';
+import Papa from 'papaparse';
 //import 'angularjs-datepicker';
 
 import '../../../startup/accounts-config.js';
 import '../../../startup/datepicker.js';
 import '../../../startup/ngPrint.js';
+import '../../../startup/please-wait.js';
  
 import template from './socially.html';
 import Navigation from '../navigation/navigation';
@@ -23,6 +25,8 @@ import Sealog from '../sealog/sealog';
 import Logdetails from '../logdetails/logdetails';
 import Equipments from '../equipments/equipments';
 import Profilepage from '../profilepage/profilepage';
+import Equipmentlist from '../equipmentlist/equipmentlist';
+import Adminpanel from '../adminpanel/adminpanel';
 
  
 class Socially {}
@@ -47,6 +51,8 @@ export default angular.module(name, [
   Logdetails.name,
   Equipments.name,
   Profilepage.name,
+  Equipmentlist.name,
+  Adminpanel.name,
   'accounts.ui',
   'date-picker',
   'ngPrint',

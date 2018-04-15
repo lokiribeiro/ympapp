@@ -13,8 +13,18 @@ export function  upsertProfilePhoto(profileID, downloadUrl){
     }
   return fileUpsert;
 }
+
+export function upsertBoatIDProfile(userID, boatID){
+  var selector = {_id: userID};
+  var modifier = {$set: {
+    boatID: boatID
+  }};
+  var roleUpsert = Profiles.upsert(selector, modifier);
+  return roleUpsert;
+}
   
 
 Meteor.methods({
-    upsertProfilePhoto
+    upsertProfilePhoto,
+    upsertBoatIDProfile
 });

@@ -19,6 +19,9 @@
         <li class="nav-parent active" ng-click="employeedetails.gotoEmployees()" ng-if="employeedetails.currentUser.employees">
           <a href=""><i class="icon-user"></i><span>Employees </span><span class="fa arrow"></span></a>
         </li>
+        <li class="nav-parent" ng-click="employeedetails.gotoAdminPanel()" ng-if="employeedetails.currentUser.superadmin">
+          <a href=""><i class="icon-puzzle"></i><span>Super Admin </span><span class="fa arrow"></span></a>
+        </li>
       </ul>
     </div>
   </div>
@@ -205,7 +208,7 @@
                           </div>
                         </div>
 
-                      <div class="row">
+                      <!--<div class="row">
                           <div class="col-sm-6">
                         <div class="form-group">
                           <label class="col-sm-3 control-label f-12">Type
@@ -228,21 +231,29 @@
                           </div>
                         </div>
                       </div>
-                      </div>
+                      </div>-->
 
                       <div class="row">
-                          <div class="col-sm-6">
-                        <div class="form-group">
-                          <label class="col-sm-3 control-label f-12">Mailing
-                          </label>
-                          <div class="col-sm-9">
+                        <div class="col-sm-6">
+                          <div class="form-group">
+                            <label class="col-sm-3 control-label f-12">Mailing
+                            </label>
+                            <div class="col-sm-9">
                               <select ng-model="employeedetails.profile.mailing" name="group" class="form-control" required>
-                                  <option ng-repeat="mailing in employeedetails.mailings" value="{{mailing.value}}">{{mailing.name}}</option>
-                                </select>
+                                <option ng-repeat="mailing in employeedetails.mailings" value="{{mailing.value}}">{{mailing.name}}</option>
+                              </select>
+                            </div>
                           </div>
                         </div>
-                        </div>
                         <div class="col-sm-6">
+                          <div class="form-group">
+                            <label class="col-sm-3 control-label f-12">Boat Name</label>
+                            <div class="col-sm-9">
+                              <input type="text" ng-model="employeedetails.profile.boatName" class="form-control" placeholder="Lastname" required>
+                            </div>
+                          </div>
+                        </div>
+                        <!--<div class="col-sm-6">
                         <div class="form-group">
                           <label class="col-sm-3 control-label f-12">Term of Employment
                           </label>
@@ -252,7 +263,7 @@
                                 </select>
                           </div>
                         </div>
-                      </div>
+                      </div>-->
                       </div>
 
                       <div class="row">
@@ -275,30 +286,6 @@
                         </div>
                       </div>
                       </div>
-
-                      <div class="row">
-                        <div class="col-sm-6">
-                        <div class="form-group">
-                          <label class="col-sm-3 control-label f-12">CV
-                          </label>
-                          <div class="col-sm-9">
-                              <a target="_blank" ng-repeat="doc in employeedetails.docs" ng-if="doc.fileType == 'cv'" href="{{doc.downloadurl}}" class="btn btn-embossed btn-primary m-r-20">view</a>
-                              <button data-toggle="modal" data-target="#upload-cv" class="btn btn-embossed btn-primary">Upload</button>
-                          </div>
-                        </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                              <label class="col-sm-3 control-label f-12">Passport
-                              </label>
-                              <div class="col-sm-9">
-                                  <a target="_blank" ng-repeat="doc in employeedetails.docs" ng-if="doc.fileType == 'passport'" href="{{doc.downloadurl}}" class="btn btn-embossed btn-primary m-r-20">view</a>
-                                  <button data-toggle="modal" data-target="#upload-passport" class="btn btn-embossed btn-primary">Upload</button>
-                              </div>
-                            </div>
-                            </div>
-                      </div>
-
                       </form>
                     </div>
                   </div>
@@ -518,6 +505,41 @@
                                 <div class="col-sm-6">
                                   <div class="form-group">
                                       <button data-toggle="modal" data-target="#upload-photo" class="btn btn-embossed btn-primary">Upload</button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading bg-dark">
+                            <h4>
+                                <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#Collapse_7">
+                                    CV / Passport
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="Collapse_7" class="panel-collapse collapse">
+                            <div class="panel-body bg-dark">
+                              <div class="row" style="margin-bottom:5px !important;">
+                                <div class="col-sm-6">
+                                  <div class="form-group">
+                                    <label class="col-sm-3 control-label f-12">CV
+                                    </label>
+                                    <div class="col-sm-9">
+                                      <a target="_blank" ng-repeat="doc in employeedetails.docs" ng-if="doc.fileType == 'cv'" href="{{doc.downloadurl}}" class="btn btn-embossed btn-primary m-r-20">view</a>
+                                      <button data-toggle="modal" data-target="#upload-cv" class="btn btn-embossed btn-primary">Upload</button>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="col-sm-6">
+                                  <div class="form-group">
+                                    <label class="col-sm-3 control-label f-12">Passport
+                                    </label>
+                                    <div class="col-sm-9">
+                                      <a target="_blank" ng-repeat="doc in employeedetails.docs" ng-if="doc.fileType == 'passport'" href="{{doc.downloadurl}}" class="btn btn-embossed btn-primary m-r-20">view</a>
+                                      <button data-toggle="modal" data-target="#upload-passport" class="btn btn-embossed btn-primary">Upload</button>
+                                    </div>
                                   </div>
                                 </div>
                               </div>

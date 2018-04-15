@@ -17,7 +17,22 @@ import { Meteor } from 'meteor/meteor';
      return username;
    }
 
-   export function upsertNewRoleFromAdmin(userID, userRole, boatID, jobs){
+   export function upsertNewRoleFromRegister(userID, userRole, boatID, jobs, logbook, inventory, employees, superadmin){
+    var selector = {_id: userID};
+    var modifier = {$set: {
+      role: userRole,
+      boatID: boatID,
+      jobs: jobs,
+      logbook: logbook,
+      inventory: inventory,
+      employees: employees,
+      superadmin: superadmin
+    }};
+    var roleUpsert = Meteor.users.upsert(selector, modifier);
+    return roleUpsert;
+  }
+
+  export function upsertNewRoleFromAdmin(userID, userRole, boatID, jobs){
     var selector = {_id: userID};
     var modifier = {$set: {
       role: userRole,
@@ -96,6 +111,22 @@ import { Meteor } from 'meteor/meteor';
      }
      return password;
    }
+
+  export function createUsersFromRegister(password, username) { 
+    if (Meteor.isServer) {
+      username = Accounts.createUser({username:username, password:password});
+    }
+    return username;
+  }
+
+  export function upsertBoatID(userID, boatID){
+    var selector = {_id: userID};
+    var modifier = {$set: {
+      boatID: boatID
+    }};
+    var roleUpsert = Meteor.users.upsert(selector, modifier);
+    return roleUpsert;
+  }
     
    
    
@@ -111,6 +142,7 @@ import { Meteor } from 'meteor/meteor';
 
    Meteor.methods({
        createUsers,
+       upsertNewRoleFromRegister,
        upsertNewRoleFromAdmin,
        upsertJobsAccess,
        upsertInventoryAccess,
@@ -118,5 +150,7 @@ import { Meteor } from 'meteor/meteor';
        upsertEmployeesAccess,
        upsertSettingsAccess,
        upsertPhotoUser,
-       changePasswordNow
+       changePasswordNow,
+       createUsersFromRegister,
+       upsertBoatID
    });
