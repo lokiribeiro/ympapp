@@ -139,6 +139,62 @@ export function  upsertService(profileID, downloadUrl, jobID, date){
     }
   return fileUpsert;
 }
+
+export function upsertYmpDrawing(profileID, downloadUrl, jobID){
+  var selector = {jobID: jobID,
+    fileType:'ympdrawings'};
+  var modifier = {$set: {
+      downloadurl: downloadUrl,
+      fileType:'ympdrawings',
+      userID: profileID
+    }};
+    if (Meteor.isServer) {
+  var fileUpsert = Docs.upsert(selector, modifier);
+    }
+  return fileUpsert;
+}
+
+export function  upsertYmpManual(profileID, downloadUrl, jobID){
+  var selector = {jobID: jobID,
+    fileType:'ympmanual'};
+  var modifier = {$set: {
+      downloadurl: downloadUrl,
+      fileType:'ympmanual',
+      userID: profileID
+    }};
+    if (Meteor.isServer) {
+  var fileUpsert = Docs.upsert(selector, modifier);
+    }
+  return fileUpsert;
+}
+
+export function  upsertYmpSpecs(profileID, downloadUrl, jobID){
+  var selector = {jobID: jobID,
+    fileType:'ympspecification'};
+  var modifier = {$set: {
+      downloadurl: downloadUrl,
+      fileType:'ympspecification',
+      userID: profileID
+    }};
+    if (Meteor.isServer) {
+  var fileUpsert = Docs.upsert(selector, modifier);
+    }
+  return fileUpsert;
+}
+
+export function  upsertYmpPage(profileID, downloadUrl, jobID, page){
+  var pages = {};
+  pages.userID = profileID;
+  pages.downloadurl = downloadUrl;
+  pages.jobID = jobID;
+  pages.page = page;
+  pages.fileType = 'ymppage';
+ 
+    if (Meteor.isServer) {
+  var fileUpsert = Docs.insert(pages);
+    }
+  return fileUpsert;
+}
    
 
 Meteor.methods({
@@ -151,5 +207,9 @@ Meteor.methods({
   upsertPhoto,
   upsertLicenses,
   upsertMisc,
-  upsertService
+  upsertService,
+  upsertYmpDrawing,
+  upsertYmpManual,
+  upsertYmpSpecs,
+  upsertYmpPage
 });

@@ -192,26 +192,46 @@ class Dashboard {
     }
 
     this.gotoDashboard = function() {
+      angular.element("body").removeClass("modal-open");
+      var removeMe = angular.element(document.getElementsByClassName("modal-backdrop"));
+      removeMe.remove();
       $state.go('dashboard', {}, {reload: 'dashboard'});
     }
     this.gotoInventory = function() {
+      angular.element("body").removeClass("modal-open");
+      var removeMe = angular.element(document.getElementsByClassName("modal-backdrop"));
+      removeMe.remove();
       $state.go('inventory', {}, {reload: 'inventory'});
     }
     this.gotoLogbook = function() {
+      angular.element("body").removeClass("modal-open");
+      var removeMe = angular.element(document.getElementsByClassName("modal-backdrop"));
+      removeMe.remove();
       $state.go('logbook', {}, {reload: 'logbook'});
     }
     this.gotoEmployees = function() {
+      angular.element("body").removeClass("modal-open");
+      var removeMe = angular.element(document.getElementsByClassName("modal-backdrop"));
+      removeMe.remove();
       $state.go('employees', {}, {reload: 'employees'});
     }
     this.gotoEquipments = function() {
+      angular.element("body").removeClass("modal-open");
+      var removeMe = angular.element(document.getElementsByClassName("modal-backdrop"));
+      removeMe.remove();
       $state.go('equipments', {}, {reload: 'equipments'});
     }
     this.gotoAdminPanel = function() {
+      angular.element("body").removeClass("modal-open");
+      var removeMe = angular.element(document.getElementsByClassName("modal-backdrop"));
+      removeMe.remove();
       $state.go('adminpanel', {}, {reload: 'adminpanel'});
     }
 
     this.gotoEquipList = function(equipID) {
-      console.info('equipID', equipID);
+      angular.element("body").removeClass("modal-open");
+      var removeMe = angular.element(document.getElementsByClassName("modal-backdrop"));
+      removeMe.remove();
       $state.go('equipmentlist', {equipID: equipID}, {reload: 'equipmentlist'});
     }
 

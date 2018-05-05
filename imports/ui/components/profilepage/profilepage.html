@@ -172,7 +172,7 @@
                                   <label class="col-sm-3 control-label f-12">First name
                                   </label>
                                   <div class="col-sm-9">
-                                    <input type="text" class="form-control" ng-model="profilepage.profile.firstName" disabled>
+                                    <input type="text" class="form-control" ng-model="profilepage.profile.firstName" >
                                   </div>
                                 </div>
                               </div>
@@ -181,7 +181,7 @@
                                   <label class="col-sm-3 control-label f-12">Last name
                                   </label>
                                   <div class="col-sm-9">
-                                    <input type="text" class="form-control" ng-model="profilepage.profile.lastName" disabled>
+                                    <input type="text" class="form-control" ng-model="profilepage.profile.lastName" >
                                   </div>
                                 </div>
                               </div>
@@ -192,7 +192,7 @@
                                   <label class="col-sm-3 control-label f-12">Email
                                   </label>
                                   <div class="col-sm-9">
-                                    <input type="text" class="form-control" ng-model="profilepage.profile.email" disabled>
+                                    <input type="text" class="form-control" ng-model="profilepage.profile.email" >
                                   </div>
                                 </div>
                               </div>
@@ -201,20 +201,20 @@
                                     <label class="col-sm-3 control-label f-12">Birthdate
                                     </label>
                                     <div class="prepend-icon col-sm-9">
-                                        <date-picker language="en" ng-model="profilepage.profile.birthDate" format="MMMM d, y" disabled></date-picker>
+                                        <date-picker language="en" ng-model="profilepage.profile.birthDate" format="MMMM d, y" ></date-picker>
                                       <i class="icon-calendar"></i>
                                     </div>
                                   </div>
                               </div>
                             </div>
     
-                          <div class="row">
+                          <!--<div class="row">
                               <div class="col-sm-6">
                             <div class="form-group">
                               <label class="col-sm-3 control-label f-12">Type
                               </label>
                               <div class="col-sm-9">
-                                  <select ng-model="profilepage.profile.type" name="group" class="form-control" disabled>
+                                  <select ng-model="profilepage.profile.type" name="group" class="form-control" >
                                       <option ng-repeat="type in profilepage.types" value="{{type.value}}">{{type.name}}</option>
                                     </select>
                               </div>
@@ -225,13 +225,13 @@
                               <label class="col-sm-3 control-label f-12">Status
                               </label>
                               <div class="col-sm-9">
-                                  <select ng-model="profilepage.profile.status" name="group" class="form-control" disabled>
+                                  <select ng-model="profilepage.profile.status" name="group" class="form-control" >
                                       <option ng-repeat="status in profilepage.statuses" value="{{status.value}}">{{status.name}}</option>
                                     </select>
                               </div>
                             </div>
                           </div>
-                          </div>
+                          </div>-->
     
                           <div class="row">
                               <div class="col-sm-6">
@@ -239,7 +239,7 @@
                               <label class="col-sm-3 control-label f-12">Mailing
                               </label>
                               <div class="col-sm-9">
-                                  <select ng-model="profilepage.profile.mailing" name="group" class="form-control" disabled>
+                                  <select ng-model="profilepage.profile.mailing" name="group" class="form-control" >
                                       <option ng-repeat="mailing in profilepage.mailings" value="{{mailing.value}}">{{mailing.name}}</option>
                                     </select>
                               </div>
@@ -247,12 +247,10 @@
                             </div>
                             <div class="col-sm-6">
                             <div class="form-group">
-                              <label class="col-sm-3 control-label f-12">Term of Employment
+                              <label class="col-sm-3 control-label f-12">Boat Name
                               </label>
                               <div class="col-sm-9">
-                                  <select ng-model="profilepage.profile.termOfEmployment" name="group" class="form-control" disabled>
-                                      <option ng-repeat="term in profilepage.terms" value="{{term.value}}">{{term.name}}</option>
-                                    </select>
+                                <input type="text" ng-model="profilepage.profile.boatName" class="form-control" placeholder="Boatname" disabled>
                               </div>
                             </div>
                           </div>
@@ -264,7 +262,7 @@
                               <label class="col-sm-3 control-label f-12">Username
                               </label>
                               <div class="col-sm-9">
-                                <input type="text" class="form-control" ng-model="profilepage.profile.username" disabled>
+                                <input type="text" class="form-control" ng-model="profilepage.profile.username" >
                               </div>
                             </div>
                             </div>
@@ -273,10 +271,18 @@
                               <label class="col-sm-3 control-label f-12">Password
                               </label>
                               <div class="col-sm-9">
-                                <input type="text" class="form-control" ng-model="profilepage.profile.password" disabled>
+                                <input type="text" class="form-control" ng-model="profilepage.profile.password" >
                               </div>
                             </div>
                           </div>
+                          </div>
+
+                          <div class="row">
+                            <div class="col-sm-9 col-sm-offset-3">
+                              <div class="pull-right">
+                                <button ng-click="profilepage.save()" type="submit" class="btn btn-embossed btn-primary">Save Changes</button>
+                              </div>
+                            </div>
                           </div>
     
                           </form>
@@ -307,7 +313,7 @@
                                 <div class="row">
                                   <div class="col-sm-9 col-sm-offset-3">
                                     <div class="pull-right">
-                                      <button ng-click="profilepage.save()" type="submit" class="btn btn-embossed btn-primary">Save Changes</button>
+                                      <button ng-click="profilepage.savePassword()" type="submit" class="btn btn-embossed btn-primary">Save Password</button>
                                     </div>
                                   </div>
                                 </div>
@@ -335,7 +341,7 @@
                                             <label class="col-sm-3 control-label f-12">Address
                                             </label>
                                             <div class="col-sm-9">
-                                              <input type="text" class="form-control" ng-model="profilepage.profile.address" disabled>
+                                              <input type="text" class="form-control" ng-model="profilepage.profile.address" >
                                             </div>
                                           </div>
                                         </div>
@@ -344,7 +350,7 @@
                                             <label class="col-sm-3 control-label f-12">Mobile
                                             </label>
                                             <div class="col-sm-9">
-                                              <input type="text" class="form-control" ng-model="profilepage.profile.phone" disabled>
+                                              <input type="text" class="form-control" ng-model="profilepage.profile.phone" >
                                             </div>
                                           </div>
                                         </div>
@@ -355,7 +361,7 @@
                                               <label class="col-sm-3 control-label f-12">Mobile no. 2
                                               </label>
                                               <div class="col-sm-9">
-                                                <input type="text" class="form-control" ng-model="profilepage.profile.phone2" disabled>
+                                                <input type="text" class="form-control" ng-model="profilepage.profile.phone2" >
                                               </div>
                                             </div>
                                           </div>
@@ -364,7 +370,7 @@
                                               <label class="col-sm-3 control-label f-12">Mobile no. 3
                                               </label>
                                               <div class="col-sm-9">
-                                                <input type="text" class="form-control" ng-model="profilepage.profile.phone3" disabled>
+                                                <input type="text" class="form-control" ng-model="profilepage.profile.phone3" >
                                               </div>
                                             </div>
                                           </div>
@@ -375,7 +381,7 @@
                                                 <label class="col-sm-3 control-label f-12">skype
                                                 </label>
                                                 <div class="col-sm-9">
-                                                  <input type="text" class="form-control" ng-model="profilepage.profile.skype" disabled>
+                                                  <input type="text" class="form-control" ng-model="profilepage.profile.skype" >
                                                 </div>
                                               </div>
                                             </div>
@@ -386,7 +392,7 @@
                                                       <label class="control-label">Notes
                                                       </label>
                                                       <div>
-                                                        <textarea rows="5" class="form-control" ng-model="profilepage.profile.notes" placeholder="Write notes... " disabled></textarea>
+                                                        <textarea rows="5" class="form-control" ng-model="profilepage.profile.notes" placeholder="Write notes... " ></textarea>
                                                       </div>
                                                     </div>
                                               </div>
@@ -413,7 +419,7 @@
                                         <label class="col-sm-3 control-label f-12">Fullname
                                         </label>
                                         <div class="col-sm-9">
-                                          <input type="text" class="form-control" ng-model="profilepage.profile.ecFullName" disabled>
+                                          <input type="text" class="form-control" ng-model="profilepage.profile.ecFullName" >
                                         </div>
                                       </div>
                                     </div>
@@ -422,7 +428,7 @@
                                         <label class="col-sm-3 control-label f-12">Relation
                                         </label>
                                         <div class="col-sm-9">
-                                          <input type="text" class="form-control" ng-model="profilepage.profile.ecRelation" disabled>
+                                          <input type="text" class="form-control" ng-model="profilepage.profile.ecRelation" >
                                         </div>
                                       </div>
                                     </div>
@@ -434,7 +440,7 @@
                                           <label class="col-sm-3 control-label f-12">Contact No
                                           </label>
                                           <div class="col-sm-9">
-                                            <input type="text" class="form-control" ng-model="profilepage.profile.ecContactNum" disabled>
+                                            <input type="text" class="form-control" ng-model="profilepage.profile.ecContactNum" >
                                           </div>
                                         </div>
                                       </div>
@@ -443,7 +449,7 @@
                                           <label class="col-sm-3 control-label f-12">Contact No. 2
                                           </label>
                                           <div class="col-sm-9">
-                                            <input type="text" class="form-control" ng-model="profilepage.profile.ecContactNum2" disabled>
+                                            <input type="text" class="form-control" ng-model="profilepage.profile.ecContactNum2" >
                                           </div>
                                         </div>
                                       </div>
@@ -455,7 +461,7 @@
                                           <label class="col-sm-3 control-label f-12">Contact No. 3
                                           </label>
                                           <div class="col-sm-9">
-                                            <input type="text" class="form-control" ng-model="profilepage.profile.ecContactNum3" disabled>
+                                            <input type="text" class="form-control" ng-model="profilepage.profile.ecContactNum3" >
                                           </div>
                                         </div>
                                       </div>
@@ -464,7 +470,7 @@
                                           <label class="col-sm-3 control-label f-12">Email
                                           </label>
                                           <div class="col-sm-9">
-                                            <input type="text" class="form-control" ng-model="profilepage.profile.ecEmail" disabled>
+                                            <input type="text" class="form-control" ng-model="profilepage.profile.ecEmail" >
                                           </div>
                                         </div>
                                       </div>
@@ -476,7 +482,7 @@
                                           <label class="col-sm-3 control-label f-12">Address
                                           </label>
                                           <div class="col-sm-9">
-                                            <input type="text" class="form-control" ng-model="profilepage.profile.ecAddress" disabled>
+                                            <input type="text" class="form-control" ng-model="profilepage.profile.ecAddress" >
                                           </div>
                                         </div>
                                       </div>
@@ -485,7 +491,7 @@
                                           <label class="col-sm-3 control-label f-12">Skype (if any)
                                           </label>
                                           <div class="col-sm-9">
-                                            <input type="text" class="form-control" ng-model="profilepage.profile.ecSkype" disabled>
+                                            <input type="text" class="form-control" ng-model="profilepage.profile.ecSkype" >
                                           </div>
                                         </div>
                                       </div>
@@ -510,10 +516,126 @@
                                           <img src="{{profilepage.profile.profilePhoto}}" style="width: 250px !important; height: 250px !important;" class="img-user img-responsive" alt="picture 2">
                                       </div>
                                     </div>
+                                    <div class="col-sm-6">
+                                      <div class="form-group">
+                                          <button data-toggle="modal" data-target="#upload-photo" class="btn btn-embossed btn-primary">Upload</button>
+                                      </div>
+                                    </div>
                                   </div>
                                 </div>
                             </div>
                         </div>
+                        <div class="panel panel-default">
+                          <div class="panel-heading bg-dark">
+                              <h4>
+                                  <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#Collapse_7">
+                                      CV / Passport
+                                  </a>
+                              </h4>
+                          </div>
+                          <div id="Collapse_7" class="panel-collapse collapse">
+                              <div class="panel-body bg-dark">
+                                <div class="row" style="margin-bottom:5px !important;">
+                                  <div class="col-sm-6">
+                                    <div class="form-group">
+                                      <label class="col-sm-3 control-label f-12">CV
+                                      </label>
+                                      <div class="col-sm-9">
+                                        <a target="_blank" ng-repeat="doc in profilepage.docs" ng-if="doc.fileType == 'cv'" href="{{doc.downloadurl}}" class="btn btn-embossed btn-primary m-r-20">view</a>
+                                        <button data-toggle="modal" data-target="#upload-cv" class="btn btn-embossed btn-primary">Upload</button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div class="col-sm-6">
+                                    <div class="form-group">
+                                      <label class="col-sm-3 control-label f-12">Passport
+                                      </label>
+                                      <div class="col-sm-9">
+                                        <a target="_blank" ng-repeat="doc in profilepage.docs" ng-if="doc.fileType == 'passport'" href="{{doc.downloadurl}}" class="btn btn-embossed btn-primary m-r-20">view</a>
+                                        <button data-toggle="modal" data-target="#upload-passport" class="btn btn-embossed btn-primary">Upload</button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="panel panel-default">
+                          <div class="panel-heading bg-dark">
+                              <h4>
+                                  <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#Collapse_3">
+                                      Licenses / Certificates
+                                  </a>
+                              </h4>
+                          </div>
+                          <div id="Collapse_3" class="panel-collapse collapse">
+                              <div class="panel-body bg-dark">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <button data-toggle="modal" data-target="#upload-licenses" class="btn btn-embossed btn-primary">Upload</button>
+                                        </div>
+                                      </div>
+                                </div>
+                                <div class="row">
+                                    <table class="table dataTable" id="table-editable">
+                                        <thead>
+                                          <tr>
+                                            <th>Cert. Type</th>
+                                            <th>Exp. Date</th>
+                                            <th class="text-right"> </th>
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+                                          <tr ng-repeat="license in profilepage.docs" ng-if="license.fileType == 'license'">
+                                            <td>{{license.certType}}</td>
+                                            <td>{{license.expDate | date : "mediumDate"}}</td>
+                                            <td class="text-right"><a target="_blank" href="{{license.downloadurl}}" class="btn btn-embossed btn-primary">view</a><button ng-click="" class="btn btn-embossed btn-primary">remove</button></td>
+                                          </tr>      
+                                        </tbody>
+                                    </table>
+                                </div>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="panel panel-default">
+                          <div class="panel-heading">
+                              <h4>
+                                  <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#Collapse_4">
+                                      Miscellaneous Files
+                                  </a>
+                              </h4>
+                          </div>
+                          <div id="Collapse_4" class="panel-collapse collapse">
+                              <div class="panel-body bg-dark">
+                                  <div class="row">
+                                      <div class="col-sm-6">
+                                          <div class="form-group">
+                                              <button data-toggle="modal" data-target="#upload-misc" class="btn btn-embossed btn-primary">Upload</button>
+                                          </div>
+                                        </div>
+                                  </div>
+                                  <div class="row">
+                                      <table class="table dataTable" id="table-editable">
+                                          <thead>
+                                            <tr>
+                                              <th>Filename</th>
+                                              <th>Description</th>
+                                              <th class="text-right"> </th>
+                                            </tr>
+                                          </thead>
+                                          <tbody>
+                                            <tr ng-repeat="misc in profilepage.docs" ng-if="misc.fileType == 'misc'">
+                                              <td>{{misc.fileName}}</td>
+                                              <td>{{misc.desc}}</td>
+                                              <td class="text-right"><a target="_blank" href="{{misc.downloadurl}}" class="btn btn-embossed btn-primary">view</a><button ng-click="" class="btn btn-embossed btn-primary">remove</button></td>
+                                            </tr>      
+                                          </tbody>
+                                      </table>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
                     </div>
                   </div>
           </div>

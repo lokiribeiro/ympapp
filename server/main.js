@@ -13,3 +13,6 @@ import '../imports/api/logbooks';
 import '../imports/api/groups';
 import '../imports/api/subgroups';
 import '../imports/api/boats';
+import '../imports/api/ympequipments';
+import '../imports/api/ympsubgroups';
+import '../imports/api/ympjobs';

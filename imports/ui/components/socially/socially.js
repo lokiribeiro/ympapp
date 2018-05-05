@@ -27,6 +27,10 @@ import Equipments from '../equipments/equipments';
 import Profilepage from '../profilepage/profilepage';
 import Equipmentlist from '../equipmentlist/equipmentlist';
 import Adminpanel from '../adminpanel/adminpanel';
+import Adminequipment from '../adminequipment/adminequipment';
+import Adminjobs from '../adminjobs/adminjobs';
+import Adminjobdetails from '../adminjobdetails/adminjobdetails';
+import Adminboat from '../adminboat/adminboat';
 
  
 class Socially {}
@@ -53,6 +57,10 @@ export default angular.module(name, [
   Profilepage.name,
   Equipmentlist.name,
   Adminpanel.name,
+  Adminequipment.name,
+  Adminjobs.name,
+  Adminjobdetails.name,
+  Adminboat.name,
   'accounts.ui',
   'date-picker',
   'ngPrint',

@@ -2,19 +2,20 @@ import angular from 'angular';
 import angularMeteor from 'angular-meteor';
 import uiRouter from 'angular-ui-router';
 import utilsPagination from 'angular-utils-pagination';
+import Papa from 'papaparse';
 import {pleaseWait} from '../../../startup/please-wait.js';
 
 import { Meteor } from 'meteor/meteor';
 
 import { Counts } from 'meteor/tmeasday:publish-counts';
 
-import { Groups } from '../../../api/groups';
-import { Subgroups } from '../../../api/subgroups';
+import { Ympequipments } from '../../../api/ympequipments';
+import { Ympsubgroups } from '../../../api/ympsubgroups';
 
-import template from './equipments.html';
+import template from './adminequipment.html';
  
-class Equipments {
-  constructor($scope, $reactive, $state) {
+class Adminequipment {
+  constructor($scope, $reactive, $state, Upload) {
     //'ngInject';
  
     $reactive(this).attach($scope);
@@ -47,39 +48,26 @@ class Equipments {
     this.inputs = [];
     this.option = {};
     this.withoutOptions = true;
+    this.sort = {
+        name: 1
+    };
 
     this.subscribe('users');
 
-    this.subscribe('groups');
+    this.subscribe('ympequipments');
 
-    this.subscribe('subgroups');
+    this.subscribe('ympsubgroups');
  
     this.helpers({
       groups() {
-        var userID = Meteor.userId();
-        var boats = Meteor.users.findOne(userID);
-        console.info('boats', boats);
-        if(boats){
-          $scope.userBoatID = boats.boatID;
-          var boatID = $scope.userBoatID;
-          var selector = {boatID: boatID};
-        } else {
-          var selector = {};
-        } 
-        return Groups.find(selector);
+        var selector = {};
+        return Ympequipments.find(selector, {
+            sort: this.getReactively('sort')
+        });
       },
       subgroups() {
-        var userID = Meteor.userId();
-        var boats = Meteor.users.findOne(userID);
-        console.info('boats', boats);
-        if(boats){
-          $scope.userBoatID = boats.boatID;
-          var boatID = $scope.userBoatID;
-          var selector = {boatID: boatID};
-        } else {
-          var selector = {};
-        } 
-        return Subgroups.find(selector);
+        var selector = {};
+        return Ympsubgroups.find(selector);
       },
       isLoggedIn() {
         return !!Meteor.userId();
@@ -145,7 +133,7 @@ class Equipments {
         this.inputs.push({});
     }
     this.removeGroup = function() {
-      Groups.remove($scope.removeID);
+      Ympequipments.remove($scope.removeID);
     }
     this.removeGroupConfirm = function(group) {
       console.info('remove group', group);
@@ -155,15 +143,14 @@ class Equipments {
     this.deleteRow = function(row){
       console.info('row', row);
       var rowID = row._id;
-      var status = Subgroups.remove(rowID);
+      var status = Ympsubgroups.remove(rowID);
       console.info('status', status);
     }
     this.save = function() {
       console.info('group value', this.group)
       this.group.owner = Meteor.userId();
       this.group.date = new Date();
-      this.group.boatID = $scope.userBoatID;
-      var status = Groups.insert(this.group);
+      var status = Ympequipments.insert(this.group);
       this.group = {};
     }
     this.addRow = function(passedGroup, unit) {
@@ -181,12 +168,173 @@ class Equipments {
       this.subgroup.groupID = passedGroup._id;
       this.subgroup.unit = unit;
       this.subgroup.withoutOptions = this.withoutOptions;
-      this.subgroup.boatID = $scope.userBoatID;
       console.info('subgroup items', this.subgroup.optionItems);
-      var status = Subgroups.insert(this.subgroup);
+      var status = Ympsubgroups.insert(this.subgroup);
       this.subgroup = {};
       this.inputs = [];
     }
+
+    $scope.createEquips = function(details, index) {
+        var detail = details;
+        $scope.indexPoint = index;
+        var equipments = {};
+        console.info('indexPoint', $scope.indexPoint);
+        console.info('arraylengthscope', $scope.arrayLength);
+        console.info('detail from for loop', detail);
+        console.info('arrayLength', parseInt($scope.arrayLength) - 1);
+        if($scope.indexPoint == (parseInt($scope.arrayLength) - 1)) {
+            $scope.doneSearching = false;
+            $scope.uploadSuccess = true;
+            window.setTimeout(function(){
+              $scope.$apply();
+            },2000);
+        } else {
+          console.info('detail info', detail.equipmentName);
+          equipments.name = detail.equipmentName;
+          if(detail.hours == 'yes') {
+            equipments.hours = true;
+          } else {
+            equipments.hours = false;
+          }
+          equipments.owner = $scope.userID;
+          equipments.date = new Date();
+          //equipments.boatID = $scope.boats.boatID;
+          console.info('boats', $scope.boats);
+          equipments.location = detail.location;
+          equipments.modelNumber = detail.modelNumber;
+          equipments.serialNumber = detail.serialNumber;
+          equipments.manufacturer = detail.manufacturer;
+          if(detail.atPort == 'yes'){
+            equipments.atPort = true;
+          } else {
+            equipments.atPort = false;
+          }
+          if(detail.atSea == 'yes'){
+            equipments.atSea = true;
+          } else {
+            equipments.atSea = false;
+          }
+          console.info('save to collection', equipments);
+          Ympequipments.insert(equipments, (error) => {
+            if (error) {
+              console.log('Oops, unable to insert...');
+              console.info('error', error);
+            } else {
+              console.log('Done!');
+            }
+        });
+  
+        }
+      }
+
+    this.uploadFiles = function(file, errFiles) {
+        console.log('pasok');
+        this.f = file;
+        this.errFile = errFiles && errFiles[0];
+        this.fileHere = file.name;
+        this.profileID = Meteor.userId();
+        $scope.doneSearching = true;
+        $scope.uploadSuccess = false;
+        this.progress = 0;
+        $scope.done = true;
+        if (file) {
+          console.log(file);
+          $scope.fileCSV = file;
+  
+          var config = {
+               delimiter: "",	// auto-detect
+               newline: "",	// auto-detect
+               header: true,
+               dynamicTyping: false,
+               preview: 0,
+               encoding: "",
+               worker: false,
+               comments: false,
+               step: undefined,
+               complete: function(results, file) {
+                  console.info("Parsing complete:", results);
+                var length = results.data.length;
+                $scope.arrayLength = length;
+                console.info("Array length:", length);
+                for(i=0;i<length;i++){
+                  var details = results.data[i];
+                  console.info('details from parsed CSV', details);
+                  $scope.createEquips(details, i);
+                }
+                var file = $scope.fileCSV;
+                  file.upload = Upload.upload({
+                      url: '/uploads',
+                      data: {file: file}
+                  });
+                  var filename = file.name;
+                  var path = '/uploads';
+                  var type = file.type;
+                  switch (type) {
+                    case 'text':
+                    //tODO Is this needed? If we're uploading content from file, yes, but if it's from an input/textarea I think not...
+                    var method = 'readAsText';
+                    var encoding = 'utf8';
+                    break;
+                    case 'binary':
+                    var method = 'readAsBinaryString';
+                    var encoding = 'binary';
+                    break;
+                    default:
+                    var method = 'readAsBinaryString';
+                    var encoding = 'binary';
+                    break;
+                  }
+                  /*Meteor.call('uploadFileFromClient', filename, path, file, encoding, function(err) {
+                    if (err) {
+                      console.log(err);
+                    } else {
+                      console.log('success maybe?');
+                    }
+                  });*/
+  
+  
+                  file.upload.then(function (response) {
+                      $timeout(function () {
+                        console.log(response);
+                          file.result = response.data;
+                          $scope.Fresult = response.config.data.file;
+  
+                          var errs = 0;
+                          var Fresult = $scope.Fresult;
+                          console.info('$scope', Fresult);
+                      });
+                  }, function (response) {
+                      if (response.status > 0)
+                          $scope.errorMsg = response.status + ': ' + response.data;
+                      else {
+                        console.log('else pa');
+                      }
+                  }, function (event) {
+                      file.progress = Math.min(100, parseInt(100.0 *
+                                               event.loaded / event.total));
+                      this.progress = file.progress;
+                      if (this.progress == 100) {
+                        console.log('transferred up');
+                      }
+                      console.log(this.progress);
+                  });
+  
+  
+              },
+               error: function(results, file) {
+                  console.info("Parsing complete:", results);
+              },
+               download: false,
+               skipEmptyLines: false,
+               chunk: undefined,
+               fastMode: undefined,
+               beforeFirstChunk: undefined,
+               withCredentials: undefined
+           };
+  
+          Papa.parse(file, config);
+        }
+    };
 
   }
 
@@ -205,7 +353,7 @@ class Equipments {
 
   saveChanges(group) {
     console.info('group value', this.group)
-    Groups.update({
+    Ympequipments.update({
       _id: group._id
     }, {
       $set: {
@@ -226,7 +374,7 @@ class Equipments {
 
   updatePort(group) {
       console.info('value upon entrance', group.atPort);
-      Groups.update({
+      Ympequipments.update({
         _id: group._id
       }, {
         $set: {
@@ -244,7 +392,7 @@ class Equipments {
 
   updateSea(group) {
     console.info('value upon entrance', group.atSea);
-    Groups.update({
+    Ympequipments.update({
       _id: group._id
     }, {
       $set: {
@@ -275,7 +423,7 @@ class Equipments {
   }
 }
  
-const name = 'equipments';
+const name = 'adminequipment';
 
 //Dashboard.$inject = ['$scope', '$reactive'];
  
@@ -287,15 +435,15 @@ export default angular.module(name, [
 ]).component(name, {
   template,
   controllerAs: name,
-  controller: ['$scope', '$reactive', '$state', Equipments]
+  controller: ['$scope', '$reactive', '$state', 'Upload', Adminequipment]
 })
 .config(['$stateProvider', 
 function($stateProvider) {
   //'ngInject';
   $stateProvider
-    .state('equipments', {
-      url: '/equipments',
-      template: '<equipments></equipments>',
+    .state('adminequipment', {
+      url: '/adminequipment',
+      template: '<adminequipment></adminequipment>',
       resolve: {
         currentUser($q, $state) {
             if (!Meteor.userId()) {

@@ -161,20 +161,12 @@
               <div class="panel bg-dark">
                 <div class="panel-content">
                   <div class="row">
-                    <div class="col-sm-8">
                       <div class="form-group">
-                        <label class="control-label">Current Boat: </label>
-                        <div>
-                            <input type="text" ng-model="boat.boatName" class="form-control" placeholder="Boat Name" disabled>
+                        <label class="col-sm-3 control-label">Current Boat: </label>
+                        <div class="col-sm-9">
+                        <input type="text" ng-model="boat.boatName" class="form-control" placeholder="Boat Name" disabled>
                         </div>
                       </div>
-                    </div>
-                    <div class="col-sm-4" style="padding-left: 0 !important; padding-right: 0 !important;">
-                      <div class="form-group" style="margin-top: 25px !important;">
-                        <button class="btn btn-dark"  data-toggle="modal" data-target="#upload-equipments">Upload Equipments</button>
-                        <button class="btn btn-dark"  data-toggle="modal" data-target="#upload-jobs" >Upload Jobs</button>
-                      </div>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -186,7 +178,13 @@
             <div class="panel-header panel-controls">
                 <div class="m-b-20 row">
                     <div class="btn-group">
-                      <button id="table-edit_new" class="btn btn-dark" data-toggle="modal" data-target="#modal-responsive"><i class="fa fa-plus"></i> Add New Boat</button>
+                      <button class="btn btn-dark" data-toggle="modal" data-target="#modal-responsive"><i class="fa fa-plus"></i> Add New Boat</button>
+                    </div>
+                    <div class="btn-group">
+                      <button class="btn btn-dark" ng-click="adminpanel.gotoAdminEquipment()"><i class="fa fa-eye-slash"></i>View Equipments</button>
+                    </div>
+                    <div class="btn-group">
+                      <button class="btn btn-dark" ng-click="adminpanel.gotoAdminJobs()" ><i class="fa fa-eye-slash"></i>View Jobs</button>
                     </div>
                   </div>
                 <div class="col-sm-4 col-sm-offset-8">
@@ -217,7 +215,11 @@
                   <tr dir-paginate="boat in adminpanel.boats | itemsPerPage: adminpanel.perPage" total-items="adminpanel.boatCount">
                     <td>{{boat.boatName}}</td>
                     <td>{{boat.status}}</td>
-                    <td><button class="btn btn-dark" ng-click="adminpanel.switchBoat(boat)"><i class="fa fa-refresh"></i> Switch to this Boat</button><button class="btn btn-dark" data-toggle="modal" data-target="#modal-confirm" ng-click="adminpanel.removeBoatConfirm(boat)"><i class="fa fa-trash"></i> Delete Boat</button></td>
+                    <td>
+                      <button class="btn btn-dark" ng-click="adminpanel.switchBoat(boat)"><i class="fa fa-refresh"></i> Switch to this Boat</button>
+                      <button class="btn btn-dark" ui-sref="adminboat({ boatId: boat._id })"><i class="fa fa-eye-slash"></i> View Boat</button>
+                      <button class="btn btn-dark" data-toggle="modal" data-target="#modal-confirm" ng-click="adminpanel.removeBoatConfirm(boat)"><i class="fa fa-trash"></i> Delete Boat</button>
+                    </td>
                   </a>
                   </tr>
                   

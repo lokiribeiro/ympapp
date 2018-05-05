@@ -13,7 +13,7 @@ if (Meteor.isServer) {
     //  $options : 'i'
     var search = {$regex: `.*${searchString}.*`, $options: 'i'};
     selector = {$or: [
-      {boatID: search},
+      {boatName: search},
       {status: search}
     ]
     };

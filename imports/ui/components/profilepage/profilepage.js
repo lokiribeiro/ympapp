@@ -131,21 +131,39 @@ class Profilepage {
     }
 
     this.gotoDashboard = function() {
+      angular.element("body").removeClass("modal-open");
+      var removeMe = angular.element(document.getElementsByClassName("modal-backdrop"));
+      removeMe.remove();
       $state.go('dashboard', {}, {reload: 'dashboard'});
     }
     this.gotoInventory = function() {
+      angular.element("body").removeClass("modal-open");
+      var removeMe = angular.element(document.getElementsByClassName("modal-backdrop"));
+      removeMe.remove();
       $state.go('inventory', {}, {reload: 'inventory'});
     }
     this.gotoLogbook = function() {
+      angular.element("body").removeClass("modal-open");
+      var removeMe = angular.element(document.getElementsByClassName("modal-backdrop"));
+      removeMe.remove();
       $state.go('logbook', {}, {reload: 'logbook'});
     }
     this.gotoEmployees = function() {
+      angular.element("body").removeClass("modal-open");
+      var removeMe = angular.element(document.getElementsByClassName("modal-backdrop"));
+      removeMe.remove();
       $state.go('employees', {}, {reload: 'employees'});
     }
     this.gotoSettings = function() {
+      angular.element("body").removeClass("modal-open");
+      var removeMe = angular.element(document.getElementsByClassName("modal-backdrop"));
+      removeMe.remove();
       $state.go('settings', {}, {reload: 'settings'});
     }
     this.gotoAdminPanel = function() {
+      angular.element("body").removeClass("modal-open");
+      var removeMe = angular.element(document.getElementsByClassName("modal-backdrop"));
+      removeMe.remove();
       $state.go('adminpanel', {}, {reload: 'adminpanel'});
     }
 
@@ -836,7 +854,7 @@ this.uploadMisc = function(file, errFiles) {
 
   }
    
-  save() {
+  savePassword() {
     Profiles.update({
       _id: this.profile._id
     }, {
@@ -863,6 +881,43 @@ this.uploadMisc = function(file, errFiles) {
         console.info('uploaded', err);
      }
    });
+  }
+
+  save() {
+    Profiles.update({
+      _id: this.profile._id
+    }, {
+      $set: {
+        firstName: this.profile.firstName,
+        lastName: this.profile.lastName,
+        mailing: this.profile.mailing,
+        email: this.profile.email,
+        birthDate: this.profile.birthDate,
+        address: this.profile.address,
+        phone: this.profile.phone,
+        phone2: this.profile.phone2,
+        phone3: this.profile.phone3,
+        birthDate: this.profile.birthDate,
+        skype: this.profile.skype,
+        notes: this.profile.notes,
+        ecFullName: this.profile.ecFullName,
+        ecRelation: this.profile.ecRelation,
+        ecContactNum: this.profile.ecContactNum,
+        ecContactNum2: this.profile.ecContactNum2,
+        ecContactNum3: this.profile.ecContactNum3,
+        ecEmail: this.profile.ecEmail,
+        ecAddress: this.profile.ecAddress,
+        ecSkype: this.profile.ecSkype
+
+
+      }
+    }, (error) => {
+        if (error) {
+          console.log('Oops, unable to update the inventory...');
+        } else {
+          console.log('Done!');
+        }
+    });
   }
 }
  

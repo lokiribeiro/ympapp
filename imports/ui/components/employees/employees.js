@@ -182,21 +182,39 @@ class Employees {
     }
 
     this.gotoDashboard = function() {
+      angular.element("body").removeClass("modal-open");
+      var removeMe = angular.element(document.getElementsByClassName("modal-backdrop"));
+      removeMe.remove();
       $state.go('dashboard', {}, {reload: 'dashboard'});
     }
     this.gotoInventory = function() {
+      angular.element("body").removeClass("modal-open");
+      var removeMe = angular.element(document.getElementsByClassName("modal-backdrop"));
+      removeMe.remove();
       $state.go('inventory', {}, {reload: 'inventory'});
     }
     this.gotoLogbook = function() {
+      angular.element("body").removeClass("modal-open");
+      var removeMe = angular.element(document.getElementsByClassName("modal-backdrop"));
+      removeMe.remove();
       $state.go('logbook', {}, {reload: 'logbook'});
     }
     this.gotoEmployees = function() {
+      angular.element("body").removeClass("modal-open");
+      var removeMe = angular.element(document.getElementsByClassName("modal-backdrop"));
+      removeMe.remove();
       $state.go('employees', {}, {reload: 'employees'});
     }
     this.gotoSettings = function() {
+      angular.element("body").removeClass("modal-open");
+      var removeMe = angular.element(document.getElementsByClassName("modal-backdrop"));
+      removeMe.remove();
       $state.go('settings', {}, {reload: 'settings'});
     }
     this.gotoAdminPanel = function() {
+      angular.element("body").removeClass("modal-open");
+      var removeMe = angular.element(document.getElementsByClassName("modal-backdrop"));
+      removeMe.remove();
       $state.go('adminpanel', {}, {reload: 'adminpanel'});
     }
   }
