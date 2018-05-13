@@ -42,7 +42,13 @@ class Login {
                     console.info('err: ' ,   $scope.loginerror );
                     this.error = true;
                 } else {
-                    $state.go('dashboard', {}, {reload: 'dashboard'});
+                    var user = Meteor.user();
+                    console.info('user', user);
+                    if(user.watchkeeper) {
+                      $state.go('watchkeep', {}, {reload: 'watchkeep'});
+                    } else {
+                      $state.go('dashboard', {}, {reload: 'dashboard'});
+                    }
                 }
               })
             );

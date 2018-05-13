@@ -221,6 +221,12 @@ class Dashboard {
       removeMe.remove();
       $state.go('equipments', {}, {reload: 'equipments'});
     }
+    this.gotoWatchkeep = function() {
+      angular.element("body").removeClass("modal-open");
+      var removeMe = angular.element(document.getElementsByClassName("modal-backdrop"));
+      removeMe.remove();
+      $state.go('watchkeep', {}, {reload: 'watchkeep'});
+    }
     this.gotoAdminPanel = function() {
       angular.element("body").removeClass("modal-open");
       var removeMe = angular.element(document.getElementsByClassName("modal-backdrop"));

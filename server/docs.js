@@ -31,6 +31,20 @@ export function  upsertManual(profileID, downloadUrl, jobID){
   return fileUpsert;
 }
 
+export function  upsertManualParts(profileID, downloadUrl, jobID){
+  var selector = {jobID: jobID,
+    fileType:'parts'};
+  var modifier = {$set: {
+      downloadurl: downloadUrl,
+      fileType:'parts',
+      userID: profileID
+    }};
+    if (Meteor.isServer) {
+  var fileUpsert = Docs.upsert(selector, modifier);
+    }
+  return fileUpsert;
+}
+
 export function  upsertSpecs(profileID, downloadUrl, jobID){
   var selector = {jobID: jobID,
     fileType:'specification'};
@@ -168,6 +182,20 @@ export function  upsertYmpManual(profileID, downloadUrl, jobID){
   return fileUpsert;
 }
 
+export function  upsertYmpManualParts(profileID, downloadUrl, jobID){
+  var selector = {jobID: jobID,
+    fileType:'ympmanualparts'};
+  var modifier = {$set: {
+      downloadurl: downloadUrl,
+      fileType:'ympmanualparts',
+      userID: profileID
+    }};
+    if (Meteor.isServer) {
+  var fileUpsert = Docs.upsert(selector, modifier);
+    }
+  return fileUpsert;
+}
+
 export function  upsertYmpSpecs(profileID, downloadUrl, jobID){
   var selector = {jobID: jobID,
     fileType:'ympspecification'};
@@ -200,6 +228,7 @@ export function  upsertYmpPage(profileID, downloadUrl, jobID, page){
 Meteor.methods({
   upsertDrawing,
   upsertManual,
+  upsertManualParts,
   upsertSpecs,
   upsertPage,
   upsertCvs,
@@ -210,6 +239,7 @@ Meteor.methods({
   upsertService,
   upsertYmpDrawing,
   upsertYmpManual,
+  upsertYmpManualParts,
   upsertYmpSpecs,
   upsertYmpPage
 });

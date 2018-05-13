@@ -20,6 +20,9 @@
         <li class="nav-parent" ng-click="dashboard.gotoEmployees()" ng-if="dashboard.currentUser.employees">
           <a href=""><i class="icon-user"></i><span>Employees </span><span class="fa arrow"></span></a>
         </li>
+        <li class="nav-parent" ng-click="dashboard.gotoWatchkeep()" ng-if="dashboard.currentUser.watchkeeping || dashboard.currentUser.watchkeeper">
+          <a href=""><i class="icon-cup"></i><span>Watchkeep </span><span class="fa arrow"></span></a>
+        </li>
         <li class="nav-parent" ng-click="dashboard.gotoAdminPanel()" ng-if="dashboard.currentUser.superadmin">
           <a href=""><i class="icon-puzzle"></i><span>Super Admin </span><span class="fa arrow"></span></a>
         </li>

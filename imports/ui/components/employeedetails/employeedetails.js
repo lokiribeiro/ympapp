@@ -259,6 +259,38 @@ class Employeedetails {
       });
     }
 
+    this.updateWatchkeeping= function(group) {
+      console.info('value upon entrance', group.watchkeeping);
+      var profile = Profiles.findOne({
+        _id: $stateParams.employeeId
+      });
+      $scope.profileId = profile.userID;
+      console.info('profileId', $scope.profileId);
+      Meteor.call('upsertWatchkeepingAccess', $scope.profileId, group.watchkeeping, function(err, result) {
+        if (err) {
+          console.info('err', err);
+       } else {
+         console.info('uploaded', err);
+       }
+      });
+    }
+
+    this.updateWatchkeeper= function(group) {
+      console.info('value upon entrance', group.watchkeeper);
+      var profile = Profiles.findOne({
+        _id: $stateParams.employeeId
+      });
+      $scope.profileId = profile.userID;
+      console.info('profileId', $scope.profileId);
+      Meteor.call('upsertWatchkeeperAccess', $scope.profileId, group.watchkeeper, function(err, result) {
+        if (err) {
+          console.info('err', err);
+       } else {
+         console.info('uploaded', err);
+       }
+      });
+    }
+
     this.uploadCv = function(file, errFiles) {
       console.info('pasok', file);
       this.progress = 0;

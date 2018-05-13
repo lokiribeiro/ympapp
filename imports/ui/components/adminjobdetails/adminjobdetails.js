@@ -56,6 +56,9 @@ class Adminjobdetails {
     this.notComplete = false;
     $scope.notMatch = false;
     $scope.canDelete = false;
+    $scope.profileID = '';
+    $scope.downloadUrl = '';
+    $scope.groupFromJob = '';
 
     this.subscribe('ympjobs');
 
@@ -224,6 +227,10 @@ class Adminjobdetails {
       $scope.notMatch = false;
     }
 
+    this.resetValue = function() {
+      $scope.uploadSuccess = false;
+    }
+
     this.saveWork = function() {
       console.info('doneby', this.job.doneBy);
       if(this.job.doneBy){
@@ -313,10 +320,10 @@ class Adminjobdetails {
           else {
             var filename = this.fileHere;
             var profileID = Meteor.userId();
-  
-            Meteor.call('upsertYmpDrawing', profileID, downloadUrl, $stateParams.jobId, function(err, result) {
-                  console.log(downloadUrl);
-            console.log('success: ' + downloadUrl);
+            
+            Meteor.call('upsertYmpDrawing', profileID, downloadUrl, jobID, function(err, result) {
+                console.log(downloadUrl);
+                console.log('success: ' + downloadUrl);
                   if (err) {
                     console.info('err', err);
                     $scope.doneSearching = false;
@@ -337,9 +344,9 @@ class Adminjobdetails {
                   },2000);
                  }
                });
-          }
+            }
           });
-          file.upload = Upload.upload({
+        file.upload = Upload.upload({
               url: '/uploads',
               data: {file: file}
           });
@@ -422,11 +429,24 @@ class Adminjobdetails {
         }
         else {
           var filename = this.fileHere;
-          var profileID = Meteor.userId();
+          $scope.profileID = Meteor.userId();
+            $scope.downloadUrl = downloadUrl;
 
-          Meteor.call('upsertYmpManual', profileID, downloadUrl, $stateParams.jobId, function(err, result) {
-                console.log(downloadUrl);
-          console.log('success: ' + downloadUrl);
+            var selector = {_id: $stateParams.jobId};
+            var ympjobs = Ympjobs.findOne(selector);
+            console.info('ympjobs', ympjobs);
+            $scope.groupFromJob = ympjobs.group;
+            console.info('ympjobgroup', $scope.groupFromJob);
+            var selector = {group: $scope.groupFromJob};
+            var ympjobs = Ympjobs.find(selector);
+            ympjobs.forEach(function(ympjob){
+            if(ympjob.group == $scope.groupFromJob){
+              var jobID = ympjob._id;
+              console.info('pasok jobID', jobID);
+
+              Meteor.call('upsertYmpManual', $scope.profileID, $scope.downloadUrl, jobID, function(err, result) {
+                console.log($scope.downloadUrl);
+                console.log('success: ' + $scope.downloadUrl);
                 if (err) {
                   console.info('err', err);
                   $scope.doneSearching = false;
@@ -447,6 +467,8 @@ class Adminjobdetails {
                 },2000);
                }
              });
+            }
+          });
         }
         });
         file.upload = Upload.upload({
@@ -509,6 +531,130 @@ class Adminjobdetails {
     }
 };
 
+this.uploadManualParts = function(file, errFiles) {
+  console.info('pasok', file);
+  this.progress = 0;
+  this.uploadingNow = true;
+  this.f = file;
+  this.errFile = errFiles && errFiles[0];
+  this.fileHere = file.name;
+  this.profileID = Meteor.userId();
+  $scope.doneSearching = true;
+  $scope.uploadSuccess = false;
+  if (file) {
+    console.log(file);
+
+
+    this.uploader.send(file, function (error, downloadUrl) {
+      if (error) {
+        // Log service detailed response.
+        console.error('Error uploading', this.uploader);
+        alert (error);
+      }
+      else {
+        var filename = this.fileHere;
+        $scope.profileID = Meteor.userId();
+            $scope.downloadUrl = downloadUrl;
+
+            var selector = {_id: $stateParams.jobId};
+            var ympjobs = Ympjobs.findOne(selector);
+            console.info('ympjobs', ympjobs);
+            $scope.groupFromJob = ympjobs.group;
+            console.info('ympjobgroup', $scope.groupFromJob);
+            var selector = {group: $scope.groupFromJob};
+            var ympjobs = Ympjobs.find(selector);
+            ympjobs.forEach(function(ympjob){
+              if(ympjob.group == $scope.groupFromJob){
+                var jobID = ympjob._id;
+                console.info('pasok jobID', jobID);
+
+              Meteor.call('upsertYmpManualParts', $scope.profileID, $scope.downloadUrl, jobID, function(err, result) {
+              console.log($scope.downloadUrl);
+              console.log('success: ' + $scope.downloadUrl);
+              if (err) {
+                console.info('err', err);
+                $scope.doneSearching = false;
+                window.setTimeout(function(){
+                  $scope.$apply();
+                  //this.doneSearching = false;
+                },2000);
+
+             } else {
+               var toasted = 'New file uploaded.';
+               console.info('uploaded', err);
+               $scope.doneSearching = false;
+               console.info('doneSearching', $scope.doneSearching);
+               $scope.uploadSuccess = true;
+               window.setTimeout(function(){
+                $scope.$apply();
+                //this.doneSearching = false;
+              },2000);
+             }
+           });
+          }
+        });
+      }
+      });
+      file.upload = Upload.upload({
+          url: '/uploads',
+          data: {file: file}
+      });
+      var filename = file.name;
+      var path = '/uploads';
+      var type = file.type;
+      switch (type) {
+        case 'text':
+        //tODO Is this needed? If we're uploading content from file, yes, but if it's from an input/textarea I think not...
+        var method = 'readAsText';
+        var encoding = 'utf8';
+        break;
+        case 'binary':
+        var method = 'readAsBinaryString';
+        var encoding = 'binary';
+        break;
+        default:
+        var method = 'readAsBinaryString';
+        var encoding = 'binary';
+        break;
+      }
+      /*Meteor.call('uploadFileFromClient', filename, path, file, encoding, function(err) {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log('success maybe?');
+        }
+      });*/
+
+
+      file.upload.then(function (response) {
+          $timeout(function () {
+            console.log(response);
+              file.result = response.data;
+              this.Fresult = response.config.data.file;
+
+              var errs = 0;
+              var Fresult = this.Fresult;
+              console.info('this', Fresult);
+          });
+      }, function (response) {
+          if (response.status > 0)
+              this.errorMsg = response.status + ': ' + response.data;
+          else {
+            console.log('else pa');
+          }
+      }, function (event) {
+          file.progress = Math.min(100, parseInt(100.0 *
+                                   event.loaded / event.total));
+          this.progress = file.progress;
+          if (this.progress == 100) {
+            this.uploadingNow = false;
+          }
+          console.log(this.progress);
+      });
+
+  }
+};
+
 this.uploadSpecs = function(file, errFiles) {
   console.info('pasok', file);
   this.progress = 0;
@@ -531,11 +677,24 @@ this.uploadSpecs = function(file, errFiles) {
       }
       else {
         var filename = this.fileHere;
-        var profileID = Meteor.userId();
+        $scope.profileID = Meteor.userId();
+            $scope.downloadUrl = downloadUrl;
 
-        Meteor.call('upsertYmpSpecs', profileID, downloadUrl, $stateParams.jobId, function(err, result) {
-              console.log(downloadUrl);
-        console.log('success: ' + downloadUrl);
+            var selector = {_id: $stateParams.jobId};
+            var ympjobs = Ympjobs.findOne(selector);
+            console.info('ympjobs', ympjobs);
+            $scope.groupFromJob = ympjobs.group;
+            console.info('ympjobgroup', $scope.groupFromJob);
+            var selector = {group: $scope.groupFromJob};
+            var ympjobs = Ympjobs.find(selector);
+            ympjobs.forEach(function(ympjob){
+              if(ympjob.group == $scope.groupFromJob){
+                var jobID = ympjob._id;
+                console.info('pasok jobID', jobID);
+
+              Meteor.call('upsertYmpSpecs', $scope.profileID, $scope.downloadUrl, jobID, function(err, result) {
+              console.log($scope.downloadUrl);
+              console.log('success: ' + $scope.downloadUrl);
               if (err) {
                 console.info('err', err);
                 $scope.doneSearching = false;
@@ -556,6 +715,8 @@ this.uploadSpecs = function(file, errFiles) {
               },2000);
              }
            });
+          }
+        });
       }
       });
       file.upload = Upload.upload({

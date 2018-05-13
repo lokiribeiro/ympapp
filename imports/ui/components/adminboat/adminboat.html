@@ -362,12 +362,27 @@
                         <p><strong>Job</strong> is already added to boat.</p>
                       </div>
                   </div>
+                  <div ng-show="nonSelected" class="preview active">
+                      <div class="alert alert-danger media fade in">
+                        <p>Please select a <strong>Job</strong></p>
+                      </div>
+                  </div>
                   <div ng-show="uploadSuccess" class="preview active">
                     <div class="alert alert-success media fade in">
                       <p><strong>Job</strong> successfully added.</p>
                     </div>
                   </div>
                   <div class="row" ng-hide="doneSearching">
+                    <div class="col-sm-12">
+                      <div class="form-group">
+                        <label class="control-label">Equipments</label>
+                        <select ng-model="adminboat.searchText" class="form-control">
+                          <option ng-repeat="group in adminboat.groups" value="{{group.name}}">{{group.name}}</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row" ng-hide="doneSearching" ng-if="adminboat.searchText">
                     <div class="col-sm-10">
                       <div class="form-group">
                         <label class="control-label">Job</label>

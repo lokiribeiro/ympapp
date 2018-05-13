@@ -213,6 +213,10 @@ class Jobdetails {
       console.info('notif daan', this.showNotif);
     }
 
+    this.resetValue = function() {
+      $scope.uploadSuccess = false;
+    }
+
     this.notCompleted = function() {
       
       this.notComplete = false;
@@ -516,6 +520,115 @@ class Jobdetails {
         });
 
     }
+};
+
+this.uploadManualParts = function(file, errFiles) {
+  console.info('pasok', file);
+  this.progress = 0;
+  this.uploadingNow = true;
+  this.f = file;
+  this.errFile = errFiles && errFiles[0];
+  this.fileHere = file.name;
+  this.profileID = Meteor.userId();
+  $scope.doneSearching = true;
+  $scope.uploadSuccess = false;
+  if (file) {
+    console.log(file);
+
+
+    this.uploader.send(file, function (error, downloadUrl) {
+      if (error) {
+        // Log service detailed response.
+        console.error('Error uploading', this.uploader);
+        alert (error);
+      }
+      else {
+        var filename = this.fileHere;
+        var profileID = Meteor.userId();
+
+        Meteor.call('upsertManualParts', profileID, downloadUrl, $stateParams.jobId, function(err, result) {
+              console.log(downloadUrl);
+        console.log('success: ' + downloadUrl);
+              if (err) {
+                console.info('err', err);
+                $scope.doneSearching = false;
+                window.setTimeout(function(){
+                  $scope.$apply();
+                  //this.doneSearching = false;
+                },2000);
+
+             } else {
+               var toasted = 'New file uploaded.';
+               console.info('uploaded', err);
+               $scope.doneSearching = false;
+               console.info('doneSearching', $scope.doneSearching);
+               $scope.uploadSuccess = true;
+               window.setTimeout(function(){
+                $scope.$apply();
+                //this.doneSearching = false;
+              },2000);
+             }
+           });
+      }
+      });
+      file.upload = Upload.upload({
+          url: '/uploads',
+          data: {file: file}
+      });
+      var filename = file.name;
+      var path = '/uploads';
+      var type = file.type;
+      switch (type) {
+        case 'text':
+        //tODO Is this needed? If we're uploading content from file, yes, but if it's from an input/textarea I think not...
+        var method = 'readAsText';
+        var encoding = 'utf8';
+        break;
+        case 'binary':
+        var method = 'readAsBinaryString';
+        var encoding = 'binary';
+        break;
+        default:
+        var method = 'readAsBinaryString';
+        var encoding = 'binary';
+        break;
+      }
+      /*Meteor.call('uploadFileFromClient', filename, path, file, encoding, function(err) {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log('success maybe?');
+        }
+      });*/
+
+
+      file.upload.then(function (response) {
+          $timeout(function () {
+            console.log(response);
+              file.result = response.data;
+              this.Fresult = response.config.data.file;
+
+              var errs = 0;
+              var Fresult = this.Fresult;
+              console.info('this', Fresult);
+          });
+      }, function (response) {
+          if (response.status > 0)
+              this.errorMsg = response.status + ': ' + response.data;
+          else {
+            console.log('else pa');
+          }
+      }, function (event) {
+          file.progress = Math.min(100, parseInt(100.0 *
+                                   event.loaded / event.total));
+          this.progress = file.progress;
+          if (this.progress == 100) {
+            this.uploadingNow = false;
+          }
+          console.log(this.progress);
+      });
+
+  }
 };
 
 this.uploadSpecs = function(file, errFiles) {

@@ -43,6 +43,9 @@ class Adminboat {
     this.sort2 = {
       dateNow: -1
     };
+    this.sort3 = {
+      title: 1
+    };
     this.searchText = '';
     this.searchGroup = '';
     $scope.passworD = '';
@@ -55,11 +58,15 @@ class Adminboat {
     $scope.notMatch = false;
     $scope.canDelete = false;
     $scope.existing = false;
+    $scope.nonSelected = false;
     this.selectEquip = {};
     this.equipment = {};
     this.jobForBoat = {};
 
-    this.subscribe('ympjobs');
+    this.subscribe('ympjobs', () => [{
+      sort: this.getReactively('sort3')
+    }, this.getReactively('searchText')
+    ]);
 
     this.subscribe('users');
 
@@ -240,7 +247,9 @@ class Adminboat {
     }
 
     this.addJobToBoat = function(){
-      $scope.uploadSuccess = false;
+      $scope.nonSelected = false;
+      if(this.selectJob){
+        $scope.uploadSuccess = false;
       $scope.dontExists = true;
       console.info('selected', this.selectJob);
       console.info('boatId', this.boatId);
@@ -294,8 +303,11 @@ class Adminboat {
         $scope.uploadSuccess = true;
         console.info('status', status);
         $scope.equip = {};
-
       }
+      } else {
+        $scope.nonSelected = true;
+      }
+      
     }
 
 }

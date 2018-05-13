@@ -7,7 +7,7 @@ Slingshot.createDirective('myFileUploads', Slingshot.GoogleCloud, {
     bucket: 'ympbucket',
     acl: 'public-read',
     allowedFileTypes: null,
-    maxSize: 10 * 1024 * 1024, // 10 MB (use null for unlimited).
+    maxSize: null, // 10 MB (use null for unlimited).
     authorize: function() {
         if (!this.userId) {
             var message = 'Please login before posting file';

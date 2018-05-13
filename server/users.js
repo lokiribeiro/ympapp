@@ -88,6 +88,24 @@ import { Meteor } from 'meteor/meteor';
     return roleUpsert;
   }
 
+  export function upsertWatchkeepingAccess(userID, access){
+    var selector = {_id: userID};
+    var modifier = {$set: {
+      watchkeeping: access
+    }};
+    var roleUpsert = Meteor.users.upsert(selector, modifier);
+    return roleUpsert;
+  }
+
+  export function upsertWatchkeeperAccess(userID, access){
+    var selector = {_id: userID};
+    var modifier = {$set: {
+      watchkeeper: access
+    }};
+    var roleUpsert = Meteor.users.upsert(selector, modifier);
+    return roleUpsert;
+  }
+
   export function  upsertPhotoUser(profileID, downloadUrl){
     var selector = {_id: profileID};
     var modifier = {$set: {
@@ -148,6 +166,8 @@ import { Meteor } from 'meteor/meteor';
        upsertInventoryAccess,
        upsertLogbookAccess,
        upsertEmployeesAccess,
+       upsertWatchkeepingAccess,
+       upsertWatchkeeperAccess,
        upsertSettingsAccess,
        upsertPhotoUser,
        changePasswordNow,

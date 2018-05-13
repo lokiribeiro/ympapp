@@ -31,7 +31,10 @@ import Adminequipment from '../adminequipment/adminequipment';
 import Adminjobs from '../adminjobs/adminjobs';
 import Adminjobdetails from '../adminjobdetails/adminjobdetails';
 import Adminboat from '../adminboat/adminboat';
-
+import Watchkeep from '../watchkeep/watchkeep';
+import Watchkeepdetails from '../watchkeepdetails/watchkeepdetails';
+import Watchkeeplog from '../watchkeeplog/watchkeeplog';
+import Watchkeeplogdetails from '../watchkeeplogdetails/watchkeeplogdetails';
  
 class Socially {}
  
@@ -61,6 +64,10 @@ export default angular.module(name, [
   Adminjobs.name,
   Adminjobdetails.name,
   Adminboat.name,
+  Watchkeep.name,
+  Watchkeepdetails.name,
+  Watchkeeplog.name,
+  Watchkeeplogdetails.name,
   'accounts.ui',
   'date-picker',
   'ngPrint',

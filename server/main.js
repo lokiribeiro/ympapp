@@ -16,3 +16,7 @@ import '../imports/api/boats';
 import '../imports/api/ympequipments';
 import '../imports/api/ympsubgroups';
 import '../imports/api/ympjobs';
+import '../imports/api/watchkeeps';
+import '../imports/api/taskgroups';
+import '../imports/api/watchkeepers';
+import '../imports/api/watchkeeplogs';

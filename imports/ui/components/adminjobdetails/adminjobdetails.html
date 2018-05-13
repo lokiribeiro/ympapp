@@ -225,20 +225,26 @@
                         </div>
                         <div class="form-group">
                           <label class="col-sm-3 control-label"> </label>
-                          <div class="col-sm-3" ng-repeat="doc in adminjobdetails.docs" ng-if="doc.fileType == 'ympdrawings'">
-                            <a target="_blank" href="{{doc.downloadurl}}" class="btn btn-embossed btn-primary m-r-20">Drawing</a>
+                          <div ng-repeat="doc in adminjobdetails.docs" ng-if="doc.fileType == 'ympdrawings'">
+                            <a target="_blank" href="{{doc.downloadurl}}" class="col-sm-4 btn btn-dark m-r-20">Drawing</a>
                           </div>
-                          <div class="col-sm-3" ng-repeat="doc in adminjobdetails.docs" ng-if="doc.fileType == 'ympmanual'">
-                            <a target="_blank" href="{{doc.downloadurl}}" class="btn btn-embossed btn-primary m-r-20">Manual</a>
-                          </div>
-                          <div class="col-sm-3" ng-repeat="doc in adminjobdetails.docs" ng-if="doc.fileType == 'ympspecification'">
-                            <a target="_blank" href="{{doc.downloadurl}}" class="btn btn-embossed btn-primary m-r-20">Specification</a>
+                          <div ng-repeat="doc in adminjobdetails.docs" ng-if="doc.fileType == 'ympspecification'">
+                            <a target="_blank" href="{{doc.downloadurl}}" class="col-sm-4 btn btn-dark m-r-20">Specification</a>
                           </div>
                         </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label"> </label>
+                            <div ng-repeat="doc in adminjobdetails.docs" ng-if="doc.fileType == 'ympmanual'">
+                              <a target="_blank" href="{{doc.downloadurl}}" class="col-sm-4 btn btn-dark m-r-20">Service Manual</a>
+                            </div>
+                            <div ng-repeat="doc in adminjobdetails.docs" ng-if="doc.fileType == 'ympmanualparts'">
+                              <a target="_blank" href="{{doc.downloadurl}}" class="col-sm-4 btn btn-dark m-r-20">Parts Manual</a>
+                            </div>
+                          </div>
                         <div class="form-group" >
                           <label class="col-sm-3 control-label"> </label>
-                          <div class="col-sm-3" ng-repeat="doc in adminjobdetails.docs" ng-if="doc.fileType == 'ymppage'">
-                            <a target="_blank" href="{{doc.downloadurl}}#page={{doc.page}}" class="btn btn-embossed btn-primary m-r-20">Page {{doc.page}}</a>
+                          <div ng-repeat="doc in adminjobdetails.docs" ng-if="doc.fileType == 'ymppage'">
+                            <a target="_blank" href="{{doc.downloadurl}}#page={{doc.page}}" class="btn btn-dark m-r-20">Page {{doc.page}}</a>
                           </div>
                         </div>
                         <div class="col-sm-12" >
@@ -253,8 +259,8 @@
                         <div class="row" ng-if="adminjobdetails.currentUser.role == 'admin'">
                           <div class="col-sm-9 col-sm-offset-3">
                             <div class="pull-right">
-                              <button data-toggle="modal" data-target="#modal-confirm" ng-click="adminjobdetails.removeJobConfirm(adminjobdetails.job)" class="btn btn-embossed btn-primary m-r-20"><i class="fa fa-trash"></i> Delete Job</button>
-                              <button ng-click="adminjobdetails.save()" class="btn btn-embossed btn-primary"><i class="fa fa-save"></i> Save Changes</button>
+                              <button data-toggle="modal" data-target="#modal-confirm" ng-click="adminjobdetails.removeJobConfirm(adminjobdetails.job)" class="btn btn-dark m-r-20"><i class="fa fa-trash"></i> Delete Job</button>
+                              <button ng-click="adminjobdetails.save()" class="btn btn-dark"><i class="fa fa-save"></i> Save Changes</button>
                             </div>
                           </div>
                         </div>
@@ -262,7 +268,7 @@
                         <!--<div class="row">
                           <div class="col-sm-9 col-sm-offset-3">
                             <div class="pull-right">
-                              <button ng-click="adminjobdetails.save()" type="submit" class="btn btn-embossed btn-primary m-r-20">Save</button>
+                              <button ng-click="adminjobdetails.save()" type="submit" class="btn btn-dark m-r-20">Save</button>
                             </div>
                           </div>
                         </div>-->
@@ -282,25 +288,34 @@
                                 <div class="form-group">
                                     <label class="control-label">Drawing</label>
                                     <div>
-                                        <button  data-toggle="modal" data-target="#upload-drawing" class="btn btn-embossed btn-primary m-r-20">Upload</button>
+                                        <button  data-toggle="modal" data-target="#upload-drawing" class="col-sm-12 btn btn-dark m-r-20">Upload</button>
                                       </div>
                                           <!---->
                                 </div>
                             </div>
                             <div class="col-sm-3">
                               <div class="form-group">
-                                <label class="control-label">Manual</label>
+                                <label class="control-label">Service Manual</label>
                                 <div>
-                                    <button  data-toggle="modal" data-target="#upload-manual" class="btn btn-embossed btn-primary m-r-20">Upload</button>
+                                    <button  data-toggle="modal" data-target="#upload-manual" class="col-sm-12 btn btn-dark m-r-20">Upload</button>
                                   </div>
                                       <!---->
                               </div>
                             </div>
                             <div class="col-sm-3">
+                                <div class="form-group">
+                                  <label class="control-label">Parts Manual</label>
+                                  <div>
+                                      <button  data-toggle="modal" data-target="#upload-manualParts" class="col-sm-12 btn btn-dark m-r-20">Upload</button>
+                                    </div>
+                                        <!---->
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
                               <div class="form-group">
                                 <label class="control-label">Specification</label>
                                 <div>
-                                    <button data-toggle="modal" data-target="#upload-specs" class="btn btn-embossed btn-primary m-r-20">Upload</button>
+                                    <button data-toggle="modal" data-target="#upload-specs" class="col-sm-12 btn btn-dark m-r-20">Upload</button>
                                   </div>
                                       <!---->
                               </div>
@@ -309,7 +324,7 @@
                               <div class="form-group">
                                   <label class="control-label">Pages</label>
                                   <div>
-                                      <button  data-toggle="modal" data-target="#upload-pages" class="btn btn-embossed btn-primary m-r-20">Upload</button>
+                                      <button  data-toggle="modal" data-target="#upload-pages" class="col-sm-12 btn btn-dark m-r-20">Upload</button>
                                     </div>
                                         <!---->
                               </div>
@@ -340,7 +355,7 @@
       <div class="modal-dialog modal-responsive" style="margin-top: 15% !important;">
         <div class="modal-content">
           <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icons-office-52"></i></button>
+            <button type="button" class="close" data-dismiss="modal" ng-click="adminjobdetails.resetValue()" aria-hidden="true"><i class="icons-office-52"></i></button>
             <h4 class="modal-title"><strong>Upload</strong> Drawing</h4>
           </div>
           <div class="modal-body">
@@ -376,8 +391,8 @@
       <div class="modal-dialog modal-responsive" style="margin-top: 15% !important;">
         <div class="modal-content">
           <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icons-office-52"></i></button>
-            <h4 class="modal-title"><strong>Upload</strong> Manual</h4>
+            <button type="button" class="close" data-dismiss="modal" ng-click="adminjobdetails.resetValue()" aria-hidden="true"><i class="icons-office-52"></i></button>
+            <h4 class="modal-title"><strong>Upload</strong>Service Manual</h4>
           </div>
           <div class="modal-body">
             <!--<p>Change screen size to see responsive behaviour.</p>-->
@@ -408,11 +423,47 @@
       </div>
     </div>
 
+    <div class="modal fade" id="upload-manualParts" aria-hidden="true">
+        <div class="modal-dialog modal-responsive" style="margin-top: 15% !important;">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" ng-click="adminjobdetails.resetValue()" aria-hidden="true"><i class="icons-office-52"></i></button>
+              <h4 class="modal-title"><strong>Upload</strong> Parts Manual</h4>
+            </div>
+            <div class="modal-body">
+              <!--<p>Change screen size to see responsive behaviour.</p>-->
+                    <div  ng-show="doneSearching" class="loader2 col-sm-offset-5"></div>
+                    <div ng-show="uploadSuccess" class="preview active">
+                        <div class="alert alert-success media fade in">
+                          <p><strong>Well done!</strong> Upload Successful.</p>
+                        </div>
+                      </div>
+              
+              <div class="row" ng-hide="doneSearching">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="control-label">File</label>
+                    <div class="file">
+                        <div class="option-group">
+                          <input type="file"  ngf-select="adminjobdetails.uploadManualParts($file, $invalidFiles)" class="custom-file" name="avatar" required>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer text-center">
+             <!--<button type="button" class="btn btn-primary btn-embossed bnt-square" ><i class="fa fa-check"></i> Add</button>-->
+            </div>
+          </div>
+        </div>
+      </div>
+
     <div class="modal fade" id="upload-specs" aria-hidden="true">
       <div class="modal-dialog modal-responsive" style="margin-top: 15% !important;">
         <div class="modal-content">
           <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icons-office-52"></i></button>
+            <button type="button" class="close" data-dismiss="modal" ng-click="adminjobdetails.resetValue()" aria-hidden="true"><i class="icons-office-52"></i></button>
             <h4 class="modal-title"><strong>Upload</strong> Specification</h4>
           </div>
           <div class="modal-body">
@@ -448,7 +499,7 @@
       <div class="modal-dialog modal-responsive" style="margin-top: 15% !important;">
         <div class="modal-content">
           <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icons-office-52"></i></button>
+            <button type="button" class="close" data-dismiss="modal" ng-click="adminjobdetails.resetValue()" aria-hidden="true"><i class="icons-office-52"></i></button>
             <h4 class="modal-title"><strong>Upload</strong> Page</h4>
           </div>
           <div class="modal-body">
@@ -490,7 +541,7 @@
         <div class="modal-dialog modal-responsive" style="margin-top: 15% !important;">
           <div class="modal-content">
             <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icons-office-52"></i></button>
+              <button type="button" class="close" data-dismiss="modal" ng-click="adminjobdetails.resetValue()" aria-hidden="true"><i class="icons-office-52"></i></button>
               <h4 class="modal-title"><strong>Upload</strong> Image</h4>
             </div>
             <div class="modal-body">
@@ -569,7 +620,7 @@
                       </div>    
                       <div class="col-sm-9 col-sm-offset-3" style="margin-top: 10px !important;">
                         <div class="pull-right">
-                            <button ng-click="adminjobdetails.supportSave()" data-dismiss="modal" class="btn btn-embossed btn-primary m-r-20"><i class="fa fa-save"></i> Save</button>     
+                            <button ng-click="adminjobdetails.supportSave()" data-dismiss="modal" class="btn btn-dark m-r-20"><i class="fa fa-save"></i> Save</button>     
                         </div>
                       </div>
                       
@@ -682,7 +733,7 @@
                   <div class="modal-body " style="overflow-x: hidden !important;">     
                     <div class="row">
                       <div class="col-sm-3" ng-repeat="service in adminjobdetails.docs" ng-if="service.fileType == 'service'">
-                        <a target="_blank" href="{{service.downloadurl}}" class="btn btn-embossed btn-primary m-r-20">{{service.date | date: mediumDate}}</a>
+                        <a target="_blank" href="{{service.downloadurl}}" class="btn btn-dark m-r-20">{{service.date | date: mediumDate}}</a>
                       </div>
                     </div>            
                   </div>
