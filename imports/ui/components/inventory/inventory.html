@@ -19,6 +19,9 @@
         <li class="nav-parent" ng-click="inventory.gotoEmployees()" ng-if="inventory.currentUser.employees">
           <a href=""><i class="icon-user"></i><span>Employees </span><span class="fa arrow"></span></a>
         </li>
+        <li class="nav-parent" ng-click="inventory.gotoWatchkeep()" ng-if="inventory.currentUser.watchkeeping || inventory.currentUser.watchkeeper">
+          <a href=""><i class="icon-cup"></i><span>Watchkeep </span><span class="fa arrow"></span></a>
+        </li>
         <li class="nav-parent" ng-click="inventory.gotoAdminPanel()" ng-if="inventory.currentUser.superadmin">
           <a href=""><i class="icon-puzzle"></i><span>Super Admin </span><span class="fa arrow"></span></a>
         </li>

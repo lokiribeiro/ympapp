@@ -20,6 +20,9 @@
         <li class="nav-parent" ng-click="logbook.gotoEmployees()" ng-if="logbook.currentUser.employees">
           <a href=""><i class="icon-user"></i><span>Employees </span><span class="fa arrow"></span></a>
         </li>
+        <li class="nav-parent" ng-click="logbook.gotoWatchkeep()" ng-if="logbook.currentUser.watchkeeping || logbook.currentUser.watchkeeper">
+          <a href=""><i class="icon-cup"></i><span>Watchkeep </span><span class="fa arrow"></span></a>
+        </li>
         <li class="nav-parent" ng-click="logbook.gotoAdminPanel()" ng-if="logbook.currentUser.superadmin">
           <a href=""><i class="icon-puzzle"></i><span>Super Admin </span><span class="fa arrow"></span></a>
         </li>

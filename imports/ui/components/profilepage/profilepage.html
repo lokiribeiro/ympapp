@@ -19,6 +19,9 @@
             <li class="nav-parent" ng-click="profilepage.gotoEmployees()" ng-if="profilepage.currentUser.employees">
               <a href=""><i class="icon-user"></i><span>Employees </span><span class="fa arrow"></span></a>
             </li>
+            <li class="nav-parent" ng-click="profilepage.gotoWatchkeep()" ng-if="profilepage.currentUser.watchkeeping || profilepage.currentUser.watchkeeper">
+              <a href=""><i class="icon-cup"></i><span>Watchkeep </span><span class="fa arrow"></span></a>
+            </li>
             <li class="nav-parent" ng-click="profilepage.gotoAdminPanel()" ng-if="profilepage.currentUser.superadmin">
               <a href=""><i class="icon-puzzle"></i><span>Super Admin </span><span class="fa arrow"></span></a>
             </li>

@@ -132,6 +132,12 @@ class Logdetails {
       removeMe.remove();
       $state.go('employees', {}, {reload: 'employees'});
     }
+    this.gotoWatchkeep = function() {
+      angular.element("body").removeClass("modal-open");
+      var removeMe = angular.element(document.getElementsByClassName("modal-backdrop"));
+      removeMe.remove();
+      $state.go('watchkeep', {}, {reload: 'watchkeep'});
+    }
     this.gotoSettings = function() {
       angular.element("body").removeClass("modal-open");
       var removeMe = angular.element(document.getElementsByClassName("modal-backdrop"));

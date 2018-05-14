@@ -124,7 +124,7 @@ class Newlog {
 
     this.logout = function() {
       window.loading_screen = pleaseWait({
-        logo: "../assets/global/images/logo/logo-white.png",
+        logo: "../assets/global/images/logo/logo-white2.png",
         backgroundColor: '#8c9093',
         loadingHtml: "<div class='sk-spinner sk-spinner-wave'><div class='sk-rect1'></div><div class='sk-rect2'></div><div class='sk-rect3'></div><div class='sk-rect4'></div><div class='sk-rect5'></div></div>"
       });
@@ -158,6 +158,12 @@ class Newlog {
       var removeMe = angular.element(document.getElementsByClassName("modal-backdrop"));
       removeMe.remove();
       $state.go('employees', {}, {reload: 'employees'});
+    }
+    this.gotoWatchkeep = function() {
+      angular.element("body").removeClass("modal-open");
+      var removeMe = angular.element(document.getElementsByClassName("modal-backdrop"));
+      removeMe.remove();
+      $state.go('watchkeep', {}, {reload: 'watchkeep'});
     }
     this.gotoSettings = function() {
       angular.element("body").removeClass("modal-open");
