@@ -2051,7 +2051,7 @@ body:not(.sidebar-collapsed) .topbar .header-left .topnav .menutoggle:hover .men
   pointer-events: none;
 }
 .sidebar .sidebar-inner .nav-sidebar > li.active > a {
-  background-color: #0091fe;
+  background-color: #555;
   color: #ffffff;
   opacity: 1;
 }
@@ -2059,7 +2059,7 @@ body:not(.sidebar-collapsed) .topbar .header-left .topnav .menutoggle:hover .men
   color: #ffffff;
 }
 .sidebar .sidebar-inner .nav-sidebar > li.nav-parent.active > a:hover {
-  background-color: #0091fe;
+  background-color: #555;
   color: #ffffff !important;
 }
 .sidebar .sidebar-inner .nav-sidebar-placeholder {

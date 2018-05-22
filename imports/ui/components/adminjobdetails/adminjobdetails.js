@@ -237,6 +237,11 @@ class Adminjobdetails {
       $scope.uploadSuccess = false;
     }
 
+    this.removeDocs = function(document){
+      console.info('document', document);
+      Docs.remove(document._id);
+    };
+
     this.saveWork = function() {
       console.info('doneby', this.job.doneBy);
       if(this.job.doneBy){
@@ -325,9 +330,22 @@ class Adminjobdetails {
           }
           else {
             var filename = this.fileHere;
-            var profileID = Meteor.userId();
+            $scope.profileID = Meteor.userId();
+            $scope.downloadUrl = downloadUrl;
+
+            var selector = {_id: $stateParams.jobId};
+            var ympjobs = Ympjobs.findOne(selector);
+            console.info('ympjobs', ympjobs);
+            $scope.groupFromJob = ympjobs.group;
+            console.info('ympjobgroup', $scope.groupFromJob);
+            var selector = {group: $scope.groupFromJob};
+            var ympjobs = Ympjobs.find(selector);
+            ympjobs.forEach(function(ympjob){
+            if(ympjob.group == $scope.groupFromJob){
+              var jobID = ympjob._id;
+              console.info('pasok jobID', jobID);
             
-            Meteor.call('upsertYmpDrawing', profileID, downloadUrl, jobID, function(err, result) {
+            Meteor.call('upsertYmpDrawing', $scope.profileID, $scope.downloadUrl, jobID, function(err, result) {
                 console.log(downloadUrl);
                 console.log('success: ' + downloadUrl);
                   if (err) {
@@ -350,6 +368,8 @@ class Adminjobdetails {
                   },2000);
                  }
                });
+              }
+            });
             }
           });
         file.upload = Upload.upload({

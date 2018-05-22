@@ -9,6 +9,7 @@ import { Meteor } from 'meteor/meteor';
 import { Counts } from 'meteor/tmeasday:publish-counts';
 
 import { Groups } from '../../../api/groups';
+import { Jobs } from '../../../api/jobs';
 import { Subgroups } from '../../../api/subgroups';
 
 import template from './equipments.html';
@@ -47,10 +48,13 @@ class Equipments {
     this.inputs = [];
     this.option = {};
     this.withoutOptions = true;
+    $scope.groupName = '';
 
     this.subscribe('users');
 
     this.subscribe('groups');
+
+    this.subscribe('jobs');
 
     this.subscribe('subgroups');
  
@@ -194,6 +198,50 @@ class Equipments {
       this.inputs = [];
     }
 
+    this.saveChanges = function(group) {
+      console.info('group value', group)
+      $scope.groupName = group.name;
+      Groups.update({
+        _id: group._id
+      }, {
+        $set: {
+          location: group.location,
+          modelNumber: group.modelNumber,
+          serialNumber: group.serialNumber,
+          manufacturer: group.manufacturer,
+          name: group.name
+        }
+      }, (error) => {
+          if (error) {
+            console.log('Oops, unable to update the party...');
+          } else {
+            console.log('Done!');
+          }
+      });
+
+      /*var selector = {group: $scope.groupName};
+      var editJobs = Jobs.find(selector);
+      var count = editJobs.count();
+      console.info('count', count);
+      editJobs.forEach(function(editJob){
+        var jobID = editJob._id;
+        Jobs.update({
+          _id: jobID
+        }, {
+          $set: {
+            group: $scope.groupName
+          }
+        }, (error) => {
+            if (error) {
+              console.log('Oops, unable to update the party...');
+            } else {
+              console.log('Done!');
+            }
+        });
+      });
+      $scope.groupName = '';*/
+    }
+
   }
 
   isOwner(party) {
@@ -207,27 +255,6 @@ class Equipments {
 
   sortChanged(sort) {
     this.sort = sort;
-  }
-
-  saveChanges(group) {
-    console.info('group value', this.group)
-    Groups.update({
-      _id: group._id
-    }, {
-      $set: {
-        location: group.location,
-        modelNumber: group.modelNumber,
-        serialNumber: group.serialNumber,
-        manufacturer: group.manufacturer,
-        name: group.name
-      }
-    }, (error) => {
-        if (error) {
-          console.log('Oops, unable to update the party...');
-        } else {
-          console.log('Done!');
-        }
-    });
   }
 
   updatePort(group) {

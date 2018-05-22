@@ -227,29 +227,27 @@
                           </div>
                         </div>
                         <div class="form-group">
-                          <label class="col-sm-3 control-label"> </label>
-                          <div ng-repeat="doc in adminjobdetails.docs" ng-if="doc.fileType == 'ympdrawings'">
-                            <a target="_blank" href="{{doc.downloadurl}}" class="col-sm-4 btn btn-dark m-r-20">Drawing</a>
+                          <div ng-repeat="doc in adminjobdetails.docs" ng-if="doc.fileType == 'ympdrawings'" class="col-sm-3">
+                            <a target="_blank" href="{{doc.downloadurl}}" class="col-sm-12 btn btn-dark m-r-20">Drawing</a>
                           </div>
-                          <div ng-repeat="doc in adminjobdetails.docs" ng-if="doc.fileType == 'ympspecification'">
-                            <a target="_blank" href="{{doc.downloadurl}}" class="col-sm-4 btn btn-dark m-r-20">Specification</a>
+                          <div ng-repeat="doc in adminjobdetails.docs" ng-if="doc.fileType == 'ympspecification'" class="col-sm-3">
+                            <a target="_blank" href="{{doc.downloadurl}}" class="col-sm-12 btn btn-dark m-r-20">Specification</a>
                           </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label"> </label>
-                            <div ng-repeat="doc in adminjobdetails.docs" ng-if="doc.fileType == 'ympmanual'">
-                              <a target="_blank" href="{{doc.downloadurl}}" class="col-sm-4 btn btn-dark m-r-20">Service Manual</a>
-                            </div>
-                            <div ng-repeat="doc in adminjobdetails.docs" ng-if="doc.fileType == 'ympmanualparts'">
-                              <a target="_blank" href="{{doc.downloadurl}}" class="col-sm-4 btn btn-dark m-r-20">Parts Manual</a>
-                            </div>
+                          <div ng-repeat="doc in adminjobdetails.docs" ng-if="doc.fileType == 'ympmanual'" class="col-sm-3">
+                            <a target="_blank" href="{{doc.downloadurl}}" class="col-sm-12 btn btn-dark m-r-20">Service Manual</a>
                           </div>
-                        <div class="form-group" >
-                          <label class="col-sm-3 control-label"> </label>
-                          <div ng-repeat="doc in adminjobdetails.docs" ng-if="doc.fileType == 'ymppage'">
-                            <a target="_blank" href="{{doc.downloadurl}}#page={{doc.page}}" class="btn btn-dark m-r-20">Page {{doc.page}}</a>
+                          <div ng-repeat="doc in adminjobdetails.docs" ng-if="doc.fileType == 'ympmanualparts'" class="col-sm-3">
+                            <a target="_blank" href="{{doc.downloadurl}}" class="col-sm-12 btn btn-dark m-r-20">Parts Manual</a>
+                          </div>
+                          <div ng-repeat="doc in adminjobdetails.docs" ng-if="doc.fileType == 'ymppage'" class="col-sm-3">
+                            <a target="_blank" href="{{doc.downloadurl}}#page={{doc.page}}" class="col-sm-12 btn btn-dark m-r-20">Page {{doc.page}}</a>
                           </div>
                         </div>
+                        <!--<div class="form-group" >
+                          <div ng-repeat="doc in adminjobdetails.docs" ng-if="doc.fileType == 'ymppage'" class="col-sm-3">
+                            <a target="_blank" href="{{doc.downloadurl}}#page={{doc.page}}" class="col-sm-12 btn btn-dark m-r-20">Page {{doc.page}}</a>
+                          </div>
+                        </div>-->
                         <div class="col-sm-12" >
                           <div class="form-group">
                             <label class="control-label">Description
@@ -331,7 +329,16 @@
                                     </div>
                                         <!---->
                               </div>
-                          </div>
+                            </div>
+                            <div class="col-sm-3">
+                              <div class="form-group">
+                                  <label class="control-label">Documents</label>
+                                  <div>
+                                      <button  data-toggle="modal" data-target="#delete-docs" class="col-sm-12 btn btn-dark m-r-20">Delete</button>
+                                    </div>
+                                        <!---->
+                              </div>
+                            </div>
                         </div>                    
                     </div>
                   </div>
@@ -724,6 +731,48 @@
                     </div>
                   </div>
                 </div>
+            </div>
+
+            <div class="modal fade" id="delete-docs" aria-hidden="true">
+              <div class="modal-dialog modal-responsive" style="margin-top: 15% !important;">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" ng-click="jobdetails.resetValue()" aria-hidden="true"><i class="icons-office-52"></i></button>
+                    <h4 class="modal-title"><strong>Delete</strong> Documents</h4>
+                  </div>
+                  <div class="modal-body">
+                    <!--<p>Change screen size to see responsive behaviour.</p>-->
+                          <div  ng-show="doneSearching" class="loader2 col-sm-offset-5"></div>
+                          <div ng-show="uploadSuccess" class="preview active">
+                              <div class="alert alert-success media fade in">
+                                <p><strong>Document</strong> Deleted</p>
+                              </div>
+                            </div>
+                    
+                    <div ng-hide="doneSearching">
+                      <table class="table table-hover dataTable" id="table-editable">
+                        <thead>
+                          <tr>
+                            <th>Document Type</th>
+                            <th>Page No.</th>
+                            <th>Action</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr ng-repeat="doc in adminjobdetails.docs" >
+                            <td>{{doc.fileType}}</td>
+                            <td>{{doc.page ? doc.page : "none"}}</td>
+                            <td><button class="btn btn-dark f-12" type="submit" ng-click="adminjobdetails.removeDocs(doc)"><i class="fa fa-trash"></i> Delete</button></td>
+                          </tr>    
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                  <div class="modal-footer text-center">
+                   <!--<button type="button" class="btn btn-primary btn-embossed bnt-square" ><i class="fa fa-check"></i> Add</button>-->
+                  </div>
+                </div>
+              </div>
             </div>
 
             <div class="modal fade" id="view-service" aria-hidden="true">

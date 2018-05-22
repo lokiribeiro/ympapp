@@ -9,6 +9,7 @@ import { Meteor } from 'meteor/meteor';
 
 import { Counts } from 'meteor/tmeasday:publish-counts';
 
+import { Ympjobs } from '../../../api/ympjobs';
 import { Ympequipments } from '../../../api/ympequipments';
 import { Ympsubgroups } from '../../../api/ympsubgroups';
 
@@ -51,10 +52,13 @@ class Adminequipment {
     this.sort = {
         name: 1
     };
+    $scope.groupNewName = '';
 
     this.subscribe('users');
 
     this.subscribe('ympequipments');
+
+    this.subscribe('ympjobs');
 
     this.subscribe('ympsubgroups');
  
@@ -159,6 +163,53 @@ class Adminequipment {
       var status = Ympequipments.insert(this.group);
       this.group = {};
     }
+
+    this.saveChanges = function(group) {
+      console.info('group value', group);
+      $scope.groupNewName = group.name;
+      Ympequipments.update({
+        _id: group._id
+      }, {
+        $set: {
+          location: group.location,
+          modelNumber: group.modelNumber,
+          serialNumber: group.serialNumber,
+          manufacturer: group.manufacturer,
+          name: group.name
+        }
+      }, (error) => {
+          if (error) {
+            console.log('Oops, unable to update the party...');
+          } else {
+            console.log('Done!');
+          }
+      });
+  
+      var selector = {groupID: group._id};
+        var editJobs = Ympjobs.find(selector);
+        var count = editJobs.count();
+        console.info('count', count);
+        editJobs.forEach(function(editJob){
+          var jobID = editJob._id;
+          Ympjobs.update({
+            _id: jobID
+          }, {
+            $set: {
+              group: $scope.groupNewName
+            }
+          }, (error) => {
+              if (error) {
+                console.log('Oops, unable to update the party...');
+              } else {
+                console.log('Done!');
+              }
+          });
+        });
+        $scope.groupNewName = '';
+    }
+
+
+
     this.addRow = function(passedGroup, unit) {
       console.info('array value', unit);
       console.info('inputs value', this.inputs);
@@ -355,27 +406,6 @@ class Adminequipment {
 
   sortChanged(sort) {
     this.sort = sort;
-  }
-
-  saveChanges(group) {
-    console.info('group value', this.group)
-    Ympequipments.update({
-      _id: group._id
-    }, {
-      $set: {
-        location: group.location,
-        modelNumber: group.modelNumber,
-        serialNumber: group.serialNumber,
-        manufacturer: group.manufacturer,
-        name: group.name
-      }
-    }, (error) => {
-        if (error) {
-          console.log('Oops, unable to update the party...');
-        } else {
-          console.log('Done!');
-        }
-    });
   }
 
   updatePort(group) {

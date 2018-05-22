@@ -13,6 +13,7 @@ import { Groups } from '../../../api/groups';
 import { Jobs } from '../../../api/jobs';
 import { Boats } from '../../../api/boats';
 import { Ympequipments } from '../../../api/ympequipments';
+import { Docs } from '../../../api/docs';
 import template from './adminboat.html';
  
 class Adminboat {
@@ -49,6 +50,7 @@ class Adminboat {
     this.searchText = '';
     this.searchGroup = '';
     $scope.passworD = '';
+    $scope.newJobID = '';
     this.pageNum  = null;
     $scope.doneSearching = false;
     $scope.uploadSuccess = false;
@@ -77,6 +79,8 @@ class Adminboat {
     this.subscribe('groups');
 
     this.subscribe('jobs');
+
+    this.subscribe('docs');
  
     this.helpers({
       job() {
@@ -208,21 +212,21 @@ class Adminboat {
 
     this.addToBoat = function(){
       $scope.uploadSuccess = false;
-      $scope.dontExists = true;
+      //$scope.dontExists = true;
       console.info('selected', this.selectEquip);
       console.info('boatId', this.boatId);
       $scope.boatID = this.boatId;
       $scope.groupID = this.selectEquip;
-      var boatEquipments = Groups.find();
-      boatEquipments.forEach(function(boatEquipment){
-        console.info('loob boatId', boatEquipment.boatID);
-        console.info('boatId', $scope.boatID);
-        if(boatEquipment.ympequipID == $scope.groupID && boatEquipment.boatID == $scope.boatID){
-          $scope.existing = true;
-          $scope.dontExists = false;
-        }
-      });
-      if($scope.dontExists){
+      //var boatEquipments = Groups.find();
+      //boatEquipments.forEach(function(boatEquipment){
+      //  console.info('loob boatId', boatEquipment.boatID);
+      //  console.info('boatId', $scope.boatID);
+      //  if(boatEquipment.ympequipID == $scope.groupID && boatEquipment.boatID == $scope.boatID){
+      //   $scope.existing = true;
+      //    $scope.dontExists = false;
+      //  }
+      //});
+      //if($scope.dontExists){
         $scope.existing = false;
         var selector = {_id: $scope.groupID};
         var groups = Ympequipments.findOne(selector);
@@ -248,8 +252,9 @@ class Adminboat {
         $scope.uploadSuccess = true;
         console.info('status', status);
         $scope.equip = {};
+        $scope.uploadSuccess = false;
 
-      }
+      //}
     }
 
     this.addJobToBoat = function(){
@@ -277,7 +282,7 @@ class Adminboat {
             $scope.equip = group;
           }
         });*/
-        this.jobForBoat.name = jobs.group;
+        this.jobForBoat.group = jobs.group;
         this.jobForBoat.title = jobs.title;
         this.jobForBoat.description = jobs.description;
         this.jobForBoat.repeating = jobs.repeating;
@@ -307,8 +312,43 @@ class Adminboat {
         console.info('from DB', this.jobForBoat);
         var status = Jobs.insert(this.jobForBoat);
         $scope.uploadSuccess = true;
+        $scope.newJobID = status;
         console.info('status', status);
+        var selector = {jobID: $scope.jobID};
+        var jobDocs = Docs.find(selector);
+        var count = jobDocs.count();
+        console.info('count jobdocs', count);
+        jobDocs.forEach(function(jobDoc){
+          var documents = {};
+          documents.jobID = $scope.newJobID;
+          documents.downloadurl = jobDoc.downloadurl;
+          documents.userID = Meteor.userId();
+          if(jobDoc.fileType == 'ympdrawings'){
+            documents.fileType = 'drawings';
+            var status = Docs.insert(documents);
+            console.info('status', status);
+          } else if (jobDoc.fileType == 'ympmanual'){
+            documents.fileType = 'manual';
+            var status = Docs.insert(documents);
+            console.info('status', status);
+          } else if (jobDoc.fileType == 'ympmanualparts'){
+            documents.fileType = 'parts';
+            var status = Docs.insert(documents);
+            console.info('status', status);
+          } else if (jobDoc.fileType == 'ympspecification'){
+            documents.fileType = 'specification';
+            var status = Docs.insert(documents);
+            console.info('status', status);
+          } else if (jobDoc.fileType == 'ymppage'){
+            documents.fileType = 'page';
+            documents.page = jobDoc.page;
+            var status = Docs.insert(documents);
+            console.info('status', status);
+          }
+        });
+
         $scope.equip = {};
+        $scope.uploadSuccess = false;
       }
       } else {
         $scope.nonSelected = true;

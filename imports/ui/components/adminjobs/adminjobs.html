@@ -255,8 +255,8 @@
                 <div class="col-md-6">
                   <div class="form-group">
                     <label class="control-label">Equipment</label>
-                      <select ng-model="adminjobs.job.group" name="group" class="form-control" required>
-                        <option ng-repeat="group in adminjobs.groups" value="{{group.name}}">{{group.name}}</option>
+                      <select ng-model="adminjobs.job.groupID" name="group" class="form-control" required>
+                        <option ng-repeat="group in adminjobs.groups" value="{{group._id}}">{{group.name}}</option>
                       </select>
                   </div>
                 </div>

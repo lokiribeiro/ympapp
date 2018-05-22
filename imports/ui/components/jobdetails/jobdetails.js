@@ -282,6 +282,11 @@ class Jobdetails {
       
     }
 
+    this.removeDocs = function(document){
+      console.info('document', document);
+      Docs.remove(document._id);
+    };
+
     this.removeJob = function() {
       console.info('userID', $scope.userID);
       var profiles = Profiles.find({

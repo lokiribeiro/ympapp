@@ -165,6 +165,10 @@ class Adminjobs {
       this.job.date = new Date();
       this.job.unplanned = false;
       console.info('this.job', this.job);
+      var selector = {_id: this.job.groupID};
+      var group = Ympequipments.findOne(selector);
+      console.info('group for submit', group);
+      this.job.group = group.name;
       var status = Ympjobs.insert(this.job);
       this.job = {};
     }

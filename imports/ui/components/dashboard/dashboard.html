@@ -262,23 +262,23 @@
                 </thead>
                 <tbody>
                   <tr ng-repeat="job in dashboard.jobs" ui-sref="jobdetails({ jobId: job._id, stateHolder: 'jobs' })" ng-click="" ng-hide="dashboard.viewJobs">
-                    <td>{{job.group}}</td>
-                    <td>{{job.title}}</td>
-                    <td>{{job.hours ? job.hours : "0"}}</td>
-                    <td>{{job.days ? job.days : "0"}}</td>
-                    <td>{{job.date | date : "medium"}}</td>
+                    <td style="color: #ff5050 !important;" ng-if="job.status == false">{{job.group}}</td><td style="color: #5cd65c !important;" ng-if="job.status == true">{{job.group}}</td>
+                    <td style="color: #ff5050 !important;" ng-if="job.status == false">{{job.title}}</td><td style="color: #5cd65c !important;" ng-if="job.status == true">{{job.title}}</td>
+                    <td style="color: #ff5050 !important;" ng-if="job.status == false">{{job.hours ? job.hours : "0"}}</td><td style="color: #5cd65c !important;" ng-if="job.status == true">{{job.hours ? job.hours : "0"}}</td>
+                    <td style="color: #ff5050 !important;" ng-if="job.status == false">{{job.days ? job.days : "0"}}</td><td style="color: #5cd65c !important;" ng-if="job.status == true">{{job.days ? job.days : "0"}}</td>
+                    <td style="color: #ff5050 !important;" ng-if="job.status == false">{{job.date | date : "medium"}}</td><td style="color: #5cd65c !important;" ng-if="job.status == true">{{job.date | date : "medium"}}</td>
                     <!--<td class="text-right"><a class="edit btn btn-sm btn-default" ui-sref="jobdetails({ jobId: job._id })"><i class="icon-note"></i></a>  <a class="delete btn btn-sm btn-danger" href="javascript:;"><i class="icons-office-52"></i></a>-->
-                    <td>{{job.status ? "yes" : "no"}}</td>
+                    <td style="color: #ff5050 !important;" ng-if="job.status == false">{{job.status ? "yes" : "no"}}</td><td style="color: #5cd65c !important;" ng-if="job.status == true">{{job.status ? "yes" : "no"}}</td>
                     </td>
                   </tr>
                   <tr ng-repeat="job in dashboard.jobs" ui-sref="jobdetails({ jobId: job._id, stateHolder: 'jobs' })" ng-click="" ng-if="job.status == false && dashboard.viewJobs">
-                      <td>{{job.group}}</td>
-                      <td>{{job.title}}</td>
-                      <td>{{job.hours ? job.hours : "0"}}</td>
-                      <td>{{job.days ? job.days : "0"}}</td>
-                      <td>{{job.date | date : "medium"}}</td>
+                      <td style="color: #ff5050 !important;">{{job.group}}</td>
+                      <td style="color: #ff5050 !important;">{{job.title}}</td>
+                      <td style="color: #ff5050 !important;">{{job.hours ? job.hours : "0"}}</td>
+                      <td style="color: #ff5050 !important;">{{job.days ? job.days : "0"}}</td>
+                      <td style="color: #ff5050 !important;">{{job.date | date : "medium"}}</td>
                       <!--<td class="text-right"><a class="edit btn btn-sm btn-default" ui-sref="jobdetails({ jobId: job._id })"><i class="icon-note"></i></a>  <a class="delete btn btn-sm btn-danger" href="javascript:;"><i class="icons-office-52"></i></a>-->
-                      <td>{{job.status ? "yes" : "no"}}</td>
+                      <td style="color: #ff5050 !important;">{{job.status ? "yes" : "no"}}</td>
                       </td>
                   </tr>
                   
